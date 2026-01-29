@@ -44,6 +44,9 @@ class Date extends Formula implements ContainerFactoryPluginInterface {
    */
   protected $argFormat = 'Y-m-d';
 
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
+  public $option_name = 'default_argument_date';
+
   /**
    * The route match.
    *
@@ -107,11 +110,9 @@ class Date extends Formula implements ContainerFactoryPluginInterface {
    */
   public function defaultArgumentForm(&$form, FormStateInterface $form_state) {
     parent::defaultArgumentForm($form, $form_state);
-    $form['default_argument_type']['#options'] += [
-      'date' => $this->t('Current date'),
-      'node_created' => $this->t("Current node's creation time"),
-      'node_changed' => $this->t("Current node's update time"),
-    ];
+    $form['default_argument_type']['#options'] += ['date' => $this->t('Current date')];
+    $form['default_argument_type']['#options'] += ['node_created' => $this->t("Current node's creation time")];
+    $form['default_argument_type']['#options'] += ['node_changed' => $this->t("Current node's update time")];
   }
 
   /**
@@ -151,16 +152,6 @@ class Date extends Formula implements ContainerFactoryPluginInterface {
   public function getFormula() {
     $this->formula = $this->getDateFormat($this->argFormat);
     return parent::getFormula();
-  }
-
-  /**
-   * Returns the date format used in the query in a form usable by PHP.
-   *
-   * @return string
-   *   The date format used in the query.
-   */
-  public function getArgFormat(): string {
-    return $this->argFormat;
   }
 
 }

@@ -4,7 +4,6 @@ namespace Drupal\Core\Controller;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 use Symfony\Component\Routing\Route;
@@ -81,13 +80,6 @@ class TitleResolver implements TitleResolverInterface {
       // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
       $route_title = $this->t($title, $args, $options);
     }
-
-    // Empty titles should return a NULL value as this is same result as title
-    // not being set.
-    if ($route_title === '' || ($route_title instanceof TranslatableMarkup && $route_title->getUntranslatedString() === '')) {
-      return NULL;
-    }
-
     return $route_title;
   }
 

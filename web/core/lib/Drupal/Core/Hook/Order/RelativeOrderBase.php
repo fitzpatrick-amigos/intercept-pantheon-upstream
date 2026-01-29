@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Core\Hook\Order;
 
-use Drupal\Core\Extension\ProceduralCall;
 use Drupal\Core\Hook\OrderOperation\BeforeOrAfter;
 use Drupal\Core\Hook\OrderOperation\OrderOperation;
 
@@ -47,14 +46,7 @@ abstract readonly class RelativeOrderBase implements OrderInterface {
       $identifier,
       $this->modules,
       array_map(
-        static function (array $class_and_method): string {
-          if ($class_and_method[0] === ProceduralCall::class) {
-            return $class_and_method[1];
-          }
-          else {
-            return $class_and_method[0] . '::' . $class_and_method[1];
-          }
-        },
+        static fn(array $class_and_method) => implode('::', $class_and_method),
         $this->classesAndMethods,
       ),
       $this->isAfter(),

@@ -10,18 +10,16 @@ use Drupal\Core\TypedData\Plugin\DataType\BooleanData;
 use Drupal\Core\TypedData\Plugin\DataType\IntegerData;
 use Drupal\Core\TypedData\Plugin\DataType\StringData;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests entity adapter for configuration entities.
  *
  * @see \Drupal\Core\Entity\Plugin\DataType\ConfigEntityAdapter
+ *
+ * @group Entity
+ *
+ * @coversDefaultClass \Drupal\Core\Entity\Plugin\DataType\ConfigEntityAdapter
  */
-#[CoversClass(ConfigEntityAdapter::class)]
-#[Group('Entity')]
-#[RunTestsInSeparateProcesses]
 class ConfigEntityAdapterTest extends KernelTestBase {
 
   /**
@@ -44,7 +42,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
     $this->installConfig(static::$modules);
 
     // ConfigTest::create doesn't work with the following exception:
-    // "Multiple entity types found for Drupal\config_test\Entity\ConfigTest".
+    // "Multiple entity types found for Drupal\config_test\Entity\ConfigTest."
     $this->entity = \Drupal::entityTypeManager()->getStorage('config_test')->create([
       'id' => 'system',
       'label' => 'foobar',
@@ -53,9 +51,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests entity deriver.
-   *
-   * @legacy-covers \Drupal\Core\Entity\Plugin\DataType\Deriver\EntityDeriver::getDerivativeDefinitions
+   * @covers \Drupal\Core\Entity\Plugin\DataType\Deriver\EntityDeriver::getDerivativeDefinitions
    */
   public function testEntityDeriver(): void {
     $definition = \Drupal::typedDataManager()->getDefinition('entity:config_test');
@@ -63,9 +59,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests validate.
-   *
-   * @legacy-covers ::validate
+   * @covers ::validate
    */
   public function testValidate(): void {
     $adapter = ConfigEntityAdapter::createFromEntity($this->entity);
@@ -89,9 +83,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests get properties.
-   *
-   * @legacy-covers ::getProperties
+   * @covers ::getProperties
    */
   public function testGetProperties(): void {
     $expected_properties = [
@@ -117,9 +109,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests get value.
-   *
-   * @legacy-covers ::getValue
+   * @covers ::getValue
    */
   public function testGetValue(): void {
     $adapter = ConfigEntityAdapter::createFromEntity($this->entity);
@@ -129,9 +119,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests set.
-   *
-   * @legacy-covers ::set
+   * @covers ::set
    */
   public function testSet(): void {
     $adapter = ConfigEntityAdapter::createFromEntity($this->entity);
@@ -147,9 +135,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests get string.
-   *
-   * @legacy-covers ::getString
+   * @covers ::getString
    */
   public function testGetString(): void {
     $adapter = ConfigEntityAdapter::createFromEntity($this->entity);
@@ -157,9 +143,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests apply default value.
-   *
-   * @legacy-covers ::applyDefaultValue
+   * @covers ::applyDefaultValue
    */
   public function testApplyDefaultValue(): void {
     $this->expectException(\BadMethodCallException::class);
@@ -169,9 +153,7 @@ class ConfigEntityAdapterTest extends KernelTestBase {
   }
 
   /**
-   * Tests get iterator.
-   *
-   * @legacy-covers ::getIterator
+   * @covers ::getIterator
    */
   public function testGetIterator(): void {
     $adapter = ConfigEntityAdapter::createFromEntity($this->entity);

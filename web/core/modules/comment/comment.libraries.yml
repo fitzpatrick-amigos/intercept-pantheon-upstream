@@ -25,15 +25,24 @@ drupal.comment-by-viewer:
 
 drupal.comment-new-indicator:
   version: VERSION
+  js:
+    js/comment-new-indicator.js: {}
   dependencies:
-    - history/drupal.comment-new-indicator
-  deprecated: The "%library_id%" asset library is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Use history/drupal.comment-new-indicator instead. See https://www.drupal.org/node/3537055
+    - core/jquery
+    - core/once
+    - core/drupal
+    - history/api
+    - core/drupal.displace
 
 drupal.node-new-comments-link:
   version: VERSION
+  js:
+    js/node-new-comments-link.js: {}
   dependencies:
-    - history/drupal.node-new-comments-link
-  deprecated: The "%library_id%" asset library is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. Use history/drupal.comment-new-indicator instead. See https://www.drupal.org/node/3537055
+    - core/jquery
+    - core/once
+    - core/drupal
+    - history/api
 
 drupal.comment-icon:
   version: VERSION

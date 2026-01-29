@@ -7,23 +7,16 @@ namespace Drupal\Tests\package_manager\Unit;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\package_manager\PathLocator;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\package_manager\PathLocator.
- *
+ * @coversDefaultClass \Drupal\package_manager\PathLocator
+ * @group package_manager
  * @internal
  */
-#[CoversClass(PathLocator::class)]
-#[Group('package_manager')]
 class PathLocatorTest extends UnitTestCase {
 
   /**
-   * Tests staging root.
-   *
-   * @legacy-covers ::getStagingRoot
+   * @covers ::getStagingRoot
    */
   public function testStagingRoot(): void {
     $config_factory = $this->getConfigFactoryStub([
@@ -108,9 +101,10 @@ class PathLocatorTest extends UnitTestCase {
    * @param string $expected_web_root
    *   The value expected from getWebRoot().
    *
-   * @legacy-covers ::getWebRoot
+   * @covers ::getWebRoot
+   *
+   * @dataProvider providerWebRoot
    */
-  #[DataProvider('providerWebRoot')]
   public function testWebRoot(string $app_root, string $project_root, string $expected_web_root): void {
     $path_locator = $this->getMockBuilder(PathLocator::class)
       // Mock all methods except getWebRoot().

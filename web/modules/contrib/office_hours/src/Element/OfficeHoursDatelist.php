@@ -16,7 +16,7 @@ class OfficeHoursDatelist extends Datelist {
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     $parent_info = parent::getInfo();
 
     $info = [
@@ -102,7 +102,7 @@ class OfficeHoursDatelist extends Datelist {
    * @return array
    *   The screen element.
    */
-  public static function processDatelist(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processDatelist(&$element, FormStateInterface $form_state, &$complete_form): array {
     $element = parent::processDatelist($element, $form_state, $complete_form);
 
     $time_format = $element['#field_settings']['time_format'];
@@ -129,7 +129,7 @@ class OfficeHoursDatelist extends Datelist {
    * @param array $complete_form
    *   The complete form structure.
    */
-  public static function validateDatelist(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateDatelist(&$element, FormStateInterface $form_state, &$complete_form): void {
     // This overrides parent::validateDatelist() function.
     $input = $element['#value'];
     $value = NULL;

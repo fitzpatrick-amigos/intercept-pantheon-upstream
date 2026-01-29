@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Theme\ThemeNegotiatorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller routines for menu_test routes.
@@ -49,6 +50,17 @@ class MenuTestController extends ControllerBase {
     $this->themeManager = $theme_manager;
     $this->themeNegotiator = $theme_negotiator;
     $this->routeMatch = $route_match;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('theme.manager'),
+      $container->get('theme.negotiator'),
+      $container->get('current_route_match')
+    );
   }
 
   /**

@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace Drupal\KernelTests\Core\Field\FieldType;
 
 use Drupal\Core\Entity\EntityStorageException;
-use Drupal\Core\Field\Plugin\Field\FieldType\PasswordItem;
 use Drupal\Core\Password\PasswordInterface;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\field\Kernel\FieldKernelTestBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Drupal\Core\Field\Plugin\Field\FieldType\PasswordItem.
+ * @coversDefaultClass \Drupal\Core\Field\Plugin\Field\FieldType\PasswordItem
+ * @group Field
  */
-#[CoversClass(PasswordItem::class)]
-#[Group('Field')]
-#[RunTestsInSeparateProcesses]
 class PasswordItemTest extends FieldKernelTestBase {
 
   /**
@@ -59,9 +53,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save pre hashed.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSavePreHashed(): void {
     $entity = EntityTest::create([
@@ -76,9 +68,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save new null.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveNewNull(): void {
     $entity = EntityTest::create([
@@ -91,9 +81,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save new empty string.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveNewEmptyString(): void {
     $entity = EntityTest::create([
@@ -110,9 +98,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save new multiple spaces string.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveNewMultipleSpacesString(): void {
     $entity = EntityTest::create([
@@ -129,9 +115,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save existing null.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveExistingNull(): void {
     $entity = EntityTest::create();
@@ -147,9 +131,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save existing empty string.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveExistingEmptyString(): void {
     $entity = EntityTest::create();
@@ -165,9 +147,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save existing multiple spaces string.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveExistingMultipleSpacesString(): void {
     $entity = EntityTest::create();
@@ -182,9 +162,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save exception new.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveExceptionNew(): void {
     $entity = EntityTest::create();
@@ -195,9 +173,7 @@ class PasswordItemTest extends FieldKernelTestBase {
   }
 
   /**
-   * Tests pre save exception existing.
-   *
-   * @legacy-covers ::preSave
+   * @covers ::preSave
    */
   public function testPreSaveExceptionExisting(): void {
     $entity = EntityTest::create();

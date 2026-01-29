@@ -6,23 +6,18 @@ namespace Drupal\Tests\views\Unit\Plugin\filter;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\Plugin\views\filter\FilterPluginBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\views\Plugin\views\filter\FilterPluginBase.
+ * @coversDefaultClass \Drupal\views\Plugin\views\filter\FilterPluginBase
+ * @group views
  */
-#[CoversClass(FilterPluginBase::class)]
-#[Group('views')]
 class FilterPluginBaseTest extends UnitTestCase {
 
   /**
-   * Tests accept exposed input.
+   * @covers ::acceptExposedInput
    *
-   * @legacy-covers ::acceptExposedInput
+   * @dataProvider acceptExposedInputProvider
    */
-  #[DataProvider('acceptExposedInputProvider')]
   public function testAcceptExposedInput(bool $expected_result, array $options, array $input): void {
     $definition = [
       'title' => 'Accept exposed input Test',

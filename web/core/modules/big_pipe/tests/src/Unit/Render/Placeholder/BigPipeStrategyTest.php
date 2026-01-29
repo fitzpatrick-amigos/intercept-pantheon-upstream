@@ -9,27 +9,22 @@ use Drupal\big_pipe_test\BigPipePlaceholderTestCases;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\SessionConfigurationInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\big_pipe\Render\Placeholder\BigPipeStrategy.
+ * @coversDefaultClass \Drupal\big_pipe\Render\Placeholder\BigPipeStrategy
+ * @group big_pipe
  */
-#[CoversClass(BigPipeStrategy::class)]
-#[Group('big_pipe')]
 class BigPipeStrategyTest extends UnitTestCase {
 
   /**
-   * Tests process placeholders.
+   * @covers ::processPlaceholders
    *
-   * @legacy-covers ::processPlaceholders
+   * @dataProvider placeholdersProvider
    */
-  #[DataProvider('placeholdersProvider')]
   public function testProcessPlaceholders(array $placeholders, $method, $route_match_has_no_big_pipe_option, $request_has_session, $request_has_big_pipe_nojs_cookie, array $expected_big_pipe_placeholders): void {
     $request = new Request();
     $request->setMethod($method);

@@ -268,7 +268,7 @@ abstract class BuildTestBase extends TestCase {
    * @param string $expected
    *   Text we expect to find in the error output of the command.
    */
-  public function assertErrorOutputContains($expected): void {
+  public function assertErrorOutputContains($expected) {
     $this->assertStringContainsString($expected, $this->commandProcess->getErrorOutput());
   }
 
@@ -278,7 +278,7 @@ abstract class BuildTestBase extends TestCase {
    * @param string $expected
    *   Text we expect not to find in the error output of the command.
    */
-  public function assertErrorOutputNotContains($expected): void {
+  public function assertErrorOutputNotContains($expected) {
     $this->assertStringNotContainsString($expected, $this->commandProcess->getErrorOutput());
   }
 
@@ -288,7 +288,7 @@ abstract class BuildTestBase extends TestCase {
    * @param string $expected
    *   Text we expect to find in the output of the command.
    */
-  public function assertCommandOutputContains($expected): void {
+  public function assertCommandOutputContains($expected) {
     $this->assertStringContainsString($expected, $this->commandProcess->getOutput());
   }
 
@@ -300,8 +300,8 @@ abstract class BuildTestBase extends TestCase {
    * If you need to assert a different exit code, then you can use
    * executeCommand() and perform a different assertion on the process object.
    */
-  public function assertCommandSuccessful(): void {
-    $this->assertCommandExitCode(0);
+  public function assertCommandSuccessful() {
+    return $this->assertCommandExitCode(0);
   }
 
   /**
@@ -310,7 +310,7 @@ abstract class BuildTestBase extends TestCase {
    * @param int $expected_code
    *   The expected process exit code.
    */
-  public function assertCommandExitCode($expected_code): void {
+  public function assertCommandExitCode($expected_code) {
     $this->assertEquals($expected_code, $this->commandProcess->getExitCode(),
       'COMMAND: ' . $this->commandProcess->getCommandLine() . "\n" .
       'OUTPUT: ' . $this->commandProcess->getOutput() . "\n" .
@@ -345,7 +345,7 @@ abstract class BuildTestBase extends TestCase {
    * This method asserts that the X-Generator header shows that the site is a
    * Drupal site.
    */
-  public function assertDrupalVisit(): void {
+  public function assertDrupalVisit() {
     $this->getMink()->assertSession()->responseHeaderMatches('X-Generator', '/Drupal \d+ \(https:\/\/www.drupal.org\)/');
   }
 
@@ -559,7 +559,7 @@ abstract class BuildTestBase extends TestCase {
    *   (optional) Relative path within the test workspace file system that will
    *   contain the copy of the codebase. Defaults to the workspace directory.
    */
-  public function copyCodebase(?\Iterator $iterator = NULL, $working_dir = NULL): void {
+  public function copyCodebase(?\Iterator $iterator = NULL, $working_dir = NULL) {
     $working_path = $this->getWorkingPath($working_dir);
 
     if ($iterator === NULL) {

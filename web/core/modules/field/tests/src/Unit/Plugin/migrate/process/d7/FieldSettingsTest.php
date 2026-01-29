@@ -8,22 +8,17 @@ use Drupal\field\Plugin\migrate\process\d7\FieldSettings;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
 use Drupal\Tests\migrate\Unit\MigrateTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
 /**
- * Tests Drupal\field\Plugin\migrate\process\d7\FieldSettings.
+ * @coversDefaultClass \Drupal\field\Plugin\migrate\process\d7\FieldSettings
+ * @group field
  */
-#[CoversClass(FieldSettings::class)]
-#[Group('field')]
-#[IgnoreDeprecations]
 class FieldSettingsTest extends MigrateTestCase {
 
   /**
    * Tests transformation of image field settings.
    *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformImageSettings(): void {
     $plugin = new FieldSettings([], 'd7_field_settings', []);

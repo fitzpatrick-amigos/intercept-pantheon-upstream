@@ -8,14 +8,12 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\workspaces\Entity\Workspace;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests entity translations with workspaces.
+ *
+ * @group workspaces
  */
-#[Group('workspaces')]
-#[RunTestsInSeparateProcesses]
 class WorkspaceContentTranslationTest extends KernelTestBase {
 
   use UserCreationTrait;
@@ -54,7 +52,7 @@ class WorkspaceContentTranslationTest extends KernelTestBase {
 
     $this->installConfig(['language', 'content_translation']);
 
-    $this->installSchema('workspaces', ['workspace_association', 'workspace_association_revision']);
+    $this->installSchema('workspaces', ['workspace_association']);
 
     $language = ConfigurableLanguage::createFromLangcode('ro');
     $language->save();
@@ -68,7 +66,7 @@ class WorkspaceContentTranslationTest extends KernelTestBase {
   /**
    * Tests translations created in a workspace.
    *
-   * @legacy-covers \Drupal\workspaces\Hook\EntityOperations::entityTranslationInsert
+   * @covers \Drupal\workspaces\Hook\EntityOperations::entityTranslationInsert
    */
   public function testTranslations(): void {
     $storage = $this->entityTypeManager->getStorage('entity_test_mulrevpub');

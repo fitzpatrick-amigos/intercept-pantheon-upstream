@@ -11,19 +11,18 @@ use Drupal\Core\File\Exception\FileException;
 use Drupal\Core\Site\Settings;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 // cspell:ignore suis
+
 /**
  * Tests configuration objects before and after module install and uninstall.
  *
  * The installation and removal of configuration objects in install, disable
  * and uninstall functionality is tested.
+ *
+ * @group config
+ * @group #slow
  */
-#[Group('config')]
-#[Group('#slow')]
-#[RunTestsInSeparateProcesses]
 class ConfigInstallWebTest extends BrowserTestBase {
 
   /**
@@ -206,10 +205,7 @@ class ConfigInstallWebTest extends BrowserTestBase {
     }
     catch (PreExistingConfigException $e) {
       $this->assertEquals('config_clash_test_theme', $e->getExtension());
-      $this->assertEquals([
-        StorageInterface::DEFAULT_COLLECTION => ['config_test.dynamic.dotted.default'],
-        'language.fr' => ['config_test.dynamic.dotted.default'],
-      ], $e->getConfigObjects());
+      $this->assertEquals([StorageInterface::DEFAULT_COLLECTION => ['config_test.dynamic.dotted.default'], 'language.fr' => ['config_test.dynamic.dotted.default']], $e->getConfigObjects());
       $this->assertEquals('Configuration objects (config_test.dynamic.dotted.default, language/fr/config_test.dynamic.dotted.default) provided by config_clash_test_theme already exist in active configuration', $e->getMessage());
     }
   }

@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\config\Functional;
 
-use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\language\Entity\ConfigurableLanguage;
 
 // cspell:ignore antilop
+
 /**
  * Tests the listing of configuration entities in a multilingual scenario.
+ *
+ * @group config
  */
-#[Group('config')]
-#[RunTestsInSeparateProcesses]
 class ConfigEntityListMultilingualTest extends BrowserTestBase {
 
   /**

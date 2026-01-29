@@ -58,6 +58,22 @@ class LinkHooks {
   }
 
   /**
+   * Implements hook_theme().
+   */
+  #[Hook('theme')]
+  public function theme() : array {
+    return [
+      'link_formatter_link_separate' => [
+        'variables' => [
+          'title' => NULL,
+          'url_title' => NULL,
+          'url' => NULL,
+        ],
+      ],
+    ];
+  }
+
+  /**
    * Implements hook_field_type_category_info_alter().
    */
   #[Hook('field_type_category_info_alter')]

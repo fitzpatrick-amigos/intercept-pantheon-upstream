@@ -12,25 +12,20 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\Definition\DependentPluginDefinitionInterface;
 use Drupal\Core\Plugin\PluginDependencyTrait;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophecy\ProphecyInterface;
 use Prophecy\Prophet;
 
 /**
- * Tests Drupal\Core\Plugin\PluginDependencyTrait.
+ * @coversDefaultClass \Drupal\Core\Plugin\PluginDependencyTrait
+ * @group Plugin
  */
-#[CoversClass(PluginDependencyTrait::class)]
-#[Group('Plugin')]
 class PluginDependencyTraitTest extends UnitTestCase {
 
   /**
-   * Tests get plugin dependencies.
+   * @covers ::getPluginDependencies
    *
-   * @legacy-covers ::getPluginDependencies
+   * @dataProvider providerTestPluginDependencies
    */
-  #[DataProvider('providerTestPluginDependencies')]
   public function testGetPluginDependencies(ProphecyInterface $plugin, $definition, array $expected): void {
     $test_class = new TestPluginDependency();
 
@@ -52,7 +47,9 @@ class PluginDependencyTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests calculate plugin dependencies.
+   * @covers ::calculatePluginDependencies
+   *
+   * @dataProvider providerTestPluginDependencies
    *
    * @param \Prophecy\Prophecy\ProphecyInterface $plugin
    *   A prophecy of a plugin instance.
@@ -60,10 +57,7 @@ class PluginDependencyTraitTest extends UnitTestCase {
    *   A plugin definition.
    * @param array $expected
    *   The expected dependencies.
-   *
-   * @legacy-covers ::calculatePluginDependencies
    */
-  #[DataProvider('providerTestPluginDependencies')]
   public function testCalculatePluginDependencies(ProphecyInterface $plugin, $definition, array $expected): void {
     $test_class = new TestPluginDependency();
 
@@ -189,14 +183,14 @@ class TestPluginDependency {
   /**
    * The module handler.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
   /**
    * The theme handler.
    *
-   * @var \Drupal\Core\Extension\ThemeHandlerInterface
+   * @var Drupal\Core\Extension\ThemeHandlerInterface
    */
   protected $themeHandler;
 

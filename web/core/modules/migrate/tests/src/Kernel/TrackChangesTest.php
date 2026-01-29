@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\migrate\Kernel;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
-
 /**
  * Tests migration track changes property.
+ *
+ * @group migrate
  */
-#[Group('migrate')]
-#[RunTestsInSeparateProcesses]
 class TrackChangesTest extends MigrateTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
+    'system',
     'user',
     'taxonomy',
+    'migrate',
     'migrate_track_changes_test',
     'text',
   ];

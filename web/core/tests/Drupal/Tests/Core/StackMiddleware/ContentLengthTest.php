@@ -6,27 +6,21 @@ namespace Drupal\Tests\Core\StackMiddleware;
 
 use Drupal\Core\StackMiddleware\ContentLength;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Tests Drupal\Core\StackMiddleware\ContentLength.
+ * @coversDefaultClass \Drupal\Core\StackMiddleware\ContentLength
+ * @group Middleware
  */
-#[CoversClass(ContentLength::class)]
-#[Group('Middleware')]
 class ContentLengthTest extends UnitTestCase {
 
   /**
-   * Tests handle.
-   *
-   * @legacy-covers ::handle
+   * @covers ::handle
+   * @dataProvider providerTestSetContentLengthHeader
    */
-  #[DataProvider('providerTestSetContentLengthHeader')]
   public function testHandle(false|int $expected_header, Response $response): void {
     $httpKernel = $this->prophesize(HttpKernelInterface::class);
     $request = Request::create('/');
@@ -40,7 +34,7 @@ class ContentLengthTest extends UnitTestCase {
     $this->assertSame((string) $expected_header, $response->headers->get('Content-Length'));
   }
 
-  public static function providerTestSetContentLengthHeader(): array {
+  public static function providerTestSetContentLengthHeader() {
     return [
       'Informational' => [
         FALSE,

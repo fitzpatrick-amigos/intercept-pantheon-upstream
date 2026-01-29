@@ -6,23 +6,20 @@ namespace Drupal\Tests\Core\File;
 
 use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 // cspell:ignore äöüåøhello
+
 /**
  * FileUploadSanitizeNameEvent tests.
+ *
+ * @group file
+ * @coversDefaultClass \Drupal\Core\File\Event\FileUploadSanitizeNameEvent
  */
-#[CoversClass(FileUploadSanitizeNameEvent::class)]
-#[Group('file')]
 class FileUploadSanitizeNameEventTest extends UnitTestCase {
 
   /**
-   * Tests set filename.
-   *
-   * @legacy-covers ::setFilename
-   * @legacy-covers ::getFilename
+   * @covers ::setFilename
+   * @covers ::getFilename
    */
   public function testSetFilename(): void {
     $event = new FileUploadSanitizeNameEvent('foo.txt', '');
@@ -32,9 +29,7 @@ class FileUploadSanitizeNameEventTest extends UnitTestCase {
   }
 
   /**
-   * Tests set filename exception.
-   *
-   * @legacy-covers ::setFilename
+   * @covers ::setFilename
    */
   public function testSetFilenameException(): void {
     $event = new FileUploadSanitizeNameEvent('foo.txt', '');
@@ -45,10 +40,8 @@ class FileUploadSanitizeNameEventTest extends UnitTestCase {
   }
 
   /**
-   * Tests constructor exception.
-   *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::setFilename
+   * @covers ::__construct
+   * @covers ::setFilename
    */
   public function testConstructorException(): void {
     $this->expectException(\InvalidArgumentException::class);
@@ -57,9 +50,7 @@ class FileUploadSanitizeNameEventTest extends UnitTestCase {
   }
 
   /**
-   * Tests allowed extensions.
-   *
-   * @legacy-covers ::getAllowedExtensions
+   * @covers ::getAllowedExtensions
    */
   public function testAllowedExtensions(): void {
     $event = new FileUploadSanitizeNameEvent('foo.txt', '');
@@ -75,10 +66,10 @@ class FileUploadSanitizeNameEventTest extends UnitTestCase {
    * @param string $filename
    *   The filename to test.
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::getFilename
+   * @dataProvider provideFilenames
+   * @covers ::__construct
+   * @covers ::getFilename
    */
-  #[DataProvider('provideFilenames')]
   public function testEventFilenameFunctions(string $filename): void {
     $event = new FileUploadSanitizeNameEvent($filename, '');
     $this->assertSame($filename, $event->getFilename());
@@ -90,7 +81,7 @@ class FileUploadSanitizeNameEventTest extends UnitTestCase {
    * @return array
    *   Arrays with original file name.
    */
-  public static function provideFilenames(): array {
+  public static function provideFilenames() {
     return [
       'ASCII filename with extension' => [
         'example.txt',
@@ -111,9 +102,7 @@ class FileUploadSanitizeNameEventTest extends UnitTestCase {
   }
 
   /**
-   * Tests stop propagation.
-   *
-   * @legacy-covers ::stopPropagation
+   * @covers ::stopPropagation
    */
   public function testStopPropagation(): void {
     $this->expectException(\RuntimeException::class);

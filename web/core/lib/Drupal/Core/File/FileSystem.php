@@ -151,11 +151,6 @@ class FileSystem implements FileSystemInterface {
    * {@inheritdoc}
    */
   public function basename($uri, $suffix = NULL) {
-    @trigger_error(
-      "Calling FileSystem::basename() is deprecated in drupal:11.3.0 and is removed from drupal:13.0.0. Use PHP native basename() instead. See https://www.drupal.org/node/3530869",
-      E_USER_DEPRECATED,
-    );
-
     $separators = '/';
     if (DIRECTORY_SEPARATOR != '/') {
       // For Windows OS add special separator.
@@ -277,7 +272,7 @@ class FileSystem implements FileSystemInterface {
       $wrapper = $this->streamWrapperManager->getViaScheme($scheme);
 
       if ($filename = tempnam($wrapper->getDirectoryPath(), $prefix)) {
-        return $scheme . '://' . basename($filename);
+        return $scheme . '://' . static::basename($filename);
       }
       else {
         return FALSE;
@@ -466,7 +461,7 @@ class FileSystem implements FileSystemInterface {
     // Prepare the destination directory.
     if ($this->prepareDirectory($destination)) {
       // The destination is already a directory, so append the source basename.
-      $destination = $this->streamWrapperManager->normalizeUri($destination . '/' . basename($source));
+      $destination = $this->streamWrapperManager->normalizeUri($destination . '/' . $this->basename($source));
     }
     else {
       // Perhaps $destination is a dir/file?
@@ -552,7 +547,7 @@ class FileSystem implements FileSystemInterface {
       // @phpstan-ignore staticMethod.deprecated
       $fileExists = FileExists::fromLegacyInt($fileExists, __METHOD__);
     }
-    $basename = basename($destination);
+    $basename = $this->basename($destination);
     if (!Unicode::validateUtf8($basename)) {
       throw new FileException(sprintf("Invalid filename '%s'", $basename));
     }

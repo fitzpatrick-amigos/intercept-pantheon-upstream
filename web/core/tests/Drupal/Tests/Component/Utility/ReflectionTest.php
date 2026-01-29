@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\Component\Utility;
 
 use Drupal\Component\Utility\Reflection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Drupal\Component\Utility\Reflection.
+ * @coversDefaultClass \Drupal\Component\Utility\Reflection
+ * @group Utility
  */
-#[CoversClass(Reflection::class)]
-#[Group('Utility')]
 class ReflectionTest extends TestCase {
 
   /**
@@ -23,9 +19,9 @@ class ReflectionTest extends TestCase {
    * @param \ReflectionParameter $parameter
    *   The reflection parameter.
    *
-   * @legacy-covers ::getParameterClassName
+   * @covers ::getParameterClassName
+   * @dataProvider providerGetParameterClassName
    */
-  #[DataProvider('providerGetParameterClassName')]
   public function testGetParameterClassName(?string $expected, \ReflectionParameter $parameter): void {
     $this->assertEquals($expected, Reflection::getParameterClassName($parameter));
   }
@@ -38,7 +34,7 @@ class ReflectionTest extends TestCase {
    *   - string|null $expected: The expected class name.
    *   - \ReflectionParameter $parameter: The reflection parameter.
    */
-  public static function providerGetParameterClassName(): array {
+  public static function providerGetParameterClassName() {
     $reflection_method = new \ReflectionMethod(static::class, 'existsForTesting');
     $parameters = $reflection_method->getParameters();
     return [

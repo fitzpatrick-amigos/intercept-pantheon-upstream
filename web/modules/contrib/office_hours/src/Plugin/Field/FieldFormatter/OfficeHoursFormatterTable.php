@@ -24,7 +24,7 @@ class OfficeHoursFormatterTable extends OfficeHoursFormatterDefault {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = [$this->t('Display Office hours in a table.')]
       + parent::settingsSummary();
     return $summary;
@@ -33,7 +33,7 @@ class OfficeHoursFormatterTable extends OfficeHoursFormatterDefault {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = parent::viewElements($items, $langcode);
 
     // Hide the formatter if no data is filled for this entity,
@@ -124,11 +124,9 @@ class OfficeHoursFormatterTable extends OfficeHoursFormatterDefault {
       if ($create_new_table) {
         $create_new_table = FALSE;
 
-        // Retroactively, update the first table.
-        // $elements[$key]['#table']['#caption'] = t('Normal hours'); .
         $header = $this->buildTableHeader($row_columns, TRUE);
-        $elements[$key]['#table']['#header'] = $header;
-
+        // Retroactively, update the first table. (or not, leave 'Day' title empty)
+        // $elements[$key]['#table']['#header'] = $header;
         // Prepare the next table.
         $header['label']['data'] = $table_caption;
         $table_caption = '';

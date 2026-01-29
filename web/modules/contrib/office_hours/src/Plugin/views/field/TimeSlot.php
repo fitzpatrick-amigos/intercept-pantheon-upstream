@@ -31,7 +31,7 @@ class TimeSlot extends FieldBase {
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
     // Add the Weekday option.
     $options['day'] = ['default' => 0];
@@ -42,7 +42,7 @@ class TimeSlot extends FieldBase {
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     // From OfficeHoursFormatterBase::settingsForm().
     $form['day'] = [
       '#title' => $this->t('Day'),
@@ -58,15 +58,8 @@ class TimeSlot extends FieldBase {
   /**
    * Called to add the field to a query.
    */
-  public function query() {
+  public function query(): void {
     // Do not add the computed subfield to the query.
-  }
-
-  /**
-   * Returns Season item or Exception day item.
-   */
-  public function getValue(ResultRow $values, $field = NULL) {
-    return parent::getValue($values, $field);
   }
 
   /**
@@ -76,7 +69,7 @@ class TimeSlot extends FieldBase {
    *
    * {@inheritdoc}
    */
-  public function preRender(&$values) {
+  public function preRender(&$values): void {
     /** @var \Drupal\views\ResultRow[] $values */
     $field_name = $this->configuration['field_name'];
 
@@ -182,7 +175,7 @@ class TimeSlot extends FieldBase {
   /**
    * Returns formatted operating hours.
    */
-  private function getTimeSlot($entity, OfficeHoursItem|NULL $item) {
+  private function getTimeSlot($entity, OfficeHoursItem|NULL $item): ?string {
 
     if (!$item) {
       return NULL;
@@ -221,7 +214,7 @@ class TimeSlot extends FieldBase {
   /**
    * Returns array of Weekdays.
    */
-  private function getWeekDays() {
+  private function getWeekDays(): array {
     return OfficeHoursDateHelper::weekDaysByFormat('long');
   }
 

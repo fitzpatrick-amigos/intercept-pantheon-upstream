@@ -9,14 +9,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeRepositoryInterface;
 use Drupal\responsive_image\Entity\ResponsiveImageStyle;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\responsive_image\Entity\ResponsiveImageStyle.
+ * @coversDefaultClass \Drupal\responsive_image\Entity\ResponsiveImageStyle
+ * @group block
  */
-#[CoversClass(ResponsiveImageStyle::class)]
-#[Group('block')]
 class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
 
   /**
@@ -66,9 +63,7 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests calculate dependencies.
-   *
-   * @legacy-covers ::calculateDependencies
+   * @covers ::calculateDependencies
    */
   public function testCalculateDependencies(): void {
     // Set up image style loading mock.
@@ -129,10 +124,8 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests has image style mappings.
-   *
-   * @legacy-covers ::addImageStyleMapping
-   * @legacy-covers ::hasImageStyleMappings
+   * @covers ::addImageStyleMapping
+   * @covers ::hasImageStyleMappings
    */
   public function testHasImageStyleMappings(): void {
     $entity = new ResponsiveImageStyle([]);
@@ -182,10 +175,8 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get image style mapping.
-   *
-   * @legacy-covers ::addImageStyleMapping
-   * @legacy-covers ::getImageStyleMapping
+   * @covers ::addImageStyleMapping
+   * @covers ::getImageStyleMapping
    */
   public function testGetImageStyleMapping(): void {
     $entity = new ResponsiveImageStyle(['']);
@@ -204,10 +195,8 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get keyed image style mappings.
-   *
-   * @legacy-covers ::addImageStyleMapping
-   * @legacy-covers ::getKeyedImageStyleMappings
+   * @covers ::addImageStyleMapping
+   * @covers ::getKeyedImageStyleMappings
    */
   public function testGetKeyedImageStyleMappings(): void {
     $entity = new ResponsiveImageStyle(['']);
@@ -298,10 +287,8 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get image style mappings.
-   *
-   * @legacy-covers ::addImageStyleMapping
-   * @legacy-covers ::getImageStyleMappings
+   * @covers ::addImageStyleMapping
+   * @covers ::getImageStyleMappings
    */
   public function testGetImageStyleMappings(): void {
     $entity = new ResponsiveImageStyle(['']);
@@ -352,10 +339,8 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests remove image style mappings.
-   *
-   * @legacy-covers ::addImageStyleMapping
-   * @legacy-covers ::removeImageStyleMappings
+   * @covers ::addImageStyleMapping
+   * @covers ::removeImageStyleMappings
    */
   public function testRemoveImageStyleMappings(): void {
     $entity = new ResponsiveImageStyle(['']);
@@ -385,10 +370,8 @@ class ResponsiveImageStyleConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests set breakpoint group.
-   *
-   * @legacy-covers ::setBreakpointGroup
-   * @legacy-covers ::getBreakpointGroup
+   * @covers ::setBreakpointGroup
+   * @covers ::getBreakpointGroup
    */
   public function testSetBreakpointGroup(): void {
     $entity = new ResponsiveImageStyle(['breakpoint_group' => 'test_group']);

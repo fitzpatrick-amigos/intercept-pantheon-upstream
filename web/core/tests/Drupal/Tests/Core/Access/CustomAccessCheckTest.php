@@ -10,16 +10,13 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Utility\CallableResolver;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\Core\Access\CustomAccessCheck.
+ * @coversDefaultClass \Drupal\Core\Access\CustomAccessCheck
+ * @group Access
  */
-#[CoversClass(CustomAccessCheck::class)]
-#[Group('Access')]
 class CustomAccessCheckTest extends UnitTestCase {
 
   /**

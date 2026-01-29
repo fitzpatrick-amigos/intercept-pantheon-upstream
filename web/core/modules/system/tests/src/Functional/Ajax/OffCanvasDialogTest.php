@@ -8,15 +8,12 @@ use Drupal\ajax_test\Controller\AjaxTestController;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Performs tests on opening and manipulating dialogs via AJAX commands.
+ *
+ * @group Ajax
  */
-#[Group('Ajax')]
-#[RunTestsInSeparateProcesses]
 class OffCanvasDialogTest extends BrowserTestBase {
 
   /**
@@ -31,8 +28,9 @@ class OffCanvasDialogTest extends BrowserTestBase {
 
   /**
    * Tests sending AJAX requests to open and manipulate off-canvas dialog.
+   *
+   * @dataProvider dialogPosition
    */
-  #[DataProvider('dialogPosition')]
   public function testDialog($position): void {
     // Ensure the elements render without notices or exceptions.
     $this->drupalGet('ajax-test/dialog');

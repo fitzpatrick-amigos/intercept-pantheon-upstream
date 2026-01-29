@@ -66,7 +66,7 @@ class OfficeHoursTable extends Table {
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     $info = parent::getInfo();
 
     $info += [
@@ -82,7 +82,7 @@ class OfficeHoursTable extends Table {
   /**
    * {@inheritdoc}
    */
-  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
+  public static function valueCallback(&$element, $input, FormStateInterface $form_state): array {
     $indexed_items = [];
 
     $default_values = $element['#default_value'];
@@ -96,6 +96,7 @@ class OfficeHoursTable extends Table {
       switch ($element['#field_type']) {
 
         case 'office_hours_exceptions':
+          // Exception days widget.
           $day = 0;
           foreach ($default_values as $value) {
             switch ($value['day']) {
@@ -112,6 +113,7 @@ class OfficeHoursTable extends Table {
           break;
 
         default:
+          // Normal/seasonal weekday widget.
           $indexed_items = array_fill_keys(range(0, 6), []);
           $season = $element['#field_type'];
           $week_season_id = is_object($season) ? $season->id() : 0;
@@ -136,40 +138,57 @@ class OfficeHoursTable extends Table {
       switch ($element['#field_type']) {
 
         case 'office_hours_exceptions':
+          // Exception days widget.
           $new_empty_exception = '';
           $date = 0;
           $day_delta = 0;
-          $previous_day = 0;
+          $placeholders_present = 0;
           foreach ($input as $key => $value) {
-            switch ($value['day']) {
-              case 'exception_day_delta':
+            $day = $value['day'];
+            // Switch makes no difference between NULL and ''.
+            switch ($day ?? -1) {
+              case -1:
+                // Programming error. Skip this record.
+                continue 2;
+
               case $new_empty_exception:
-              case $previous_day:
+                $date++;
+                $day_delta = 0;
+                $placeholders_present++;
+                break;
+
+              case 'exception_day_delta':
                 $day_delta++;
                 break;
 
               default:
-                $day = $value['day'];
-                $date = ($day == '') ? $previous_day++ : strtotime($day);
+                $date = strtotime($day);
+                $day = strtotime($day);
                 $day_delta = 0;
                 break;
             }
-            $previous_day = $value['day'];
+            $value['day'] = $day;
             $value['day_delta'] = $day_delta;
             $indexed_items[$date][] = $value;
           }
 
           // Keep aligned in ExceptionsWidget and OfficeHoursTable element.
-          // Add empty days if we clicked "AddMore: Add exception".
+          // Add empty days upon clicking "AddMore: Add exception".
+          // Append only the missing number of empty placeholders that are
+          // present in defaults but not yet represented in input groups.
+          $placeholders_total = 0;
           foreach ($default_values as $value) {
-            if ($value['day'] == $new_empty_exception) {
-              $date++;
-              $indexed_items[$date][] = $value;
-            }
+            $placeholders_total += ($value['day'] == $new_empty_exception);
+          }
+          // Now add the missing new slots.
+          for ($i = $placeholders_present; $i < $placeholders_total; $i++) {
+            $item = OfficeHoursItem::format(['day' => OfficeHoursDateHelper::EXCEPTION_DAY_MIN]);
+            $indexed_items[++$date][] = $item;
           }
           break;
 
         default:
+          // Normal/seasonal weekday widget.
           foreach ($input as $key => $value) {
             $day = $value['day'];
             $indexed_items[$day][] = $value;
@@ -197,7 +216,7 @@ class OfficeHoursTable extends Table {
    * @return array
    *   The element.
    */
-  public static function processTable(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processTable(&$element, FormStateInterface $form_state, &$complete_form): array {
     $element = parent::processTable($element, $form_state, $complete_form);
 
     $field_settings = $element['#field_settings'];
@@ -229,7 +248,7 @@ class OfficeHoursTable extends Table {
           for ($day_delta = 0; $day_delta < $cardinality; $day_delta++) {
             // Add a new empty item if it doesn't exist yet at this delta.
             $value = $indexed_items[$day][$day_delta]
-            ?? OfficeHoursItem::format(['day' => OfficeHoursDateHelper::EXCEPTION_DAY_MIN]);
+              ?? OfficeHoursItem::format(['day' => OfficeHoursDateHelper::EXCEPTION_DAY_MIN]);
 
             $elements[] = [
               '#type' => $element_type,
@@ -258,7 +277,7 @@ class OfficeHoursTable extends Table {
           for ($day_delta = 0; $day_delta < $cardinality; $day_delta++) {
             // Add a new empty item if it doesn't exist yet at this delta.
             $value = $indexed_items[$day][$day_delta]
-            ?? OfficeHoursItem::format(['day' => $day]);
+              ?? OfficeHoursItem::format(['day' => $day]);
 
             $elements[] = [
               '#type' => $element_type,
@@ -276,20 +295,6 @@ class OfficeHoursTable extends Table {
 
     }
     return $element + $elements;
-  }
-
-  /**
-   * Render API callback: Validates the element.
-   *
-   * @param array $element
-   *   The form element to process.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   * @param array $complete_form
-   *   The complete form structure.
-   */
-  public static function validateTable(&$element, FormStateInterface $form_state, &$complete_form) {
-    return parent::validateTable($element, $form_state, $complete_form);
   }
 
 }

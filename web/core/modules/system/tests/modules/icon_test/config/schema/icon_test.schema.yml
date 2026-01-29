@@ -8,12 +8,14 @@ icon.icon_pack_options.test_path:
       type: integer
       label: 'Width'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
     height:
       type: integer
       label: 'Height'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
 
 icon.icon_pack_options.test_svg:
   type: mapping
@@ -25,7 +27,8 @@ icon.icon_pack_options.test_svg:
       type: integer
       label: 'Size'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
 
 icon.icon_pack_options.test_svg_sprite:
   type: mapping
@@ -37,12 +40,14 @@ icon.icon_pack_options.test_svg_sprite:
       type: integer
       label: 'Width'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
     height:
       type: integer
       label: 'Height'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
     alt:
       type: label
       label: 'Alt'
@@ -57,12 +62,14 @@ icon.icon_pack_options.test_settings:
       type: integer
       label: 'Width'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
     height:
       type: integer
       label: 'Height'
       constraints:
-        PositiveOrZero: ~
+        Range:
+          min: 0
     title:
       type: label
       label: 'Title'

@@ -18,18 +18,14 @@ trait ContextAwarePluginManagerTrait {
   }
 
   /**
-   * Determines plugins whose constraints are satisfied by a set of contexts.
-   *
-   * @see \Drupal\Core\Plugin\Context\ContextAwarePluginManagerInterface::getDefinitionsForContexts()
+   * See \Drupal\Core\Plugin\Context\ContextAwarePluginManagerInterface::getDefinitionsForContexts().
    */
   public function getDefinitionsForContexts(array $contexts = []) {
     return $this->contextHandler()->filterPluginDefinitionsByContexts($contexts, $this->getDefinitions());
   }
 
   /**
-   * Gets a specific plugin definition.
-   *
-   * @see \Drupal\Component\Plugin\Discovery\DiscoveryInterface::getDefinitions()
+   * See \Drupal\Component\Plugin\Discovery\DiscoveryInterface::getDefinitions().
    */
   abstract public function getDefinitions();
 

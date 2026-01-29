@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\views\Unit;
 
 use Drupal\Tests\UnitTestCase;
-use Drupal\views\Tests\ViewTestData;
 use Drupal\views\ViewsDataHelper;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\views\Tests\ViewTestData;
 
 /**
- * Tests Drupal\views\ViewsDataHelper.
+ * @coversDefaultClass \Drupal\views\ViewsDataHelper
+ * @group views
  */
-#[CoversClass(ViewsDataHelper::class)]
-#[Group('views')]
 class ViewsDataHelperTest extends UnitTestCase {
 
   /**

@@ -14,16 +14,15 @@ use Drupal\user\PermissionHandler;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamWrapper;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the permission handler.
+ *
+ * @group user
+ *
+ * @coversDefaultClass \Drupal\user\PermissionHandler
+ * @runTestsInSeparateProcesses
  */
-#[CoversClass(PermissionHandler::class)]
-#[Group('user')]
-#[RunTestsInSeparateProcesses]
 class PermissionHandlerTest extends UnitTestCase {
 
   /**
@@ -84,10 +83,10 @@ class PermissionHandlerTest extends UnitTestCase {
   /**
    * Tests permissions provided by YML files.
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::getPermissions
-   * @legacy-covers ::buildPermissionsYaml
-   * @legacy-covers ::moduleProvidesPermissions
+   * @covers ::__construct
+   * @covers ::getPermissions
+   * @covers ::buildPermissionsYaml
+   * @covers ::moduleProvidesPermissions
    */
   public function testBuildPermissionsYaml(): void {
     vfsStreamWrapper::register();
@@ -149,10 +148,10 @@ EOF
   /**
    * Tests permissions sort inside a module.
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::getPermissions
-   * @legacy-covers ::buildPermissionsYaml
-   * @legacy-covers ::sortPermissions
+   * @covers ::__construct
+   * @covers ::getPermissions
+   * @covers ::buildPermissionsYaml
+   * @covers ::sortPermissions
    */
   public function testBuildPermissionsSortPerModule(): void {
     vfsStreamWrapper::register();
@@ -206,9 +205,9 @@ EOF
   /**
    * Tests dynamic callback permissions provided by YML files.
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::getPermissions
-   * @legacy-covers ::buildPermissionsYaml
+   * @covers ::__construct
+   * @covers ::getPermissions
+   * @covers ::buildPermissionsYaml
    */
   public function testBuildPermissionsYamlCallback(): void {
     vfsStreamWrapper::register();

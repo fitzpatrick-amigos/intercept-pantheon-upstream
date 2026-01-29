@@ -20,7 +20,7 @@ class Status extends FieldBase {
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     parent::addOptionsFormWarning($form, $form_state, $this->options['label']);
     parent::buildOptionsForm($form, $form_state);
   }
@@ -28,7 +28,7 @@ class Status extends FieldBase {
   /**
    * Called to add the field to a query.
    */
-  public function query() {
+  public function query(): void {
     // Do not add the computed subfield to the query.
   }
 

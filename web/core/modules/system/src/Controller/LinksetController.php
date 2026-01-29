@@ -10,6 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\system\MenuInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -30,6 +31,13 @@ final class LinksetController extends ControllerBase {
    *   elements so that they can be serialized into a linkset response.
    */
   public function __construct(protected readonly MenuLinkTreeInterface $menuTree) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static($container->get('menu.link_tree'));
   }
 
   /**

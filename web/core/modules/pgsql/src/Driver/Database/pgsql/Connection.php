@@ -11,7 +11,6 @@ use Drupal\Core\Database\StatementInterface;
 use Drupal\Core\Database\StatementWrapperIterator;
 use Drupal\Core\Database\SupportsTemporaryTablesInterface;
 use Drupal\Core\Database\Transaction\TransactionManagerInterface;
-use Pdo\Pgsql;
 
 // cSpell:ignore ilike nextval
 
@@ -93,8 +92,6 @@ class Connection extends DatabaseConnection implements SupportsTemporaryTablesIn
    * Constructs a connection object.
    */
   public function __construct(\PDO $connection, array $connection_options) {
-    // @phpstan-ignore class.notFound
-    assert(\PHP_VERSION_ID >= 80400 ? $connection instanceof Pgsql : TRUE);
     // Sanitize the schema name here, so we do not have to do it in other
     // functions.
     if (isset($connection_options['schema']) && ($connection_options['schema'] !== 'public')) {
@@ -154,8 +151,8 @@ class Connection extends DatabaseConnection implements SupportsTemporaryTablesIn
     // so backslashes in the password need to be doubled up.
     // The bug was reported against pdo_pgsql 1.0.2, backslashes in passwords
     // will break on this doubling up when the bug is fixed, so check the
-    // version.
-    // "elseif (phpversion('pdo_pgsql') < 'version_this_was_fixed_in') {".
+    // version
+    // elseif (phpversion('pdo_pgsql') < 'version_this_was_fixed_in') {
     else {
       $connection_options['password'] = str_replace('\\', '\\\\', $connection_options['password']);
     }
@@ -181,13 +178,7 @@ class Connection extends DatabaseConnection implements SupportsTemporaryTablesIn
     ];
 
     try {
-      if (\PHP_VERSION_ID >= 80400) {
-        // @phpstan-ignore class.notFound
-        $pgsql = new Pgsql($dsn, $connection_options['username'], $connection_options['password'], $connection_options['pdo']);
-      }
-      else {
-        $pgsql = new \PDO($dsn, $connection_options['username'], $connection_options['password'], $connection_options['pdo']);
-      }
+      $pdo = new \PDO($dsn, $connection_options['username'], $connection_options['password'], $connection_options['pdo']);
     }
     catch (\PDOException $e) {
       if (static::getSQLState($e) == static::CONNECTION_FAILURE) {
@@ -201,7 +192,7 @@ class Connection extends DatabaseConnection implements SupportsTemporaryTablesIn
       throw $e;
     }
 
-    return $pgsql;
+    return $pdo;
   }
 
   /**

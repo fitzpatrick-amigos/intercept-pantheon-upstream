@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\system\Kernel\Block;
 
-use Drupal\block\Entity\Block;
-use Drupal\Core\Render\Element;
-use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\system\Entity\Menu;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Render\Element;
 use Drupal\system\Tests\Routing\MockRouteProvider;
 use Drupal\Tests\Core\Menu\MenuLinkMock;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -24,14 +21,13 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * Tests \Drupal\system\Plugin\Block\SystemMenuBlock.
  *
+ * @group Block
  * @todo Expand test coverage to all SystemMenuBlock functionality, including
  *   block_menu_delete().
  *
  * @see \Drupal\system\Plugin\Derivative\SystemMenuBlock
  * @see \Drupal\system\Plugin\Block\SystemMenuBlock
  */
-#[Group('Block')]
-#[RunTestsInSeparateProcesses]
 class SystemMenuBlockTest extends KernelTestBase {
 
   /**
@@ -42,6 +38,7 @@ class SystemMenuBlockTest extends KernelTestBase {
     'block',
     'menu_test',
     'menu_link_content',
+    'field',
     'user',
     'link',
   ];
@@ -137,14 +134,14 @@ class SystemMenuBlockTest extends KernelTestBase {
     // - 8
     // With link 6 being the only external link.
     $links = [
-      1 => MenuLinkMock::createMock([
+      1 => MenuLinkMock::create([
         'id' => 'test.example1',
         'route_name' => 'example1',
         'title' => 'foo',
         'parent' => '',
         'weight' => 0,
       ]),
-      2 => MenuLinkMock::createMock([
+      2 => MenuLinkMock::create([
         'id' => 'test.example2',
         'route_name' => 'example2',
         'title' => 'bar',
@@ -152,21 +149,21 @@ class SystemMenuBlockTest extends KernelTestBase {
         'route_parameters' => ['foo' => 'bar'],
         'weight' => 1,
       ]),
-      3 => MenuLinkMock::createMock([
+      3 => MenuLinkMock::create([
         'id' => 'test.example3',
         'route_name' => 'example3',
         'title' => 'baz',
         'parent' => 'test.example2',
         'weight' => 2,
       ]),
-      4 => MenuLinkMock::createMock([
+      4 => MenuLinkMock::create([
         'id' => 'test.example4',
         'route_name' => 'example4',
         'title' => 'qux',
         'parent' => 'test.example3',
         'weight' => 3,
       ]),
-      5 => MenuLinkMock::createMock([
+      5 => MenuLinkMock::create([
         'id' => 'test.example5',
         'route_name' => 'example5',
         'title' => 'title5',
@@ -174,7 +171,7 @@ class SystemMenuBlockTest extends KernelTestBase {
         'expanded' => TRUE,
         'weight' => 4,
       ]),
-      6 => MenuLinkMock::createMock([
+      6 => MenuLinkMock::create([
         'id' => 'test.example6',
         'route_name' => '',
         'url' => 'https://www.drupal.org/',
@@ -182,14 +179,14 @@ class SystemMenuBlockTest extends KernelTestBase {
         'parent' => '',
         'weight' => 5,
       ]),
-      7 => MenuLinkMock::createMock([
+      7 => MenuLinkMock::create([
         'id' => 'test.example7',
         'route_name' => 'example7',
         'title' => 'title7',
         'parent' => 'test.example5',
         'weight' => 6,
       ]),
-      8 => MenuLinkMock::createMock([
+      8 => MenuLinkMock::create([
         'id' => 'test.example8',
         'route_name' => 'example8',
         'title' => 'title8',
@@ -340,8 +337,9 @@ class SystemMenuBlockTest extends KernelTestBase {
 
   /**
    * Tests the config expanded option.
+   *
+   * @dataProvider configExpandedTestCases
    */
-  #[DataProvider('configExpandedTestCases')]
   public function testConfigExpanded($active_route, $menu_block_level, $expected_items): void {
     // Replace the path.matcher service so it always returns FALSE when
     // checking whether a route is the front page. Otherwise, the default

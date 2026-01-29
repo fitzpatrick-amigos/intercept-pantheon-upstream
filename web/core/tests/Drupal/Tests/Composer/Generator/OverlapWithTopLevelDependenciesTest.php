@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Composer\Generator;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests DrupalCoreRecommendedBuilder.
+ *
+ * @group Metapackage
  */
-#[Group('Metapackage')]
 class OverlapWithTopLevelDependenciesTest extends TestCase {
 
   /**
    * Provides data for testOverlapWithTemplateProject().
    */
-  public static function templateProjectPathProvider(): array {
+  public static function templateProjectPathProvider() {
     return [
       [
         'composer/Template/RecommendedProject',
@@ -33,8 +32,9 @@ class OverlapWithTopLevelDependenciesTest extends TestCase {
    *
    * @param string $template_project_path
    *   The path of the project template to test.
+   *
+   * @dataProvider templateProjectPathProvider
    */
-  #[DataProvider('templateProjectPathProvider')]
   public function testOverlapWithTemplateProject($template_project_path): void {
     $root = dirname(__DIR__, 6);
     // Read template project composer.json.

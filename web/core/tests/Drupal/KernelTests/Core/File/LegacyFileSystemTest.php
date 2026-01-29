@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\KernelTests\Core\File;
 
-use Drupal\Core\File\FileSystem;
 use Drupal\Core\File\FileSystemInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the legacy file system functions.
+ *
+ * @group file
+ * @group legacy
+ * @coversDefaultClass \Drupal\Core\File\FileSystem
  */
-#[CoversClass(FileSystem::class)]
-#[Group('file')]
-#[IgnoreDeprecations]
-#[RunTestsInSeparateProcesses]
 class LegacyFileSystemTest extends FileTestBase {
 
   /**
@@ -34,9 +29,7 @@ class LegacyFileSystemTest extends FileTestBase {
   }
 
   /**
-   * Tests copy with deprecated file exists.
-   *
-   * @legacy-covers ::copy
+   * @covers ::copy
    */
   public function testCopyWithDeprecatedFileExists(): void {
     $uri = 'public://test.txt';
@@ -47,9 +40,7 @@ class LegacyFileSystemTest extends FileTestBase {
   }
 
   /**
-   * Tests move with deprecated file exists.
-   *
-   * @legacy-covers ::move
+   * @covers ::move
    */
   public function testMoveWithDeprecatedFileExists(): void {
     $uri = 'public://test.txt';
@@ -60,9 +51,7 @@ class LegacyFileSystemTest extends FileTestBase {
   }
 
   /**
-   * Tests save data with deprecated file exists.
-   *
-   * @legacy-covers ::saveData
+   * @covers ::saveData
    */
   public function testSaveDataWithDeprecatedFileExists(): void {
     $data = $this->randomMachineName(8);
@@ -74,9 +63,7 @@ class LegacyFileSystemTest extends FileTestBase {
   }
 
   /**
-   * Tests get destination filename with deprecated file exists.
-   *
-   * @legacy-covers ::getDestinationFilename
+   * @covers ::getDestinationFilename
    */
   public function testGetDestinationFilenameWithDeprecatedFileExists(): void {
     $uri = 'public://test.txt';
@@ -87,9 +74,7 @@ class LegacyFileSystemTest extends FileTestBase {
   }
 
   /**
-   * Tests copy with out of bounds int positive.
-   *
-   * @legacy-covers ::copy
+   * @covers ::copy
    */
   public function testCopyWithOutOfBoundsIntPositive(): void {
     $uri = 'public://test.txt';
@@ -100,9 +85,7 @@ class LegacyFileSystemTest extends FileTestBase {
   }
 
   /**
-   * Tests copy with out of bounds int negative.
-   *
-   * @legacy-covers ::copy
+   * @covers ::copy
    */
   public function testCopyWithOutOfBoundsIntNegative(): void {
     $uri = 'public://test.txt';

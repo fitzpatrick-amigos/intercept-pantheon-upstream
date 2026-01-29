@@ -23,7 +23,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
     'label' => 'name',
     'langcode' => 'langcode',
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_new',
 )]
 class EntityTestNew extends EntityTest {

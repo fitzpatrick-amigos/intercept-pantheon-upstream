@@ -6,14 +6,12 @@ namespace Drupal\Tests\views\Kernel\Handler;
 
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 use Drupal\views\Views;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for core Drupal\views\Plugin\views\sort\Date handler.
+ *
+ * @group views
  */
-#[Group('views')]
-#[RunTestsInSeparateProcesses]
 class SortDateTest extends ViewsKernelTestBase {
 
   /**
@@ -203,7 +201,7 @@ class SortDateTest extends ViewsKernelTestBase {
           ],
         ]);
 
-        // Change the ordering.
+        // Change the ordering
         $view->displayHandlers->get('default')->overrideOption('sorts', [
           'created' => [
             'id' => 'created',

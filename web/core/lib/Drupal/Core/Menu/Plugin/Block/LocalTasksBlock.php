@@ -75,7 +75,7 @@ class LocalTasksBlock extends BlockBase implements ContainerFactoryPluginInterfa
    */
   public function defaultConfiguration() {
     return [
-      'label_display' => '0',
+      'label_display' => FALSE,
       'primary' => TRUE,
       'secondary' => TRUE,
     ];

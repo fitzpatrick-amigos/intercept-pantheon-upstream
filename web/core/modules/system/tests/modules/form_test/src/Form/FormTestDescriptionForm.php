@@ -32,7 +32,6 @@ class FormTestDescriptionForm extends FormBase {
       '#title' => 'Textfield test for description before element',
       '#description' => 'Textfield test for description before element',
       '#description_display' => 'before',
-      '#field_prefix' => 'Prefix',
     ];
 
     $form['form_textfield_test_description_after'] = [
@@ -40,7 +39,6 @@ class FormTestDescriptionForm extends FormBase {
       '#title' => 'Textfield test for description after element',
       '#description' => 'Textfield test for description after element',
       '#description_display' => 'after',
-      '#field_suffix' => 'Suffix',
     ];
 
     $form['form_textfield_test_description_invisible'] = [
@@ -48,7 +46,6 @@ class FormTestDescriptionForm extends FormBase {
       '#title' => 'Textfield test for visually-hidden description',
       '#description' => 'Textfield test for visually-hidden description',
       '#description_display' => 'invisible',
-      '#field_suffix' => 'Suffix',
     ];
 
     return $form;

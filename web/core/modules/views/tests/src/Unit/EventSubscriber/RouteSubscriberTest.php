@@ -8,16 +8,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteBuildEvent;
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\EventSubscriber\RouteSubscriber;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Tests Drupal\views\EventSubscriber\RouteSubscriber.
+ * @coversDefaultClass \Drupal\views\EventSubscriber\RouteSubscriber
+ * @group views
  */
-#[CoversClass(RouteSubscriber::class)]
-#[Group('views')]
 class RouteSubscriberTest extends UnitTestCase {
 
   /**
@@ -67,9 +64,7 @@ class RouteSubscriberTest extends UnitTestCase {
   }
 
   /**
-   * Tests route rebuild finished.
-   *
-   * @legacy-covers ::routeRebuildFinished
+   * @covers ::routeRebuildFinished
    */
   public function testRouteRebuildFinished(): void {
     [$display_1, $display_2] = $this->setupMocks();

@@ -8,15 +8,11 @@ use Drupal\block\Plugin\DisplayVariant\BlockPageVariant;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\DependencyInjection\Container;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\block\Plugin\DisplayVariant\BlockPageVariant.
+ * @coversDefaultClass \Drupal\block\Plugin\DisplayVariant\BlockPageVariant
+ * @group block
  */
-#[CoversClass(BlockPageVariant::class)]
-#[Group('block')]
 class BlockPageVariantTest extends UnitTestCase {
 
   /**
@@ -76,7 +72,7 @@ class BlockPageVariantTest extends UnitTestCase {
   public static function providerBuild() {
     $blocks_config = [
       'block1' => [
-        // region, is main content block, is messages block, is title block.
+        // region, is main content block, is messages block, is title block
         'top', FALSE, FALSE, FALSE,
       ],
       // Test multiple blocks in the same region.
@@ -204,9 +200,10 @@ class BlockPageVariantTest extends UnitTestCase {
   /**
    * Tests the building of a full page variant.
    *
-   * @legacy-covers ::build
+   * @covers ::build
+   *
+   * @dataProvider providerBuild
    */
-  #[DataProvider('providerBuild')]
   public function testBuild(array $blocks_config, $visible_block_count, array $expected_render_array): void {
     $display_variant = $this->setUpDisplayVariant();
     $display_variant->setMainContent(['#markup' => 'Hello kittens!']);
@@ -240,7 +237,7 @@ class BlockPageVariantTest extends UnitTestCase {
   /**
    * Tests the building of a full page variant with no main content set.
    *
-   * @legacy-covers ::build
+   * @covers ::build
    */
   public function testBuildWithoutMainContent(): void {
     $display_variant = $this->setUpDisplayVariant();

@@ -20,12 +20,14 @@ class OfficeHoursViewsHooks {
    * Implements hook_field_views_data().
    */
   #[Hook('field_views_data')]
-  public function fieldViewsData(FieldStorageConfigInterface $field_storage) {
-    if (version_compare(\Drupal::VERSION, '11.2') >= 0) {
+  public function fieldViewsData(FieldStorageConfigInterface $field_storage): array {
+    // @see https://www.drupal.org/node/3489502 for more details.
+    if (version_compare(\Drupal::VERSION, '11.2.0', '>=')) {
       $data = \Drupal::service('views.field_data_provider')
         ->defaultFieldImplementation($field_storage);
     }
     else {
+      // @phpstan-ignore-next-line.
       $data = views_field_default_views_data($field_storage);
     }
     $data = ViewsDataProvider::viewsFieldData($field_storage, $data);

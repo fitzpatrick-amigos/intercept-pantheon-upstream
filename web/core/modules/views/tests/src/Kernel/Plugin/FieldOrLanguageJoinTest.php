@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace Drupal\Tests\views\Kernel\Plugin;
 
 use Drupal\views\Plugin\views\join\FieldOrLanguageJoin;
-use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\views\ViewExecutable;
 
 /**
  * Tests the "field OR language" join plugin.
  *
+ * @group views
  * @see \Drupal\views\Plugin\views\join\FieldOrLanguageJoin
  */
-#[Group('views')]
-#[RunTestsInSeparateProcesses]
 class FieldOrLanguageJoinTest extends RelationshipJoinTestBase {
 
   /**

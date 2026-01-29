@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace Drupal\Tests\Core\Enhancer;
 
 use Drupal\Core\Routing\Enhancer\ParamConversionEnhancer;
-use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\Core\Routing\Enhancer\ParamConversionEnhancer.
+ * @coversDefaultClass \Drupal\Core\Routing\Enhancer\ParamConversionEnhancer
+ * @group Enhancer
  */
-#[CoversClass(ParamConversionEnhancer::class)]
-#[Group('Enhancer')]
 class ParamConversionEnhancerTest extends UnitTestCase {
 
   /**
@@ -41,9 +38,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
   }
 
   /**
-   * Tests enhance.
-   *
-   * @legacy-covers ::enhance
+   * @covers ::enhance
    */
   public function testEnhance(): void {
     $route = new Route('/test/{id}/{literal}/{null}');
@@ -63,7 +58,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
 
     $this->paramConverterManager->expects($this->once())
       ->method('convert')
-      ->with($this->isArray())
+      ->with($this->isType('array'))
       ->willReturn($expected);
 
     $result = $this->paramConversionEnhancer->enhance($defaults, new Request());
@@ -78,9 +73,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
   }
 
   /**
-   * Tests copy raw variables.
-   *
-   * @legacy-covers ::copyRawVariables
+   * @covers ::copyRawVariables
    */
   public function testCopyRawVariables(): void {
     $route = new Route('/test/{id}');
@@ -93,7 +86,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
     $defaults['bar'] = &$defaults['id'];
     $this->paramConverterManager->expects($this->any())
       ->method('convert')
-      ->with($this->isArray())
+      ->with($this->isType('array'))
       ->willReturnCallback(function ($defaults) {
         // Convert the mirrored default to another value.
         $defaults['bar'] = '2';

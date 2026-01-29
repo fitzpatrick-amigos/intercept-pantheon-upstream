@@ -3,7 +3,6 @@
 namespace Drupal\office_hours\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
 use Drupal\office_hours\OfficeHoursDateHelper;
 use Drupal\office_hours\OfficeHoursSeason;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
@@ -13,12 +12,12 @@ use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
  *
  * @FormElement("office_hours_season_header")
  */
-class OfficeHoursSeasonHeader extends FormElement {
+class OfficeHoursSeasonHeader extends FormElementBase {
 
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     $info = [
       '#input' => TRUE,
       '#tree' => TRUE,
@@ -40,7 +39,7 @@ class OfficeHoursSeasonHeader extends FormElement {
    *   The array structure is identical to the return value of
    *   self::getOperations().
    */
-  public static function getDefaultOperations(OfficeHoursSeason $season) {
+  public static function getDefaultOperations(OfficeHoursSeason $season): array {
     // @todo Add better seasonal add, copy, delete JS-links.
     $operations = [];
 
@@ -91,7 +90,7 @@ class OfficeHoursSeasonHeader extends FormElement {
   /**
    * {@inheritdoc}
    */
-  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
+  public static function valueCallback(&$element, $input, FormStateInterface $form_state): ?OfficeHoursSeason {
     if ($input ?? FALSE) {
       // Massage, normalize value after pressing Form button.
       // $element is also updated via reference.
@@ -120,7 +119,7 @@ class OfficeHoursSeasonHeader extends FormElement {
    * @return array
    *   The enriched element, identical to first parameter.
    */
-  public static function process(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function process(array &$element, FormStateInterface $form_state, array &$complete_form): array {
 
     // The valueCallback() has populated the #value array.
     /** @var \Drupal\office_hours\OfficeHoursSeason $season */
@@ -213,7 +212,7 @@ class OfficeHoursSeasonHeader extends FormElement {
    * @param array $complete_form
    *   The complete form structure.
    */
-  public static function validate(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validate(array &$element, FormStateInterface $form_state, array &$complete_form): void {
     $error_text = '';
 
     // Return an array with starthours, endhours, comment.
@@ -230,25 +229,25 @@ class OfficeHoursSeasonHeader extends FormElement {
     $start = $season->getFromDate();
     $end = $season->getToDate();
     if (empty($start) && empty($end)) {
-      $error_text = 'A start date and end date must be set for the season.';
+      $error_text = t('A start date and end date must be set for the season.');
       $erroneous_element = &$element;
     }
     elseif (empty($start)) {
-      $error_text = 'A start date must be set for the season.';
+      $error_text = t('A start date must be set for the season.');
       $erroneous_element = &$element['from'];
     }
     elseif (empty($end)) {
-      $error_text = 'An end date must be set for the season.';
+      $error_text = t('An end date must be set for the season.');
       $erroneous_element = &$element['to'];
     }
     elseif ($end < $start) {
       // Both Start and End must be entered. That is validated above already.
-      $error_text = 'Seasonal end date must be later then start date.';
+      $error_text = t('Seasonal end date must be later then start date.');
       $erroneous_element = &$element;
     }
 
     if ($error_text) {
-      $error_text = t($error_text);
+      $error_text = $error_text;
       $form_state->setError($erroneous_element, $error_text);
     }
   }

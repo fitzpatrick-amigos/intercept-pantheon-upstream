@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\views\Functional;
 
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
-
 /**
  * Tests the Views theme integration.
  *
- * We test against test_base_theme and test_subtheme provided by theme_test.
+ * We test against test_base_theme and test_subtheme provided by theme_test
+ *
+ * @group views
  */
-#[Group('views')]
-#[RunTestsInSeparateProcesses]
 class ViewsThemeIntegrationTest extends ViewTestBase {
 
   /**

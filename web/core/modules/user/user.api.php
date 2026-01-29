@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Session\AccountInterface;
-use Drupal\node\NodeBulkUpdate;
 use Drupal\user\UserInterface;
 
 /**
@@ -49,7 +48,7 @@ function hook_user_cancel($edit, UserInterface $account, $method): void {
         ->accessCheck(FALSE)
         ->condition('uid', $account->id())
         ->execute();
-      \Drupal::service(NodeBulkUpdate::class)->process($nodes, ['status' => 0], NULL, TRUE);
+      node_mass_update($nodes, ['status' => 0], NULL, TRUE);
       break;
 
     case 'user_cancel_reassign':
@@ -59,7 +58,7 @@ function hook_user_cancel($edit, UserInterface $account, $method): void {
         ->accessCheck(FALSE)
         ->condition('uid', $account->id())
         ->execute();
-      \Drupal::service(NodeBulkUpdate::class)->process($nodes, ['uid' => 0], NULL, TRUE);
+      node_mass_update($nodes, ['uid' => 0], NULL, TRUE);
       // Anonymize old revisions.
       \Drupal::database()->update('node_field_revision')
         ->fields(['uid' => 0])

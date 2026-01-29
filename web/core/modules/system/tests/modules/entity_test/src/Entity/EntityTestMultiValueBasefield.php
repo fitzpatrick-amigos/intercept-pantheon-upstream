@@ -27,7 +27,6 @@ use Drupal\views\EntityViewsData;
   handlers: [
     'views_data' => EntityViewsData::class,
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_multivalue_basefield',
   data_table: 'entity_test_multivalue_basefield_field_data',
 )]

@@ -12,6 +12,21 @@
   const replacementsSelector = `script[data-big-pipe-replacement-for-placeholder-with-id]`;
 
   /**
+   * Ajax object that will process all the BigPipe responses.
+   *
+   * Create a Drupal.Ajax object without associating an element, a progress
+   * indicator or a URL.
+   *
+   * @type {Drupal.Ajax}
+   */
+  const ajaxObject = Drupal.ajax({
+    url: '',
+    base: false,
+    element: false,
+    progress: false,
+  });
+
+  /**
    * Maps textContent of <script type="application/vnd.drupal-ajax"> to an AJAX
    * response.
    *
@@ -66,7 +81,7 @@
 
     // Then, simulate an AJAX response having arrived, and let the Ajax system
     // handle it.
-    Drupal.bigPipe.commandExecutionQueue(response, 'success');
+    ajaxObject.success(response, 'success');
   }
 
   /**
@@ -162,5 +177,7 @@
     if (mutations.length) {
       processMutations(mutations);
     }
+    // No more mutations will be processed, remove the leftover Ajax object.
+    Drupal.ajax.instances[ajaxObject.instanceIndex] = null;
   });
 })(Drupal, drupalSettings);

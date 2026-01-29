@@ -7,14 +7,12 @@ namespace Drupal\Tests\system\Functional\Session;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Database\Database;
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Drupal session handling tests.
+ *
+ * @group Session
  */
-#[Group('Session')]
-#[RunTestsInSeparateProcesses]
 class SessionTest extends BrowserTestBase {
 
   /**
@@ -30,9 +28,9 @@ class SessionTest extends BrowserTestBase {
   /**
    * Tests session writing and regeneration.
    *
-   * @legacy-covers \Drupal\Core\Session\WriteSafeSessionHandler::setSessionWritable
-   * @legacy-covers \Drupal\Core\Session\WriteSafeSessionHandler::isSessionWritable
-   * @legacy-covers \Drupal\Core\Session\SessionManager::regenerate
+   * @covers \Drupal\Core\Session\WriteSafeSessionHandler::setSessionWritable
+   * @covers \Drupal\Core\Session\WriteSafeSessionHandler::isSessionWritable
+   * @covers \Drupal\Core\Session\SessionManager::regenerate
    */
   public function testSessionSaveRegenerate(): void {
     $session_handler = $this->container->get('session_handler.write_safe');
@@ -184,7 +182,7 @@ class SessionTest extends BrowserTestBase {
   /**
    * Tests that an invalid session ID in the cookie is rejected.
    *
-   * @legacy-covers \Drupal\Core\Session\SessionManager::start
+   * @covers \Drupal\Core\Session\SessionManager::start
    */
   public function testAnonymousSessionFixation(): void {
 

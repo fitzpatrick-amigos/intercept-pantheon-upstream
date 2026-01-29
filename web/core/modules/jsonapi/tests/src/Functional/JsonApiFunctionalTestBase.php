@@ -284,7 +284,6 @@ abstract class JsonApiFunctionalTestBase extends BrowserTestBase {
       $values = [
         'uid' => ['target_id' => $this->user->id()],
         'type' => 'article',
-        'promote' => TRUE,
       ];
 
       if ($referencing_twice) {

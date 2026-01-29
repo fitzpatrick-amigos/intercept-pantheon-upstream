@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\file\Kernel\Upload;
 
-use Drupal\file\Upload\InputStreamFileWriter;
 use Drupal\KernelTests\KernelTestBase;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the stream file uploader.
+ *
+ * @group file
+ * @coversDefaultClass \Drupal\file\Upload\InputStreamFileWriter
  */
-#[CoversClass(InputStreamFileWriter::class)]
-#[Group('file')]
-#[RunTestsInSeparateProcesses]
 class StreamFileUploaderTest extends KernelTestBase {
 
   /**
@@ -25,9 +21,7 @@ class StreamFileUploaderTest extends KernelTestBase {
   protected static $modules = ['file'];
 
   /**
-   * Tests write stream to file success.
-   *
-   * @legacy-covers ::writeStreamToFile
+   * @covers ::writeStreamToFile
    */
   public function testWriteStreamToFileSuccess(): void {
     vfsStream::newFile('foo.txt')
@@ -43,9 +37,7 @@ class StreamFileUploaderTest extends KernelTestBase {
   }
 
   /**
-   * Tests write stream to file with smaller bytes.
-   *
-   * @legacy-covers ::writeStreamToFile
+   * @covers ::writeStreamToFile
    */
   public function testWriteStreamToFileWithSmallerBytes(): void {
     $content = $this->randomString(2048);

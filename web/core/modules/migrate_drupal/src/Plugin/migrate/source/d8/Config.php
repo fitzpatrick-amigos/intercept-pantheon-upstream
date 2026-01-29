@@ -88,8 +88,7 @@ class Config extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
-    // @see \Drupal\Core\Config\DatabaseStorage::decode()
-    $row->setSourceProperty('data', unserialize($row->getSourceProperty('data'), ['allowed_classes' => FALSE]));
+    $row->setSourceProperty('data', unserialize($row->getSourceProperty('data')));
     return parent::prepareRow($row);
   }
 

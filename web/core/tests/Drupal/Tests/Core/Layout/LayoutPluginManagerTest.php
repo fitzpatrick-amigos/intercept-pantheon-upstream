@@ -18,21 +18,17 @@ use Drupal\Core\Layout\LayoutInterface;
 use Drupal\Core\Layout\LayoutPluginManager;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Theme\ThemeManagerInterface;
-use Drupal\layout_discovery\Hook\LayoutDiscoveryThemeHooks;
 use Drupal\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use Prophecy\Argument;
 
 // cspell:ignore lorem, ipsum, consectetur, adipiscing
+
 /**
- * Tests Drupal\Core\Layout\LayoutPluginManager.
+ * @coversDefaultClass \Drupal\Core\Layout\LayoutPluginManager
+ * @group Layout
+ * @group legacy
  */
-#[CoversClass(LayoutPluginManager::class)]
-#[Group('Layout')]
-#[IgnoreDeprecations]
 class LayoutPluginManagerTest extends UnitTestCase {
 
   /**
@@ -118,10 +114,8 @@ class LayoutPluginManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests get definitions.
-   *
-   * @legacy-covers ::getDefinitions
-   * @legacy-covers ::providerExists
+   * @covers ::getDefinitions
+   * @covers ::providerExists
    */
   public function testGetDefinitions(): void {
     $expected = [
@@ -137,10 +131,8 @@ class LayoutPluginManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests get definition.
-   *
-   * @legacy-covers ::getDefinition
-   * @legacy-covers ::processDefinition
+   * @covers ::getDefinition
+   * @covers ::processDefinition
    */
   public function testGetDefinition(): void {
     $layout_definition = $this->layoutPluginManager->getDefinition('theme_a_provided_layout');
@@ -262,9 +254,7 @@ class LayoutPluginManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests process definition.
-   *
-   * @legacy-covers ::processDefinition
+   * @covers ::processDefinition
    */
   public function testProcessDefinition(): void {
     $this->moduleHandler->alter('layout', Argument::type('array'))->shouldNotBeCalled();
@@ -286,16 +276,13 @@ EOS;
   }
 
   /**
-   * Tests get theme implementations.
-   *
-   * @legacy-covers ::getThemeImplementations
+   * @covers ::getThemeImplementations
    */
   public function testGetThemeImplementations(): void {
     $core_path = '/core/lib/Drupal/Core';
     $expected = [
       'layout' => [
         'render element' => 'content',
-        'initial preprocess' => LayoutDiscoveryThemeHooks::class . ':preprocessLayout',
       ],
       'twocol' => [
         'render element' => 'content',
@@ -321,9 +308,7 @@ EOS;
   }
 
   /**
-   * Tests get categories.
-   *
-   * @legacy-covers ::getCategories
+   * @covers ::getCategories
    */
   public function testGetCategories(): void {
     $expected = [
@@ -335,9 +320,7 @@ EOS;
   }
 
   /**
-   * Tests get sorted definitions.
-   *
-   * @legacy-covers ::getSortedDefinitions
+   * @covers ::getSortedDefinitions
    */
   public function testGetSortedDefinitions(): void {
     // Sorted by category first, then label.
@@ -354,9 +337,7 @@ EOS;
   }
 
   /**
-   * Tests get grouped definitions.
-   *
-   * @legacy-covers ::getGroupedDefinitions
+   * @covers ::getGroupedDefinitions
    */
   public function testGetGroupedDefinitions(): void {
     $category_expected = [
@@ -382,7 +363,7 @@ EOS;
   /**
    * Test that modules and themes can alter the list of layouts.
    *
-   * @legacy-covers ::getLayoutOptions
+   * @covers ::getLayoutOptions
    */
   public function testGetLayoutOptions(): void {
     $this->moduleHandler->alter(

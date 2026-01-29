@@ -6,15 +6,14 @@ namespace Drupal\Tests\navigation\Functional;
 
 use Drupal\Core\Url;
 use Drupal\Tests\system\Functional\Cache\PageCacheTagsTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 // cspell:ignore navigationuser linksuserwrapper
+
 /**
  * Tests for \Drupal\navigation\Plugin\NavigationBlock\NavigationUserBlock.
+ *
+ * @group navigation
  */
-#[Group('navigation')]
-#[RunTestsInSeparateProcesses]
 class NavigationUserBlockTest extends PageCacheTagsTestBase {
 
   /**

@@ -22,7 +22,7 @@ class OfficeHoursFormatterStatus extends OfficeHoursFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = parent::settingsForm($form, $form_state);
     $element_save = $element['current_status'];
 
@@ -36,7 +36,7 @@ class OfficeHoursFormatterStatus extends OfficeHoursFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = [];
     $summary[] = $this->t("Display only 'Closed'/'Opened' text.");
     return $summary;
@@ -45,7 +45,7 @@ class OfficeHoursFormatterStatus extends OfficeHoursFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = parent::viewElements($items, $langcode);
 
     // Alter the default settings, to calculate the cache correctly.

@@ -4,7 +4,6 @@ namespace Drupal\default_content;
 
 use Drupal\Component\Graph\Graph;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
-use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\File\FileSystemInterface;
@@ -15,7 +14,6 @@ use Drupal\default_content\Event\ImportEvent;
 use Drupal\default_content\Normalizer\ContentEntityNormalizerInterface;
 use Drupal\file\FileInterface;
 use Drupal\user\EntityOwnerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -36,13 +34,6 @@ class Importer implements ImporterInterface {
    * @see https://www.drupal.org/node/3296226
    */
   protected $linkDomain;
-
-  /**
-   * The default_content logger.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  private $logger;
 
   /**
    * The serializer service.
@@ -306,9 +297,9 @@ class Importer implements ImporterInterface {
           // If a file exists in the same folder, copy it to the designed
           // target URI.
           if ($entity instanceof FileInterface) {
-            $file_source = \dirname($file->uri) . '/' . $entity->getFilename();
+            $file_source = $this->fileSystem->dirname($file->uri) . '/' . $entity->getFilename();
             if (\file_exists($file_source)) {
-              $target_directory = dirname($entity->getFileUri());
+              $target_directory = $this->fileSystem->dirname($entity->getFileUri());
               $this->fileSystem->prepareDirectory($target_directory, FileSystemInterface::CREATE_DIRECTORY);
               $new_uri = $this->fileSystem->copy($file_source, $entity->getFileUri());
               $entity->setFileUri($new_uri);

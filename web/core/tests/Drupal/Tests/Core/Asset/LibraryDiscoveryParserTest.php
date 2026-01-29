@@ -16,17 +16,11 @@ use Drupal\Core\Theme\ActiveTheme;
 use Drupal\Core\Theme\ComponentPluginManager;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 /**
- * Tests Drupal\Core\Asset\LibraryDiscoveryParser.
+ * @coversDefaultClass \Drupal\Core\Asset\LibraryDiscoveryParser
+ * @group Asset
  */
-#[CoversClass(LibraryDiscoveryParser::class)]
-#[Group('Asset')]
 class LibraryDiscoveryParserTest extends UnitTestCase {
 
   /**
@@ -126,9 +120,10 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that basic functionality works for getLibraryByName.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
+   *
+   * @runInSeparateProcess
    */
-  #[RunInSeparateProcess]
   public function testBuildByExtensionSimple(): void {
     FileCacheFactory::setPrefix('testing');
     // Use the default file cache configuration.
@@ -167,7 +162,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that a theme can be used instead of a module.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testBuildByExtensionWithTheme(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -194,7 +189,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that a module with a missing library file results in FALSE.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testBuildByExtensionWithMissingLibraryFile(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -215,7 +210,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that an exception is thrown when a libraries file couldn't be parsed.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testInvalidLibrariesFile(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -237,7 +232,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that no exception is thrown when only dependencies are specified.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testBuildByExtensionWithOnlyDependencies(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -259,7 +254,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that an exception is thrown with only the version property specified.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testBuildByExtensionWithMissingInformation(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -282,7 +277,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests the version property, and how it propagates to the contained assets.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testVersion(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -315,7 +310,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that the version property of external libraries is handled.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testExternalLibraries(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -341,7 +336,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Ensures that CSS weights are taken into account properly.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testDefaultCssWeights(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -382,7 +377,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Ensures that you cannot provide positive weights for JavaScript libraries.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testJsWithPositiveWeight(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -404,7 +399,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests a library with CSS/JavaScript and a setting.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testLibraryWithCssJsSetting(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -437,7 +432,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests a library with dependencies.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testLibraryWithDependencies(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -463,7 +458,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests a library with a couple of data formats like full URL.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testLibraryWithDataTypes(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -501,7 +496,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests a library with JavaScript-specific flags.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testLibraryWithJavaScript(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -527,7 +522,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests that an exception is thrown when license is missing when 3rd party.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testLibraryThirdPartyWithMissingLicense(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -550,7 +545,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests a library with various licenses, some GPL-compatible, some not.
    *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testLibraryWithLicenses(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -637,7 +632,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests libraries with overrides.
    *
-   * @legacy-covers ::applyLibrariesOverride
+   * @covers ::applyLibrariesOverride
    */
   public function testLibraryOverride(): void {
     $mock_theme_path = 'mocked_themes/kittens';
@@ -690,9 +685,10 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Tests deprecated library with an override.
    *
-   * @legacy-covers ::applyLibrariesOverride
+   * @covers ::applyLibrariesOverride
+   *
+   * @group legacy
    */
-  #[IgnoreDeprecations]
   public function testLibraryOverrideDeprecated(): void {
     $this->expectDeprecation('Theme "deprecated" is overriding a deprecated library. The "deprecated/deprecated" asset library is deprecated in drupal:X.0.0 and is removed from drupal:Y.0.0. Use another library instead. See https://www.example.com');
     $mock_theme_path = 'mocked_themes/kittens';
@@ -735,14 +731,21 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   }
 
   /**
+   * Verifies assertions catch invalid CSS declarations.
+   *
+   * @dataProvider providerTestCssAssert
+   */
+
+  /**
    * Verify an assertion fails if CSS declarations have non-existent categories.
    *
    * @param string $extension
    *   The css extension to build.
    * @param string $exception_message
    *   The expected exception message.
+   *
+   * @dataProvider providerTestCssAssert
    */
-  #[DataProvider('providerTestCssAssert')]
   public function testCssAssert($extension, $exception_message): void {
     $this->moduleHandler->expects($this->atLeastOnce())
       ->method('moduleExists')
@@ -764,27 +767,16 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   /**
    * Data provider for testing bad CSS declarations.
    */
-  public static function providerTestCssAssert(): array {
+  public static function providerTestCssAssert() {
     return [
-      'css_bad_category' => [
-        'css_bad_category',
-        'See https://www.drupal.org/node/2274843.',
-      ],
-      'Improper CSS nesting' => [
-        'css_bad_nesting',
-        'CSS must be nested under a category. See https://www.drupal.org/node/2274843.',
-      ],
-      'Improper CSS nesting array' => [
-        'css_bad_nesting_array',
-        'CSS files should be specified as key/value pairs, where the values are configuration options. See https://www.drupal.org/node/2274843.',
-      ],
+      'css_bad_category' => ['css_bad_category', 'See https://www.drupal.org/node/2274843.'],
+      'Improper CSS nesting' => ['css_bad_nesting', 'CSS must be nested under a category. See https://www.drupal.org/node/2274843.'],
+      'Improper CSS nesting array' => ['css_bad_nesting_array', 'CSS files should be specified as key/value pairs, where the values are configuration options. See https://www.drupal.org/node/2274843.'],
     ];
   }
 
   /**
-   * Tests non core libraries found.
-   *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testNonCoreLibrariesFound(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -815,9 +807,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   }
 
   /**
-   * Tests non core libraries not found.
-   *
-   * @legacy-covers ::buildByExtension
+   * @covers ::buildByExtension
    */
   public function testNonCoreLibrariesNotFound(): void {
     $this->moduleHandler->expects($this->atLeastOnce())
@@ -852,9 +842,7 @@ class LibraryDiscoveryParserTest extends UnitTestCase {
   }
 
   /**
-   * Tests empty library file.
-   *
-   * @legacy-covers ::parseLibraryInfo
+   * @covers ::parseLibraryInfo
    */
   public function testEmptyLibraryFile(): void {
     $this->moduleHandler->expects($this->atLeastOnce())

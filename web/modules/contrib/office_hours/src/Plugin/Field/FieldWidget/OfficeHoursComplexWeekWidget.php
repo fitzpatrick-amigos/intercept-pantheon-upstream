@@ -23,7 +23,7 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     $settings = parent::defaultSettings();
     $settings += [
       'collapsed_exceptions' => TRUE,
@@ -34,7 +34,7 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $form = parent::settingsForm($form, $form_state);
 
     $form['collapsed_exceptions'] = [
@@ -49,7 +49,7 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = parent::settingsSummary();
     $summary[] = $this->t('Collapse exceptions: @collapsed', ['@collapsed' => $this->getSetting('collapsed_exceptions') ? $this->t('Yes') : $this->t('No')]);
     return $summary;
@@ -58,7 +58,7 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     // In D8, we have a (deliberate) anomaly in the widget.
     // We prepare 1 widget for the whole week,
     // but the field has unlimited cardinality.
@@ -115,9 +115,8 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
       }
     }
 
-    // Remove messages from WeekWidget::addMessage();
-    // @todo Perhaps first fetch MessengerInterface::all(), then restore.
-    \Drupal::messenger()->deleteByType(static::MESSAGE_TYPE);
+    // Remove messages from WeekWidget::addInvalidTimeSlotMessage();
+    $this->deleteInvalidTimeSlotMessage();
 
     // @todo The '#required' is now on main level, not on weekday level.
     return $element;
@@ -126,7 +125,7 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
   /**
    * {@inheritdoc}
    */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
     $massaged_values = [];
 
     // @todo Correct $element['#parents'], since FormBuilder's
@@ -140,13 +139,6 @@ class OfficeHoursComplexWeekWidget extends OfficeHoursSeasonWidget {
     }
 
     return $massaged_values;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state) {
-    parent::extractFormValues($items, $form, $form_state);
   }
 
 }

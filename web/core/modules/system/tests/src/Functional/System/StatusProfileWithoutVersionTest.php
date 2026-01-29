@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\system\Functional\System;
 
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Status Report page if the installation profile has no version.
+ *
+ * @group system
  */
-#[Group('system')]
-#[RunTestsInSeparateProcesses]
 class StatusProfileWithoutVersionTest extends BrowserTestBase {
 
   /**
@@ -41,8 +38,9 @@ class StatusProfileWithoutVersionTest extends BrowserTestBase {
 
   /**
    * Tests that an installation profile that has no version is displayed.
+   *
+   * @group legacy
    */
-  #[IgnoreDeprecations]
   public function testStatusPage(): void {
     $this->drupalGet('admin/reports/status');
     $this->assertSession()->statusCodeEquals(200);

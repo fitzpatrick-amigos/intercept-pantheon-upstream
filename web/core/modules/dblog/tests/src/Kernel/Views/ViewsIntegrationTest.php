@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace Drupal\Tests\dblog\Kernel\Views;
 
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Link;
 use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
-use Drupal\views\Tests\ViewTestData;
 use Drupal\views\Views;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\views\Tests\ViewTestData;
 
 /**
  * Tests the views integration of dblog module.
+ *
+ * @group dblog
  */
-#[Group('dblog')]
-#[RunTestsInSeparateProcesses]
 class ViewsIntegrationTest extends ViewsKernelTestBase {
 
   /**

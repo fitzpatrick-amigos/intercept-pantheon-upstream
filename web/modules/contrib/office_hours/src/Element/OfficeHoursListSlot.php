@@ -16,7 +16,7 @@ class OfficeHoursListSlot extends OfficeHoursBaseSlot {
   /**
    * {@inheritdoc}
    */
-  public static function processOfficeHoursSlot(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processOfficeHoursSlot(&$element, FormStateInterface $form_state, &$complete_form): array {
     parent::processOfficeHoursSlot($element, $form_state, $complete_form);
 
     // The valueCallback() has populated the #value array.

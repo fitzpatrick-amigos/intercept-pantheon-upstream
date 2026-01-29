@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\block\Kernel\Migrate\d6;
 
-use Drupal\block\Hook\BlockHooks;
 use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\block\Hook\BlockHooks;
 
 /**
  * Tests migration of i18n block translations.
+ *
+ * @group migrate_drupal_6
  */
-#[Group('migrate_drupal_6')]
-#[RunTestsInSeparateProcesses]
 class MigrateBlockContentTranslationTest extends MigrateDrupal6TestBase {
 
   /**
@@ -21,11 +19,14 @@ class MigrateBlockContentTranslationTest extends MigrateDrupal6TestBase {
    */
   protected static $modules = [
     'block',
+    'comment',
+    'views',
     'block_content',
     'config_translation',
     'language',
     'locale',
     'path_alias',
+    'taxonomy',
   ];
 
   /**
@@ -44,7 +45,6 @@ class MigrateBlockContentTranslationTest extends MigrateDrupal6TestBase {
       'd6_filter_format',
       'block_content_type',
       'block_content_body_field',
-      'block_content_body_field_storage',
       'd6_menu',
       'd6_custom_block',
       'd6_user_role',

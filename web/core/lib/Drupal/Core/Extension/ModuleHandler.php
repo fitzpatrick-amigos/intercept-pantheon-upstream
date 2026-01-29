@@ -5,13 +5,11 @@ namespace Drupal\Core\Extension;
 use Drupal\Component\Graph\Graph;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\Exception\UnknownExtensionException;
 use Drupal\Core\Hook\Attribute\LegacyHook;
-use Drupal\Core\Hook\ImplementationList;
+use Drupal\Core\Hook\HookCollectorPass;
 use Drupal\Core\Hook\OrderOperation\OrderOperation;
-use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
-use Drupal\Core\Utility\CallableResolver;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class that manages modules in a Drupal installation.
@@ -21,16 +19,16 @@ class ModuleHandler implements ModuleHandlerInterface {
   /**
    * List of loaded files.
    *
-   * @var array<string, true>
+   * @var array
    *   An associative array whose keys are file paths of loaded files, relative
    *   to the application's root directory.
    */
   protected $loadedFiles;
 
   /**
-   * Installed modules, as extension objects keyed by module name.
+   * List of installed modules.
    *
-   * @var array<string, \Drupal\Core\Extension\Extension>
+   * @var \Drupal\Core\Extension\Extension[]
    */
   protected $moduleList;
 
@@ -42,58 +40,48 @@ class ModuleHandler implements ModuleHandlerInterface {
   protected $loaded = FALSE;
 
   /**
-   * Lists of callbacks which implement an alter hook, keyed by hook name(s).
+   * List of events which implement an alter hook keyed by hook name(s).
    *
-   * @var array<string, list<callable>>
+   * @var array
    */
-  protected array $alterHookListeners = [];
+  protected array $alterEventListeners = [];
 
+  /**
+   * The app root.
+   *
+   * @var string
+   */
+  protected $root;
 
   /**
    * A list of module include file keys.
    *
-   * The array keys are generated from the arguments to ->loadInclude().
-   * Each value is either the path of a file that was successfully included, or
-   * FALSE if the given file did not exist.
-   *
-   * @var array<string, string|false>
+   * @var array
    */
   protected $includeFileKeys = [];
 
   /**
-   * Implementation lists by hook name.
+   * Lists of implementation callables by hook.
    *
-   * @var array<string, \Drupal\Core\Hook\ImplementationList>
+   * @var array<string, list<callable>>
    */
-  protected array $hookImplementationLists = [];
+  protected array $listenersByHook = [];
 
   /**
-   * Raw list of hook implementations by hook name.
+   * Lists of module names by hook.
    *
-   * @var array<string, array<string, string>>|null
+   * The indices are exactly the same as in $listenersByHook.
+   *
+   * @var array<string, list<string>>
    */
-  protected ?array $hookLists = NULL;
+  protected array $modulesByHook = [];
 
   /**
-   * List of include files keyed by hook.
+   * Hook and module keyed list of listeners.
    *
-   * @var array<string, list<string>>|null
+   * @var array<string, array<string, list<callable>>>
    */
-  protected ?array $hookIncludes = NULL;
-
-  /**
-   * List of group include files keyed by hook.
-   *
-   * @var array<string, list<string>>|null
-   */
-  protected ?array $hookGroupIncludes = NULL;
-
-  /**
-   * Ordering rules by hook name, packed.
-   *
-   * @param array<string, list<string>>
-   */
-  protected array $packedOrderOperations = [];
+  protected array $invokeMap = [];
 
   /**
    * Ordering rules by hook name.
@@ -111,28 +99,32 @@ class ModuleHandler implements ModuleHandlerInterface {
    *   An associative array whose keys are the names of installed modules and
    *   whose values are Extension class parameters. This is normally the
    *   %container.modules% parameter being set up by DrupalKernel.
-   * @param \Drupal\Core\KeyValueStore\KeyValueFactoryInterface $keyValueFactory
-   *   The key value factory.
-   * @param \Drupal\Core\Utility\CallableResolver $callableResolver
-   *   The callable resolver.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The bootstrap cache.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The event dispatcher.
+   * @param array<string, array<class-string, array<string, string>>> $hookImplementationsMap
+   *   An array keyed by hook, classname, method and the value is the module.
+   * @param array<string, list<string>> $groupIncludes
+   *   Lists of *.inc file paths that contain procedural implementations, keyed
+   *   by hook name.
+   * @param array<string, list<string>> $packedOrderOperations
+   *   Ordering rules by hook name, serialized.
    *
    * @see \Drupal\Core\DrupalKernel
    * @see \Drupal\Core\CoreServiceProvider
    */
   public function __construct(
-    protected $root,
+    $root,
     array $module_list,
-    protected readonly KeyValueFactoryInterface $keyValueFactory,
-    protected readonly CallableResolver $callableResolver,
-    protected readonly CacheBackendInterface $cache,
+    protected EventDispatcherInterface $eventDispatcher,
+    protected array $hookImplementationsMap,
+    protected array $groupIncludes = [],
+    protected array $packedOrderOperations = [],
   ) {
+    $this->root = $root;
     $this->moduleList = [];
     foreach ($module_list as $name => $module) {
       $this->moduleList[$name] = new Extension($this->root, $module['type'], $module['pathname'], $module['filename']);
     }
-
   }
 
   /**
@@ -209,14 +201,16 @@ class ModuleHandler implements ModuleHandlerInterface {
    * {@inheritdoc}
    */
   public function addModule($name, $path) {
-    @trigger_error(__METHOD__ . '() is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. This method does nothing. There is no direct replacement. See https://www.drupal.org/node/3491200', E_USER_DEPRECATED);
+    @trigger_error(__METHOD__ . '() is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. There is no direct replacement. See https://www.drupal.org/node/3491200', E_USER_DEPRECATED);
+    $this->add('module', $name, $path);
   }
 
   /**
    * {@inheritdoc}
    */
   public function addProfile($name, $path) {
-    @trigger_error(__METHOD__ . '() is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. This method does nothing. There is no direct replacement. See https://www.drupal.org/node/3491200', E_USER_DEPRECATED);
+    @trigger_error(__METHOD__ . '() is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. There is no direct replacement. See https://www.drupal.org/node/3491200', E_USER_DEPRECATED);
+    $this->add('profile', $name, $path);
   }
 
   /**
@@ -229,12 +223,37 @@ class ModuleHandler implements ModuleHandlerInterface {
    * @param string $path
    *   The module path; e.g., 'core/modules/node'.
    *
-   * @deprecated in drupal:11.3.0 and is removed from drupal:12.0.0.
+   * @deprecated in drupal:11.2.0 and is removed from drupal:12.0.0.
    * There is no direct replacement.
    * @see https://www.drupal.org/node/3491200
    */
   protected function add($type, $name, $path) {
-    @trigger_error(__METHOD__ . '() is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. This method does nothing. There is no direct replacement. See https://www.drupal.org/node/3491200', E_USER_DEPRECATED);
+    $pathname = "$path/$name.info.yml";
+    $php_file_path = $this->root . "/$path/$name.$type";
+    if ($filename = file_exists($php_file_path) ? "$name.$type" : NULL) {
+      include_once $php_file_path;
+    }
+    $this->moduleList[$name] = new Extension($this->root, $type, $pathname, $filename);
+    $this->resetImplementations();
+    $hook_collector = HookCollectorPass::collectAllHookImplementations([$name => ['pathname' => $pathname]]);
+    // A module freshly added will not be registered on the container yet.
+    // ProceduralCall service does not yet know about it.
+    // Note in HookCollectorPass:
+    // phpcs:ignore Drupal.Files.LineLength
+    // - $container->register(ProceduralCall::class, ProceduralCall::class)->addArgument($collector->includes);
+    // Load all includes so the legacy section of invoke can handle hooks in
+    // includes.
+    $hook_collector->loadAllIncludes();
+    // Register procedural implementations.
+    foreach ($hook_collector->getImplementations() as $hook => $moduleImplements) {
+      foreach ($moduleImplements as $module => $classImplements) {
+        foreach ($classImplements[ProceduralCall::class] ?? [] as $method) {
+          $this->listenersByHook[$hook][] = $method;
+          $this->modulesByHook[$hook][] = $module;
+          $this->invokeMap[$hook][$module][] = $method;
+        }
+      }
+    }
   }
 
   /**
@@ -271,7 +290,6 @@ class ModuleHandler implements ModuleHandlerInterface {
    * {@inheritdoc}
    */
   public function loadAllIncludes($type, $name = NULL) {
-    @trigger_error("ModuleHandler::loadAllIncludes() is deprecated in drupal:11.3.0 and is removed from drupal:13.0.0. There is no replacement. See https://www.drupal.org/node/3536432", E_USER_DEPRECATED);
     foreach ($this->moduleList as $module => $filename) {
       $this->loadInclude($module, $type, $name);
     }
@@ -316,27 +334,26 @@ class ModuleHandler implements ModuleHandlerInterface {
    * {@inheritdoc}
    */
   public function resetImplementations() {
-    $this->alterHookListeners = [];
-    $this->hookImplementationLists = [];
+    $this->alterEventListeners = [];
+    $this->invokeMap = [];
+    $this->listenersByHook = [];
+    $this->modulesByHook = [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function hasImplementations(string $hook, $modules = NULL): bool {
-    $list = $this->getHookImplementationList($hook);
-    if ($modules === NULL) {
-      return $list->hasImplementations();
-    }
-    return $list->hasImplementationsForModules((array) $modules);
+    $implementation_modules = array_keys($this->getHookListeners($hook));
+    return (bool) (isset($modules) ? array_intersect($implementation_modules, (array) $modules) : $implementation_modules);
   }
 
   /**
    * {@inheritdoc}
    */
   public function invokeAllWith(string $hook, callable $callback): void {
-    $list = $this->getHookImplementationList($hook);
-    foreach ($list->iterateByModule() as $module => $listener) {
+    foreach ($this->getFlatHookListeners($hook) as $index => $listener) {
+      $module = $this->modulesByHook[$hook][$index];
       $callback($listener, $module);
     }
   }
@@ -345,9 +362,7 @@ class ModuleHandler implements ModuleHandlerInterface {
    * {@inheritdoc}
    */
   public function invoke($module, $hook, array $args = []) {
-    $list = $this->getHookImplementationList($hook);
-    $listeners = $list->getForModule($module);
-    if ($listeners) {
+    if ($listeners = $this->getHookListeners($hook)[$module] ?? []) {
       if (count($listeners) > 1) {
         throw new \LogicException("Module $module should not implement $hook more than once");
       }
@@ -424,8 +439,7 @@ class ModuleHandler implements ModuleHandlerInterface {
    *   The name of the hook.
    */
   private function triggerDeprecationError($description, $hook) {
-    $list = $this->getHookImplementationList($hook);
-    $modules = array_unique($list->modules);
+    $modules = array_keys($this->getHookListeners($hook));
     if (!empty($modules)) {
       $message = 'The deprecated hook hook_' . $hook . '() is implemented in these modules: ';
       @trigger_error($message . implode(', ', $modules) . '. ' . $description, E_USER_DEPRECATED);
@@ -448,21 +462,21 @@ class ModuleHandler implements ModuleHandlerInterface {
     }
 
     // Some alter hooks are invoked many times per page request, so store the
-    // list of listeners to call, and on subsequent calls, iterate through them
+    // list of functions to call, and on subsequent calls, iterate through them
     // quickly.
-    if (!isset($this->alterHookListeners[$cid])) {
+    if (!isset($this->alterEventListeners[$cid])) {
       $hooks = is_array($type)
         ? array_map(static fn (string $type) => $type . '_alter', $type)
         : [$type . '_alter'];
-      $this->alterHookListeners[$cid] = $this->getCombinedListeners($hooks);
+      $this->alterEventListeners[$cid] = $this->getCombinedListeners($hooks);
     }
-    foreach ($this->alterHookListeners[$cid] as $listener) {
+    foreach ($this->alterEventListeners[$cid] as $listener) {
       $listener($data, $context1, $context2);
     }
   }
 
   /**
-   * Builds a list of implementations for an alter hook.
+   * Builds a list of listeners for an alter hook.
    *
    * @param list<string> $hooks
    *   The hooks passed to the ->alter() call.
@@ -472,28 +486,28 @@ class ModuleHandler implements ModuleHandlerInterface {
    */
   protected function getCombinedListeners(array $hooks): array {
     // Get implementation lists for each hook.
-    /** @var list<\Drupal\Core\Hook\ImplementationList> $lists */
-    $lists = array_map($this->getHookImplementationList(...), $hooks);
+    $listener_lists = array_map($this->getFlatHookListeners(...), $hooks);
     // Remove empty lists.
-    /** @var array<int, \Drupal\Core\Hook\ImplementationList> $lists */
-    $lists = array_filter($lists, fn (ImplementationList $list) => $list->hasImplementations());
-    if (!$lists) {
+    $listener_lists = array_filter($listener_lists);
+    if (!$listener_lists) {
       // No implementations exist.
       return [];
     }
-    if (array_keys($lists) === [0]) {
+    if (array_keys($listener_lists) === [0]) {
       // Only the first hook has implementations.
-      return $lists[0]->listeners;
+      return $listener_lists[0];
     }
     // Collect the lists from each hook and group the listeners by module.
     $listeners_by_identifier = [];
     $modules_by_identifier = [];
     $identifiers_by_module = [];
-    foreach ($lists as $list) {
-      foreach ($list->iterateByModule() as $module => $listener) {
+    foreach ($listener_lists as $i_hook => $listeners) {
+      $hook = $hooks[$i_hook];
+      foreach ($listeners as $i_listener => $listener) {
+        $module = $this->modulesByHook[$hook][$i_listener];
         $identifier = is_array($listener)
           ? get_class($listener[0]) . '::' . $listener[1]
-          : $listener;
+          : ProceduralCall::class . '::' . $listener;
         $other_module = $modules_by_identifier[$identifier] ?? NULL;
         if ($other_module !== NULL) {
           $this->triggerErrorForDuplicateAlterHookListener(
@@ -610,12 +624,12 @@ class ModuleHandler implements ModuleHandlerInterface {
   /**
    * Reorder modules for alters.
    *
-   * @param list<string> $modules
-   *   A list of module names.
+   * @param array $modules
+   *   A list of modules.
    * @param string $hook
    *   The hook being worked on, for example form_alter.
    *
-   * @return list<string>
+   * @return array
    *   The list, potentially reordered and changed by
    *   hook_module_implements_alter().
    */
@@ -638,7 +652,7 @@ class ModuleHandler implements ModuleHandlerInterface {
    */
   public function alterDeprecated($description, $type, &$data, &$context1 = NULL, &$context2 = NULL) {
     // Invoke the alter hook. This has the side effect of populating
-    // $this->alterHookListeners.
+    // $this->alterEventListeners.
     $this->alter($type, $data, $context1, $context2);
     // The $type parameter can be an array. alter() will deal with this
     // internally, but we have to extract the proper $cid in order to discover
@@ -649,11 +663,11 @@ class ModuleHandler implements ModuleHandlerInterface {
       $extra_types = $type;
       $type = array_shift($extra_types);
     }
-    if (!empty($this->alterHookListeners[$cid])) {
+    if (!empty($this->alterEventListeners[$cid])) {
       $functions = [];
-      foreach ($this->alterHookListeners[$cid] as $listener) {
+      foreach ($this->alterEventListeners[$cid] as $listener) {
         if (is_string($listener)) {
-          $functions[] = $listener;
+          $functions[] = substr($listener, 1);
         }
         else {
           $functions[] = get_class($listener[0]) . '::' . $listener[1];
@@ -683,77 +697,71 @@ class ModuleHandler implements ModuleHandlerInterface {
     return \Drupal::service('extension.list.module')->getName($module);
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public function writeCache() {
     @trigger_error(__METHOD__ . '() is deprecated in drupal:11.1.0 and is removed from drupal:12.0.0. There is no need to call this method so there is no replacement. See https://www.drupal.org/node/3442349', E_USER_DEPRECATED);
   }
 
   /**
-   * Gets a hook implementation list for a specific hook.
+   * Gets hook listeners by module.
+   *
+   * @param string $hook
+   *   The name of the hook.
+   *
+   * @return array<string, list<callable>>
+   *   A list of event listeners implementing this hook.
+   */
+  protected function getHookListeners(string $hook): array {
+    if (!isset($this->invokeMap[$hook])) {
+      $this->invokeMap[$hook] = [];
+      foreach ($this->getFlatHookListeners($hook) as $index => $listener) {
+        $module = $this->modulesByHook[$hook][$index];
+        $this->invokeMap[$hook][$module][] = $listener;
+      }
+    }
+
+    return $this->invokeMap[$hook] ?? [];
+  }
+
+  /**
+   * Gets a list of hook listener callbacks.
    *
    * @param string $hook
    *   The hook name.
    *
-   * @return \Drupal\Core\Hook\ImplementationList
-   *   Object with hook implementation callbacks and their modules.
+   * @return list<callable>
+   *   A list of hook implementation callables.
+   *
+   * @internal
    */
-  protected function getHookImplementationList(string $hook): ImplementationList {
-    if (!isset($this->hookImplementationLists[$hook])) {
-      if ($this->hookLists === NULL) {
-        if ($cache = $this->cache->get('hook_data')) {
-          $hook_data = $cache->data;
+  protected function getFlatHookListeners(string $hook): array {
+    if (!isset($this->listenersByHook[$hook])) {
+      $this->listenersByHook[$hook] = [];
+      foreach ($this->eventDispatcher->getListeners("drupal_hook.$hook") as $listener) {
+        if (is_array($listener) && is_object($listener[0])) {
+          $module = $this->hookImplementationsMap[$hook][get_class($listener[0])][$listener[1]];
+          // Inline ProceduralCall::__call() otherwise references get lost.
+          if ($listener[0] instanceof ProceduralCall) {
+            $listener[0]->loadFile($listener[1]);
+            $callable = '\\' . $listener[1];
+          }
+          else {
+            $callable = $listener;
+          }
+          if (isset($this->moduleList[$module])) {
+            $this->listenersByHook[$hook][] = $callable;
+            $this->modulesByHook[$hook][] = $module;
+          }
         }
-        else {
-          $hook_data = $this->keyValueFactory->get('hook_data')->getMultiple([
-            'hook_list',
-            'includes',
-            'group_includes',
-            'packed_order_operations',
-          ]);
-          $this->cache->set('hook_data', $hook_data);
-        }
-        $this->hookLists = $hook_data['hook_list'] ?? [];
-        $this->hookIncludes = $hook_data['includes'] ?? [];
-        $this->hookGroupIncludes = $hook_data['group_includes'] ?? [];
-        $this->packedOrderOperations = $hook_data['packed_order_operations'] ?? [];
       }
-      $hook_list = $this->hookLists[$hook] ?? [];
-      if ($hook_list) {
-        $listeners = [];
-        $modules = [];
-
-        foreach ($this->hookIncludes[$hook] ?? [] as $include) {
-          include_once $include;
-        }
-        foreach ($this->hookGroupIncludes[$hook] ?? [] as $include) {
+      if (isset($this->groupIncludes[$hook])) {
+        foreach ($this->groupIncludes[$hook] as $include) {
           @trigger_error('Autoloading hooks in the file (' . $include . ') is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. Move the functions in this file to either the .module file or other appropriate location. See https://www.drupal.org/node/3489765', E_USER_DEPRECATED);
           include_once $include;
         }
-
-        foreach ($hook_list as $identifier => $module) {
-          // Remove implementations from "other" modules.
-          // This is relevant on the update page, when only the implementations
-          // from system module should be used.
-          // 'core' is a special protected module name. This is used by the test
-          // system to allow kernel tests to implement hooks.
-          if (isset($this->moduleList[$module]) || $module === 'core') {
-            $listeners[] = $this->callableResolver->getCallableFromDefinition($identifier);
-            $modules[] = $module;
-          }
-        }
-
-        $list = new ImplementationList($listeners, $modules);
-        $this->hookImplementationLists[$hook] = $list;
-      }
-      else {
-        // Set an empty implementation list.
-        $this->hookImplementationLists[$hook] = new ImplementationList([], []);
       }
     }
 
-    return $this->hookImplementationLists[$hook];
+    return $this->listenersByHook[$hook];
   }
 
 }

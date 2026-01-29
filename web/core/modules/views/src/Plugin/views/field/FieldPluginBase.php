@@ -72,9 +72,11 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
   const RENDER_TEXT_PHASE_EMPTY = 2;
 
   /**
+   * The alias for the field plugin.
+   *
    * @var string
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public $field_alias = 'unknown';
 
   /**
@@ -89,7 +91,7 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
    *
    * @var mixed
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public $original_value = NULL;
 
   /**
@@ -99,7 +101,7 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
    *
    * @var array
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public $additional_fields = [];
 
   /**
@@ -119,19 +121,19 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
   /**
    * The last rendered value.
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public string|MarkupInterface|NULL $last_render;
 
   /**
    * The last rendered text.
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public string|MarkupInterface|NULL $last_render_text;
 
   /**
    * The last rendered tokens.
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public array $last_tokens;
 
   /**
@@ -191,7 +193,7 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
    */
   protected function addAdditionalFields($fields = NULL) {
     if (!isset($fields)) {
-      // Notice check.
+      // Notice check
       if (empty($this->additional_fields)) {
         return;
       }
@@ -1563,7 +1565,7 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
     }
 
     $alt = $this->viewsTokenReplace($alter['alt'], $tokens);
-    // Set the title attribute of the link only if it improves accessibility.
+    // Set the title attribute of the link only if it improves accessibility
     if ($alt && $alt != $text) {
       $options['attributes']['title'] = Html::decodeEntities($alt);
     }
@@ -1628,7 +1630,7 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
     $final_url = CoreUrl::fromUri($path, $options);
 
     // Build the link based on our altered Url object, adding on the optional
-    // prefix and suffix.
+    // prefix and suffix
     $render = [
       '#type' => 'link',
       '#title' => $text,
@@ -1883,7 +1885,7 @@ abstract class FieldPluginBase extends HandlerBase implements FieldHandlerInterf
           $value = $matches[1];
         }
       }
-      // Remove scraps of HTML entities from the end of a strings.
+      // Remove scraps of HTML entities from the end of a strings
       $value = rtrim(preg_replace('/(?:<(?!.+>)|&(?!.+;)).*$/us', '', $value));
 
       if (!empty($alter['ellipsis'])) {

@@ -184,7 +184,7 @@ class FieldViewsDataProvider {
         'value' => $untranslatable_config_bundles,
       ];
     }
-    elseif ($translation_join_type === 'language' && $data_table) {
+    elseif ($translation_join_type === 'language') {
       $data[$table_alias]['table']['join'][$data_table]['extra'][] = [
         'left_field' => 'langcode',
         'field' => 'langcode',
@@ -226,7 +226,7 @@ class FieldViewsDataProvider {
           'field' => 'bundle',
         ];
       }
-      elseif ($translation_join_type === 'language' && $entity_revision_data_table) {
+      elseif ($translation_join_type === 'language') {
         $data[$table_alias]['table']['join'][$entity_revision_data_table]['extra'][] = [
           'left_field' => 'langcode',
           'field' => 'langcode',
@@ -509,7 +509,7 @@ class FieldViewsDataProvider {
    * @param \Drupal\field\FieldStorageConfigInterface $field_storage
    *   The field storage definition.
    *
-   * @return \Drupal\Core\Entity\Sql\SqlContentEntityStorage|false
+   * @return \Drupal\Core\Entity\Sql\SqlContentEntityStorage|bool
    *   Returns the entity type storage if supported and FALSE otherwise.
    */
   public function getSqlStorageForField(FieldStorageConfigInterface $field_storage): SqlContentEntityStorage|bool {

@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\Core\Theme\Icon;
 
 use Drupal\Core\Form\SubformStateInterface;
-use Drupal\Core\Theme\Icon\IconExtractorSettingsForm;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\Theme\Icon\IconExtractorSettingsForm;
 
 /**
- * Tests Drupal\Core\Theme\Icon\IconExtractorSettingsForm.
+ * @coversDefaultClass \Drupal\Core\Theme\Icon\IconExtractorSettingsForm
+ *
+ * @group icon
  */
-#[CoversClass(IconExtractorSettingsForm::class)]
-#[Group('icon')]
 class IconExtractorSettingsFormTest extends UnitTestCase {
 
   /**
@@ -364,8 +361,9 @@ class IconExtractorSettingsFormTest extends UnitTestCase {
    *   The settings to test.
    * @param array<string, array<string, string>> $expected
    *   The expected result.
+   *
+   * @dataProvider settingsFormDataProvider
    */
-  #[DataProvider('settingsFormDataProvider')]
   public function testGenerateSettingsForm(array $settings, array $expected): void {
     $actual = IconExtractorSettingsForm::generateSettingsForm($settings);
     $this->assertEquals($expected, $actual);

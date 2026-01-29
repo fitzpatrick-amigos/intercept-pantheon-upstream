@@ -6,17 +6,13 @@ namespace Drupal\Tests\views\Unit\Plugin\pager;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
-use Drupal\views\Plugin\views\pager\SqlBase;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Tests Drupal\views\Plugin\views\pager\SqlBase.
+ * @coversDefaultClass \Drupal\views\Plugin\views\pager\SqlBase
+ * @group views
  */
-#[CoversClass(SqlBase::class)]
-#[Group('views')]
 class SqlBaseTest extends UnitTestCase {
 
   /**

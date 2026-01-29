@@ -19,7 +19,7 @@ class OfficeHoursThemeHooks {
    * Note: Hook preprocess_field must remain procedural (message in D11.1).
    * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
    */
-  public function preprocess_field(&$variables, $hook) {
+  public function preprocessField(&$variables, $hook): void {
     if ($variables['element']['#field_type'] !== 'office_hours') {
       return;
     }
@@ -42,7 +42,7 @@ class OfficeHoursThemeHooks {
    * Note: Hook preprocess_field must remain procedural (message in D11.1).
    * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
    */
-  public function preprocess_office_hours(&$variables) {
+  public function preprocessOfficeHours(&$variables): void {
     // For office-hours.html.twig template file.
     $office_hours = $variables['office_hours'];
 
@@ -76,7 +76,7 @@ class OfficeHoursThemeHooks {
    * Note: Hook preprocess_field must remain procedural (message in D11.1).
    * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
    */
-  public function preprocess_office_hours_status(&$variables) {
+  public function preprocessOfficeHoursStatus(&$variables): void {
     // For office-hours-status.html.twig template file.
   }
 
@@ -86,7 +86,7 @@ class OfficeHoursThemeHooks {
    * Note: Hook preprocess_field must remain procedural (message in D11.1).
    * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
    */
-  public function preprocess_office_hours_table(&$variables) {
+  public function preprocessOfficeHoursTable(&$variables): void {
     // For office-hours-table.html.twig template file.
   }
 
@@ -94,7 +94,7 @@ class OfficeHoursThemeHooks {
    * Implements hook_theme().
    */
   #[Hook('theme')]
-  public function theme() {
+  public function theme(): array {
     $themes['office_hours'] = [
       'variables' => [
         'parent' => NULL,
@@ -158,7 +158,7 @@ class OfficeHoursThemeHooks {
    * Implements hook_theme_suggestions_HOOK().
    */
   #[Hook('theme_suggestions_office_hours')]
-  public function theme_suggestions_office_hours(array $variables) {
+  public function themeSuggestionsOfficeHours(array $variables): array {
     $suggestions = [];
 
     $hook_name = $variables['hook_name'] ?? 'office_hours';
@@ -184,17 +184,17 @@ class OfficeHoursThemeHooks {
   /**
    * Implements hook_theme_suggestions_HOOK().
    */
-  public function theme_suggestions_office_hours_status(array $variables) {
+  public function themeSuggestionsOfficeHoursStatus(array $variables): array {
     $variables += ['hook_name' => 'office_hours_status'];
-    return office_hours_theme_suggestions_office_hours($variables);
+    return $this->themeSuggestionsOfficeHours($variables);
   }
 
   /**
    * Implements hook_theme_suggestions_HOOK().
    */
-  public function theme_suggestions_office_hours_table(array $variables) {
+  public function themeSuggestionsOfficeHoursTable(array $variables): array {
     $variables += ['hook_name' => 'office_hours_table'];
-    return office_hours_theme_suggestions_office_hours($variables);
+    return $this->themeSuggestionsOfficeHours($variables);
   }
 
 }

@@ -16,14 +16,12 @@ use Drupal\entity_test_bundle_class\Entity\EntityTestVariant;
 use Drupal\entity_test_bundle_class\Entity\SharedEntityTestBundleClassA;
 use Drupal\entity_test_bundle_class\Entity\SharedEntityTestBundleClassB;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests entity bundle classes.
+ *
+ * @group Entity
  */
-#[Group('Entity')]
-#[RunTestsInSeparateProcesses]
 class BundleClassTest extends EntityKernelTestBase {
 
   /**
@@ -221,7 +219,7 @@ class BundleClassTest extends EntityKernelTestBase {
   /**
    * Checks exception is thrown if two bundles share the same bundle class.
    *
-   * @legacy-covers Drupal\Core\Entity\ContentEntityStorageBase::create
+   * @covers Drupal\Core\Entity\ContentEntityStorageBase::create
    */
   public function testAmbiguousBundleClassExceptionCreate(): void {
     $this->container->get('state')->set('entity_test_bundle_class_enable_ambiguous_entity_types', TRUE);
@@ -238,7 +236,7 @@ class BundleClassTest extends EntityKernelTestBase {
   /**
    * Checks exception is thrown if two entity types share the same bundle class.
    *
-   * @legacy-covers Drupal\Core\Entity\EntityTypeRepository::getEntityTypeFromClass
+   * @covers Drupal\Core\Entity\EntityTypeRepository::getEntityTypeFromClass
    */
   public function testAmbiguousBundleClassExceptionEntityTypeRepository(): void {
     $this->container->get('state')->set('entity_test_bundle_class_enable_ambiguous_entity_types', TRUE);
@@ -253,7 +251,7 @@ class BundleClassTest extends EntityKernelTestBase {
   /**
    * Checks that no exception is thrown when two bundles share an entity class.
    *
-   * @legacy-covers Drupal\Core\Entity\EntityTypeRepository::getEntityTypeFromClass
+   * @covers Drupal\Core\Entity\EntityTypeRepository::getEntityTypeFromClass
    */
   public function testNoAmbiguousBundleClassExceptionSharingEntityClass(): void {
     $shared_type_a = $this->container->get('entity_type.repository')->getEntityTypeFromClass(SharedEntityTestBundleClassA::class);

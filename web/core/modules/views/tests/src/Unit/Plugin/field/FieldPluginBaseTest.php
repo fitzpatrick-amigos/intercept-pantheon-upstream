@@ -15,9 +15,6 @@ use Drupal\Core\Utility\UnroutedUrlAssembler;
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophet;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,10 +22,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\views\Plugin\views\field\FieldPluginBase.
+ * @coversDefaultClass \Drupal\views\Plugin\views\field\FieldPluginBase
+ * @group views
  */
-#[CoversClass(FieldPluginBase::class)]
-#[Group('views')]
 class FieldPluginBaseTest extends UnitTestCase {
 
   /**
@@ -185,7 +181,7 @@ class FieldPluginBaseTest extends UnitTestCase {
       ->willReturnCallback(
         // Pretend to do a render.
         function (&$elements, $is_root_call = FALSE) {
-          // Mock the ability to theme links.
+          // Mock the ability to theme links
           $link = $this->linkGenerator->generate($elements['#title'], $elements['#url']);
           if (isset($elements['#prefix'])) {
             $link = $elements['#prefix'] . $link;
@@ -213,7 +209,7 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Tests rendering as a link without a path.
    *
-   * @legacy-covers ::renderAsLink
+   * @covers ::renderAsLink
    */
   public function testRenderAsLinkWithoutPath(): void {
     $alter = [
@@ -238,9 +234,9 @@ class FieldPluginBaseTest extends UnitTestCase {
    * @param string $url
    *   The final URL used by the more link.
    *
-   * @legacy-covers ::renderText
+   * @dataProvider providerTestRenderTrimmedWithMoreLinkAndPath
+   * @covers ::renderText
    */
-  #[DataProvider('providerTestRenderTrimmedWithMoreLinkAndPath')]
   public function testRenderTrimmedWithMoreLinkAndPath($path, $url): void {
     $alter = [
       'trim' => TRUE,
@@ -299,7 +295,7 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Tests the "No results text" rendering.
    *
-   * @legacy-covers ::renderText
+   * @covers ::renderText
    */
   public function testRenderNoResult(): void {
     $this->setupDisplayWithEmptyArgumentsAndFields();
@@ -316,9 +312,9 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Tests rendering of a link with a path and options.
    *
-   * @legacy-covers ::renderAsLink
+   * @dataProvider providerTestRenderAsLinkWithPathAndOptions
+   * @covers ::renderAsLink
    */
-  #[DataProvider('providerTestRenderAsLinkWithPathAndOptions')]
   public function testRenderAsLinkWithPathAndOptions($path, $alter, $final_html): void {
     $alter += [
       'make_link' => TRUE,
@@ -371,7 +367,7 @@ class FieldPluginBaseTest extends UnitTestCase {
     // entity_type flag.
     $entity_type_id = 'node';
     $data[] = ['test-path', ['entity_type' => $entity_type_id], '<a href="/test-path">value</a>'];
-    // Prefix.
+    // Prefix
     $data[] = ['test-path', ['prefix' => 'test_prefix'], 'test_prefix<a href="/test-path">value</a>'];
     // suffix.
     $data[] = ['test-path', ['suffix' => 'test_suffix'], '<a href="/test-path">value</a>test_suffix'];
@@ -387,9 +383,9 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Tests link rendering with a URL and options.
    *
-   * @legacy-covers ::renderAsLink
+   * @dataProvider providerTestRenderAsLinkWithUrlAndOptions
+   * @covers ::renderAsLink
    */
-  #[DataProvider('providerTestRenderAsLinkWithUrlAndOptions')]
   public function testRenderAsLinkWithUrlAndOptions(Url $url, $alter, Url $expected_url, $url_path, Url $expected_link_url, $final_html): void {
     $alter += [
       'make_link' => TRUE,
@@ -618,9 +614,9 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Tests rendering of a link with a path and options.
    *
-   * @legacy-covers ::renderAsLink
+   * @dataProvider providerTestRenderAsLinkWithPathAndTokens
+   * @covers ::renderAsLink
    */
-  #[DataProvider('providerTestRenderAsLinkWithPathAndTokens')]
   public function testRenderAsLinkWithPathAndTokens($path, $tokens, $link_html): void {
     $alter = [
       'make_link' => TRUE,
@@ -678,9 +674,9 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Tests rendering of a link with a path and options.
    *
-   * @legacy-covers ::renderAsLink
+   * @dataProvider providerTestRenderAsExternalLinkWithPathAndTokens
+   * @covers ::renderAsLink
    */
-  #[DataProvider('providerTestRenderAsExternalLinkWithPathAndTokens')]
   public function testRenderAsExternalLinkWithPathAndTokens($path, $tokens, $link_html, $context): void {
     $alter = [
       'make_link' => TRUE,
@@ -761,14 +757,11 @@ class FieldPluginBaseTest extends UnitTestCase {
     $field = new FieldPluginBaseTestField($this->configuration, $this->pluginId, $this->pluginDefinition);
     $field->init($this->executable, $this->display, $options);
     $field->setLinkGenerator($this->linkGenerator);
-    $field->view->row_index = 0;
     return $field;
   }
 
   /**
-   * Tests get render tokens without fields and arguments.
-   *
-   * @legacy-covers ::getRenderTokens
+   * @covers ::getRenderTokens
    */
   public function testGetRenderTokensWithoutFieldsAndArguments(): void {
     $field = $this->setupTestField();
@@ -784,9 +777,7 @@ class FieldPluginBaseTest extends UnitTestCase {
   }
 
   /**
-   * Tests get render tokens without arguments.
-   *
-   * @legacy-covers ::getRenderTokens
+   * @covers ::getRenderTokens
    */
   public function testGetRenderTokensWithoutArguments(): void {
     $field = $this->setupTestField(['id' => 'id']);
@@ -803,9 +794,7 @@ class FieldPluginBaseTest extends UnitTestCase {
   }
 
   /**
-   * Tests get render tokens with arguments.
-   *
-   * @legacy-covers ::getRenderTokens
+   * @covers ::getRenderTokens
    */
   public function testGetRenderTokensWithArguments(): void {
     $field = $this->setupTestField(['id' => 'id']);
@@ -833,12 +822,10 @@ class FieldPluginBaseTest extends UnitTestCase {
   }
 
   /**
-   * Tests get render tokens with query.
-   *
-   * @legacy-covers ::getRenderTokens
-   * @legacy-covers ::getTokenValuesRecursive
+   * @covers ::getRenderTokens
+   * @covers ::getTokenValuesRecursive
+   * @dataProvider providerTestGetRenderTokensWithQuery
    */
-  #[DataProvider('providerTestGetRenderTokensWithQuery')]
   public function testGetRenderTokensWithQuery(array $query_params, array $expected): void {
     $request = new Request($query_params);
     $this->executable->expects($this->any())
@@ -937,9 +924,9 @@ class FieldPluginBaseTest extends UnitTestCase {
   /**
    * Ensures proper token replacement when generating CSS classes.
    *
-   * @legacy-covers ::elementClasses
-   * @legacy-covers ::elementLabelClasses
-   * @legacy-covers ::elementWrapperClasses
+   * @covers ::elementClasses
+   * @covers ::elementLabelClasses
+   * @covers ::elementWrapperClasses
    */
   public function testElementClassesWithTokens(): void {
     $functions = [

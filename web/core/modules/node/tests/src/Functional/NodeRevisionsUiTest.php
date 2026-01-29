@@ -8,14 +8,12 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the UI for controlling node revision behavior.
+ *
+ * @group node
  */
-#[Group('node')]
-#[RunTestsInSeparateProcesses]
 class NodeRevisionsUiTest extends NodeTestBase {
 
   /**
@@ -203,7 +201,7 @@ class NodeRevisionsUiTest extends NodeTestBase {
    * This can be removed after 'entity.node.version_history' local task is
    * removed by https://www.drupal.org/project/drupal/issues/3153559.
    *
-   * @legacy-covers \Drupal\node\Hook\NodeMenuHooks::localTasksAlter
+   * @covers \Drupal\node\Hook\NodeHooks1::localTasksAlter
    */
   public function testNodeDuplicateRevisionsTab(): void {
     $this->drupalPlaceBlock('local_tasks_block');

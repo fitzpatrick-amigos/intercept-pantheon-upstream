@@ -7,15 +7,13 @@ namespace Drupal\KernelTests\Core\Entity;
 use Drupal\entity_test\Entity\EntityTestMulChanged;
 use Drupal\entity_test\Entity\EntityTestMulRevChanged;
 use Drupal\language\Entity\ConfigurableLanguage;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests basic EntityChangedInterface functionality.
+ *
+ * @group Entity
+ * @group #slow
  */
-#[Group('Entity')]
-#[Group('#slow')]
-#[RunTestsInSeparateProcesses]
 class ContentEntityChangedTest extends EntityKernelTestBase {
 
   /**
@@ -23,6 +21,11 @@ class ContentEntityChangedTest extends EntityKernelTestBase {
    */
   protected static $modules = [
     'language',
+    'user',
+    'system',
+    'field',
+    'text',
+    'filter',
     'entity_test',
   ];
 

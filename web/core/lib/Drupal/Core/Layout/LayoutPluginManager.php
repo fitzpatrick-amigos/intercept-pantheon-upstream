@@ -14,7 +14,6 @@ use Drupal\Core\Plugin\Discovery\YamlDiscoveryDecorator;
 use Drupal\Core\Layout\Attribute\Layout;
 use Drupal\Core\Plugin\FilteredPluginManagerTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\layout_discovery\Hook\LayoutDiscoveryThemeHooks;
 
 /**
  * Provides a plugin manager for layouts.
@@ -165,7 +164,6 @@ class LayoutPluginManager extends DefaultPluginManager implements LayoutPluginMa
     $hooks = [];
     $hooks['layout'] = [
       'render element' => 'content',
-      'initial preprocess' => LayoutDiscoveryThemeHooks::class . ':preprocessLayout',
     ];
     /** @var \Drupal\Core\Layout\LayoutDefinition[] $definitions */
     $definitions = $this->getDefinitions();

@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\menu_ui\Kernel;
 
-use Drupal\block\Entity\Block;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\menu_ui\Hook\MenuUiHooks;
 use Drupal\system\Entity\Menu;
+use Drupal\block\Entity\Block;
 use Drupal\system\MenuInterface;
 use Drupal\Tests\user\Traits\UserCreationTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\menu_ui\Hook\MenuUiHooks;
 
 /**
  * Tests SystemMenuBlock.
+ *
+ * @group menu_ui
  */
-#[Group('menu_ui')]
-#[RunTestsInSeparateProcesses]
 class MenuBlockTest extends KernelTestBase {
 
   use UserCreationTrait;

@@ -13,18 +13,14 @@ use Drupal\Core\TypedData\Plugin\DataType\FloatData;
 use Drupal\Core\TypedData\Plugin\DataType\IntegerData;
 use Drupal\Core\TypedData\Plugin\DataType\StringData;
 use Drupal\Core\TypedData\Plugin\DataType\Uri;
-use Drupal\serialization\Normalizer\PrimitiveDataNormalizer;
 use Drupal\Tests\serialization\Traits\JsonSchemaTestTrait;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\serialization\Normalizer\PrimitiveDataNormalizer;
 
 /**
- * Tests Drupal\serialization\Normalizer\PrimitiveDataNormalizer.
+ * @coversDefaultClass \Drupal\serialization\Normalizer\PrimitiveDataNormalizer
+ * @group serialization
  */
-#[CoversClass(PrimitiveDataNormalizer::class)]
-#[Group('serialization')]
 class PrimitiveDataNormalizerTest extends UnitTestCase {
 
   use JsonSchemaTestTrait;
@@ -46,19 +42,15 @@ class PrimitiveDataNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests supports normalization.
-   *
-   * @legacy-covers ::supportsNormalization
+   * @covers ::supportsNormalization
+   * @dataProvider dataProviderPrimitiveData
    */
-  #[DataProvider('dataProviderPrimitiveData')]
   public function testSupportsNormalization($primitive_data, $expected): void {
     $this->assertTrue($this->normalizer->supportsNormalization($primitive_data));
   }
 
   /**
-   * Tests supports normalization fail.
-   *
-   * @legacy-covers ::supportsNormalization
+   * @covers ::supportsNormalization
    */
   public function testSupportsNormalizationFail(): void {
     // Test that an object not implementing PrimitiveInterface fails.
@@ -66,11 +58,9 @@ class PrimitiveDataNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests normalize.
-   *
-   * @legacy-covers ::normalize
+   * @covers ::normalize
+   * @dataProvider dataProviderPrimitiveData
    */
-  #[DataProvider('dataProviderPrimitiveData')]
   public function testNormalize($primitive_data, $expected): void {
     $this->assertSame($expected, $this->normalizer->normalize($primitive_data));
   }

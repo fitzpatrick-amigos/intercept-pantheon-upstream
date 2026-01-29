@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\PHPStan\Tests;
 
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests that PHPStan version used for rules testing matches core.
  */
-#[Group('PHPStan')]
 class EnsurePHPStanVersionsMatchTest extends TestCase {
 
   public function testVersions(): void {

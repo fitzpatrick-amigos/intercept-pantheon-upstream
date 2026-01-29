@@ -21,7 +21,7 @@ class OfficeHoursFormatterDefault extends OfficeHoursFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = parent::settingsSummary();
 
     if (static::class === __CLASS__) {
@@ -35,7 +35,7 @@ class OfficeHoursFormatterDefault extends OfficeHoursFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = parent::viewElements($items, $langcode);
 
     // Hide the formatter if no data is filled for this entity,

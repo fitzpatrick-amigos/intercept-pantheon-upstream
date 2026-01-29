@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\FunctionalJavascriptTests;
 
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests if we can execute JavaScript in the browser.
+ *
+ * @group javascript
  */
-#[Group('javascript')]
-#[RunTestsInSeparateProcesses]
 class BrowserWithJavascriptTest extends WebDriverTestBase {
 
   /**

@@ -26,7 +26,7 @@ class OfficeHoursSeasonWidget extends OfficeHoursWeekWidget {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     // In D8, we have a (deliberate) anomaly in the widget.
     // We prepare 1 widget for the whole week,
     // but the field has unlimited cardinality.
@@ -77,7 +77,7 @@ class OfficeHoursSeasonWidget extends OfficeHoursWeekWidget {
    *
    * {@inheritdoc}
    */
-  public function getSeasonHeader(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function getSeasonHeader(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = [];
 
     $season = $this->getSeason();
@@ -115,7 +115,7 @@ class OfficeHoursSeasonWidget extends OfficeHoursWeekWidget {
    *
    * {@inheritdoc}
    */
-  private function formatSeasonTitle(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  private function formatSeasonTitle(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): string {
     $season = $this->getSeason();
     // @todo Use proper date format from field settings.
     $season_date_format = 'd-M-Y';
@@ -132,7 +132,7 @@ class OfficeHoursSeasonWidget extends OfficeHoursWeekWidget {
   /**
    * {@inheritdoc}
    */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
 
     // Rescue Season first, since it will be removed by parent function.
     $season = new OfficeHoursSeason($values['season']['header'] ?? 0);

@@ -7,20 +7,15 @@ namespace Drupal\Tests\Core\Cache\Context;
 use Drupal\Core\Cache\Context\UserRolesCacheContext;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Cache\Context\UserRolesCacheContext.
+ * @coversDefaultClass \Drupal\Core\Cache\Context\UserRolesCacheContext
+ * @group Cache
  */
-#[CoversClass(UserRolesCacheContext::class)]
-#[Group('Cache')]
 class UserRolesCacheContextTest extends UnitTestCase {
 
   /**
-   * Tests calculated role.
-   *
-   * @legacy-covers ::getContext
+   * @covers ::getContext
    */
   public function testCalculatedRole(): void {
     $current_user = $this->prophesize(AccountInterface::class);

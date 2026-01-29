@@ -11,17 +11,14 @@ use Drupal\Core\Routing\RouteBuildEvent;
 use Drupal\Core\Routing\RouteCompiler;
 use Drupal\Core\Routing\RoutingEvents;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Tests Drupal\Core\Routing\RouteBuilder.
+ * @coversDefaultClass \Drupal\Core\Routing\RouteBuilder
+ * @group Routing
  */
-#[CoversClass(RouteBuilder::class)]
-#[Group('Routing')]
 class RouteBuilderTest extends UnitTestCase {
 
   /**
@@ -360,13 +357,13 @@ class TestRouteBuilder extends RouteBuilder {
  */
 class TestRouteSubscriber {
 
-  public function routesFromArray(): array {
+  public function routesFromArray() {
     return [
       'test_route.1' => new Route('/test-route/1'),
     ];
   }
 
-  public function routesFromCollection(): RouteCollection {
+  public function routesFromCollection() {
     $collection = new RouteCollection();
     $collection->add('test_route.2', new Route('/test-route/2'));
     return $collection;

@@ -6,27 +6,23 @@ namespace Drupal\KernelTests\Core\Extension;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\Extension\Exception\ObsoleteExtensionException;
 use Drupal\Core\Extension\MissingDependencyException;
+use Drupal\Core\Extension\Exception\ObsoleteExtensionException;
 use Drupal\Core\Extension\ModuleInstaller;
 use Drupal\Core\Extension\ModuleUninstallValidatorInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Tests the ModuleInstaller class.
+ *
+ * @coversDefaultClass \Drupal\Core\Extension\ModuleInstaller
+ *
+ * @group Extension
  */
-#[CoversClass(ModuleInstaller::class)]
-#[Group('Extension')]
-#[RunTestsInSeparateProcesses]
 class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
 
   use RfcLoggerTrait;
@@ -34,8 +30,8 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests that routes are rebuilt during install and uninstall of modules.
    *
-   * @legacy-covers ::install
-   * @legacy-covers ::uninstall
+   * @covers ::install
+   * @covers ::uninstall
    */
   public function testRouteRebuild(): void {
     // Remove the routing table manually to ensure it can be created lazily
@@ -54,7 +50,7 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests config changes by hook_install() are saved for dependent modules.
    *
-   * @legacy-covers ::install
+   * @covers ::install
    */
   public function testConfigChangeOnInstall(): void {
     // Install the child module so the parent is installed automatically.
@@ -70,7 +66,7 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests cache bins defined by modules are removed when uninstalled.
    *
-   * @legacy-covers ::removeCacheBins
+   * @covers ::removeCacheBins
    */
   public function testCacheBinCleanup(): void {
     $schema = $this->container->get('database')->schema();
@@ -119,9 +115,9 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests install with a module with an invalid core version constraint.
    *
-   * @legacy-covers ::install
+   * @dataProvider providerTestInvalidCoreInstall
+   * @covers ::install
    */
-  #[DataProvider('providerTestInvalidCoreInstall')]
   public function testInvalidCoreInstall($module_name, $install_dependencies): void {
     $this->expectException(MissingDependencyException::class);
     $this->expectExceptionMessage("Unable to install modules: module '$module_name' is incompatible with this version of Drupal core.");
@@ -131,7 +127,7 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Data provider for testInvalidCoreInstall().
    */
-  public static function providerTestInvalidCoreInstall(): array {
+  public static function providerTestInvalidCoreInstall() {
     return [
       'no dependencies system_core_incompatible_semver_test' => [
         'system_core_incompatible_semver_test',
@@ -147,7 +143,7 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests install with a dependency with an invalid core version constraint.
    *
-   * @legacy-covers ::install
+   * @covers ::install
    */
   public function testDependencyInvalidCoreInstall(): void {
     $this->expectException(MissingDependencyException::class);
@@ -158,7 +154,7 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests no dependencies install with a dependency with invalid core.
    *
-   * @legacy-covers ::install
+   * @covers ::install
    */
   public function testDependencyInvalidCoreInstallNoDependencies(): void {
     $this->assertTrue($this->container->get('module_installer')->install(['system_incompatible_core_version_dependencies_test'], FALSE));
@@ -167,7 +163,7 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests trying to install an obsolete module.
    *
-   * @legacy-covers ::install
+   * @covers ::install
    */
   public function testObsoleteInstall(): void {
     $this->expectException(ObsoleteExtensionException::class);
@@ -183,9 +179,9 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
    * @param int $count
    *   The number of times the container should have been rebuilt.
    *
-   * @legacy-covers ::install
+   * @covers ::install
+   * @dataProvider containerRebuildRequiredProvider
    */
-  #[DataProvider('containerRebuildRequiredProvider')]
   public function testContainerRebuildRequired(array $modules, int $count): void {
     $this->container->get('module_installer')->install(['module_test']);
     $GLOBALS['container_rebuilt'] = 0;
@@ -197,7 +193,6 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
    * Data provider for ::testContainerRebuildRequired().
    */
   public static function containerRebuildRequiredProvider(): array {
-    // phpcs:disable Drupal.Arrays.Array.LongLineDeclaration
     return [
       [['container_rebuild_required_true'], 1],
       [['container_rebuild_required_false'], 1],
@@ -211,15 +206,15 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
       [['container_rebuild_required_false_2', 'container_rebuild_required_dependency_false'], 3],
       [['container_rebuild_required_false_2', 'container_rebuild_required_dependency_false', 'container_rebuild_required_true'], 3],
     ];
-    // phpcs:enable
   }
 
   /**
    * Tests trying to install a deprecated module.
    *
-   * @legacy-covers ::install
+   * @covers ::install
+   *
+   * @group legacy
    */
-  #[IgnoreDeprecations]
   public function testDeprecatedInstall(): void {
     $this->expectDeprecation("The module 'deprecated_module' is deprecated. See http://example.com/deprecated");
     \Drupal::service('module_installer')->install(['deprecated_module']);
@@ -229,10 +224,11 @@ class ModuleInstallerTest extends KernelTestBase implements LoggerInterface {
   /**
    * Tests the BC layer for uninstall validators.
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::addUninstallValidator
+   * @covers ::__construct
+   * @covers ::addUninstallValidator
+   *
+   * @group legacy
    */
-  #[IgnoreDeprecations]
   public function testUninstallValidatorsBC(): void {
     $this->expectDeprecation('The "module_installer.uninstall_validators" service is deprecated in drupal:11.1.0 and is removed from drupal:12.0.0. Inject "!tagged_iterator module_install.uninstall_validator" instead. See https://www.drupal.org/node/3432595');
     $module_installer = new ModuleInstaller(

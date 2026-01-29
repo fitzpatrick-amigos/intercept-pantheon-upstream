@@ -5,24 +5,20 @@ declare(strict_types=1);
 namespace Drupal\Tests\Core\Plugin\Discovery;
 
 use Drupal\Component\Discovery\YamlDirectoryDiscovery as ComponentYamlDirectoryDiscovery;
-use Drupal\Core\Plugin\Discovery\YamlDirectoryDiscovery;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
+use Drupal\Core\Plugin\Discovery\YamlDirectoryDiscovery;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Plugin\Discovery\YamlDirectoryDiscovery.
+ * @coversDefaultClass \Drupal\Core\Plugin\Discovery\YamlDirectoryDiscovery
+ *
+ * @group Plugin
  */
-#[CoversClass(\Drupal\Core\Plugin\Discovery\YamlDirectoryDiscovery::class)]
-#[Group('Plugin')]
 class YamlDirectoryDiscoveryTest extends UnitTestCase {
 
   /**
-   * Tests get definitions.
-   *
-   * @legacy-covers ::getDefinitions
+   * @covers ::getDefinitions
    */
   public function testGetDefinitions(): void {
     vfsStream::setup('modules', NULL, [
@@ -70,9 +66,7 @@ class YamlDirectoryDiscoveryTest extends UnitTestCase {
   }
 
   /**
-   * Tests get definitions with translatable definitions.
-   *
-   * @legacy-covers ::getDefinitions
+   * @covers ::getDefinitions
    */
   public function testGetDefinitionsWithTranslatableDefinitions(): void {
     vfsStream::setup('modules', NULL, [

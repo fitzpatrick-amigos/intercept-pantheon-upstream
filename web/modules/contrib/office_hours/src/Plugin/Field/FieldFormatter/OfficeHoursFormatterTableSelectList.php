@@ -22,7 +22,7 @@ class OfficeHoursFormatterTableSelectList extends OfficeHoursFormatterTable {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     // @todo Make sure the correct line is overridden.
     $summary = [$this->t('Display Office hours in a openable Select list.')]
     + parent::settingsSummary();
@@ -32,7 +32,7 @@ class OfficeHoursFormatterTableSelectList extends OfficeHoursFormatterTable {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     /** @var \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface $items */
 
     // Prevent some user errors in the 'Manage display' Field UI.
@@ -70,12 +70,9 @@ class OfficeHoursFormatterTableSelectList extends OfficeHoursFormatterTable {
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string
    *   Title of the element.
    */
-  private function getStatusTitle(OfficeHoursItemListInterface $items) {
+  private function getStatusTitle(OfficeHoursItemListInterface $items): string {
     $formatter_settings = $this->getSettings();
     // For this title, print only the weekday, not the exception date.
-    // $formatter_settings['exceptions']['date_format'] = $formatter_settings['day_format']; .
-    $formatter_settings['exceptions']['date_format'] = 'l';
-
     // Use formatter settings 'open_text' and 'current' to set the title.
     $options = OfficeHoursStatus::getOptions(NULL, $formatter_settings);
     $status = $items->getStatus();

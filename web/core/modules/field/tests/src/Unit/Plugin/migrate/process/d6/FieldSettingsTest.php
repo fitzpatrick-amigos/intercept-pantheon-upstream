@@ -8,25 +8,18 @@ use Drupal\field\Plugin\migrate\process\d6\FieldSettings;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
 /**
- * Tests Drupal\field\Plugin\migrate\process\d6\FieldSettings.
+ * @coversDefaultClass \Drupal\field\Plugin\migrate\process\d6\FieldSettings
+ * @group field
  */
-#[CoversClass(FieldSettings::class)]
-#[Group('field')]
-#[IgnoreDeprecations]
 class FieldSettingsTest extends UnitTestCase {
 
   /**
-   * Tests get settings.
+   * @covers ::getSettings
    *
-   * @legacy-covers ::getSettings
+   * @dataProvider getSettingsProvider
    */
-  #[DataProvider('getSettingsProvider')]
   public function testGetSettings($field_type, $field_settings, $allowed_values): void {
     $plugin = new FieldSettings([], 'd6_field_settings', []);
 

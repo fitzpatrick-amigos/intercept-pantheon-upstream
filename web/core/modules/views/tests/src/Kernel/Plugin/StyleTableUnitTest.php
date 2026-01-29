@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\views\Kernel\Plugin;
 
-use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\views\ViewExecutable;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests the table style plugin.
  *
+ * @group views
  * @see \Drupal\views\Plugin\views\style\Table
  */
-#[Group('views')]
-#[RunTestsInSeparateProcesses]
 class StyleTableUnitTest extends PluginKernelTestBase {
 
   /**

@@ -6,14 +6,12 @@ namespace Drupal\KernelTests\Core\Block;
 
 use Drupal\Core\Form\FormState;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the BlockBase class, base for all block plugins.
+ *
+ * @group block
  */
-#[Group('block')]
-#[RunTestsInSeparateProcesses]
 class BlockBaseTest extends KernelTestBase {
 
   /**

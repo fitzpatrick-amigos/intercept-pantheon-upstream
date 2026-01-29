@@ -8,14 +8,12 @@ use Drupal\Core\Database\Database;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\migrate\Kernel\MigrateDumpAlterInterface;
 use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests migration field label and description i18n translations.
+ *
+ * @group migrate_drupal_7
  */
-#[Group('migrate_drupal_7')]
-#[RunTestsInSeparateProcesses]
 class MigrateFieldInstanceLabelDescriptionTest extends MigrateDrupal7TestBase implements MigrateDumpAlterInterface {
 
   /**
@@ -26,11 +24,15 @@ class MigrateFieldInstanceLabelDescriptionTest extends MigrateDrupal7TestBase im
     'config_translation',
     'datetime',
     'datetime_range',
+    'field',
+    'file',
     'image',
     'language',
     'link',
+    'locale',
     'menu_ui',
     'node',
+    'system',
     'taxonomy',
     'telephone',
     'text',

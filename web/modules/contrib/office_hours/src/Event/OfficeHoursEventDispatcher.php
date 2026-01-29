@@ -60,7 +60,7 @@ final class OfficeHoursEventDispatcher {
    * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
    *   The event dispatcher service.
    */
-  protected function getEventDispatcher() {
+  protected function getEventDispatcher(): EventDispatcherInterface {
     $this->eventDispatcher ??= \Drupal::service('event_dispatcher');
     return $this->eventDispatcher;
   }
@@ -71,7 +71,7 @@ final class OfficeHoursEventDispatcher {
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The string translation service.
    */
-  protected function setEventDispatcher(EventDispatcherInterface $event_dispatcher) {
+  protected function setEventDispatcher(EventDispatcherInterface $event_dispatcher): void {
     $this->eventDispatcher = $event_dispatcher;
   }
 

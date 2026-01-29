@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\KernelTests\Core\Cache;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\Serialization\PhpSerialize;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\DatabaseBackendFactory;
 use Drupal\Core\Database\Database;
@@ -13,15 +12,14 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\DependencyInjection\Reference;
+use Drupal\Component\Serialization\PhpSerialize;
 
 /**
  * Tests delaying of cache tag invalidation queries to the end of transactions.
+ *
+ * @group Cache
  */
-#[Group('Cache')]
-#[RunTestsInSeparateProcesses]
 class EndOfTransactionQueriesTest extends KernelTestBase {
 
   /**
@@ -30,6 +28,7 @@ class EndOfTransactionQueriesTest extends KernelTestBase {
   protected static $modules = [
     'delay_cache_tags_invalidation',
     'entity_test',
+    'system',
     'user',
   ];
 

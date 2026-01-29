@@ -12,15 +12,11 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Utility\Token;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Utility\Token.
+ * @coversDefaultClass \Drupal\Core\Utility\Token
+ * @group Utility
  */
-#[CoversClass(Token::class)]
-#[Group('Utility')]
 class TokenTest extends UnitTestCase {
 
   /**
@@ -109,9 +105,7 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests get info.
-   *
-   * @legacy-covers ::getInfo
+   * @covers ::getInfo
    */
   public function testGetInfo(): void {
     $token_info = [
@@ -157,9 +151,7 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests replace with bubbleable metadata object.
-   *
-   * @legacy-covers ::replace
+   * @covers ::replace
    */
   public function testReplaceWithBubbleableMetadataObject(): void {
     $this->moduleHandler->expects($this->any())
@@ -188,9 +180,7 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests replace with hook tokens with bubbleable metadata.
-   *
-   * @legacy-covers ::replace
+   * @covers ::replace
    */
   public function testReplaceWithHookTokensWithBubbleableMetadata(): void {
     $this->moduleHandler->expects($this->any())
@@ -225,10 +215,8 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests replace with hook tokens alter with bubbleable metadata.
-   *
-   * @legacy-covers ::replace
-   * @legacy-covers ::replace
+   * @covers ::replace
+   * @covers ::replace
    */
   public function testReplaceWithHookTokensAlterWithBubbleableMetadata(): void {
     $this->moduleHandler->expects($this->any())
@@ -237,7 +225,7 @@ class TokenTest extends UnitTestCase {
 
     $this->moduleHandler->expects($this->any())
       ->method('alter')
-      ->willReturnCallback(function ($hook_name, array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata): void {
+      ->willReturnCallback(function ($hook_name, array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
         $replacements['[node:title]'] = 'hello world';
         $bubbleable_metadata->addCacheContexts(['custom_context']);
         $bubbleable_metadata->addCacheTags(['node:1']);
@@ -265,9 +253,7 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests reset info.
-   *
-   * @legacy-covers ::resetInfo
+   * @covers ::resetInfo
    */
   public function testResetInfo(): void {
     $this->cacheTagsInvalidator->expects($this->once())
@@ -278,11 +264,9 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests replace escaping.
-   *
-   * @legacy-covers ::replace
+   * @covers ::replace
+   * @dataProvider providerTestReplaceEscaping
    */
-  #[DataProvider('providerTestReplaceEscaping')]
   public function testReplaceEscaping($string, array $tokens, $expected): void {
     $this->moduleHandler->expects($this->any())
       ->method('invokeAll')
@@ -295,7 +279,7 @@ class TokenTest extends UnitTestCase {
     $this->assertEquals($expected, $result);
   }
 
-  public static function providerTestReplaceEscaping(): array {
+  public static function providerTestReplaceEscaping() {
     $data = [];
 
     // No tokens. The first argument to Token::replace() should not be escaped.
@@ -303,11 +287,7 @@ class TokenTest extends UnitTestCase {
     $data['html-in-string'] = ['<h1>Giraffe</h1>', [], '<h1>Giraffe</h1>'];
     $data['html-in-string-quote'] = ['<h1>Giraffe"</h1>', [], '<h1>Giraffe"</h1>'];
 
-    $data['simple-placeholder-with-plain-text'] = [
-      '<h1>[token:meh]</h1>',
-      ['[token:meh]' => 'Giraffe"'],
-      '<h1>' . Html::escape('Giraffe"') . '</h1>',
-    ];
+    $data['simple-placeholder-with-plain-text'] = ['<h1>[token:meh]</h1>', ['[token:meh]' => 'Giraffe"'], '<h1>' . Html::escape('Giraffe"') . '</h1>'];
 
     $data['simple-placeholder-with-safe-html'] = [
       '<h1>[token:meh]</h1>',
@@ -319,9 +299,7 @@ class TokenTest extends UnitTestCase {
   }
 
   /**
-   * Tests replace plain.
-   *
-   * @legacy-covers ::replacePlain
+   * @covers ::replacePlain
    */
   public function testReplacePlain(): void {
     $this->setupSiteTokens();

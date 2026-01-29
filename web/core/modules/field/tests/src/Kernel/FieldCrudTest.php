@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Drupal\Tests\field\Kernel;
 
 use Drupal\Core\Entity\EntityStorageException;
-use Drupal\Core\Field\FieldConfigBase;
 use Drupal\Core\Field\FieldException;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\entity_test\EntityTestHelper;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Create field entities by attaching fields to entities.
+ *
+ * @coversDefaultClass \Drupal\Core\Field\FieldConfigBase
+ *
+ * @group field
  */
-#[CoversClass(FieldConfigBase::class)]
-#[Group('field')]
-#[RunTestsInSeparateProcesses]
 class FieldCrudTest extends FieldKernelTestBase {
 
   /**
@@ -68,7 +65,7 @@ class FieldCrudTest extends FieldKernelTestBase {
   // - a full fledged $field structure, check that all the values are there
   // - a minimal $field structure, check all default values are set
   // defer actual $field comparison to a helper function, used for the two cases above,
-  // and for testUpdateField.
+  // and for testUpdateField
 
   /**
    * Tests the creation of a field.
@@ -131,8 +128,8 @@ class FieldCrudTest extends FieldKernelTestBase {
   /**
    * Tests setting and adding property constraints to a configurable field.
    *
-   * @legacy-covers ::setPropertyConstraints
-   * @legacy-covers ::addPropertyConstraints
+   * @covers ::setPropertyConstraints
+   * @covers ::addPropertyConstraints
    */
   public function testFieldPropertyConstraints(): void {
     $field = FieldConfig::create($this->fieldDefinition);

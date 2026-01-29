@@ -6,18 +6,15 @@ namespace Drupal\Tests\Core\StackMiddleware;
 
 use Drupal\Core\StackMiddleware\NegotiationMiddleware;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Tests Drupal\Core\StackMiddleware\NegotiationMiddleware.
+ * @coversDefaultClass \Drupal\Core\StackMiddleware\NegotiationMiddleware
+ * @group NegotiationMiddleware
  */
-#[CoversClass(NegotiationMiddleware::class)]
-#[Group('NegotiationMiddleware')]
 class NegotiationMiddlewareTest extends UnitTestCase {
 
   /**
@@ -43,7 +40,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   /**
    * Tests the getContentType() method with AJAX iframe upload.
    *
-   * @legacy-covers ::getContentType
+   * @covers ::getContentType
    */
   public function testAjaxIframeUpload(): void {
     $request = new Request();
@@ -55,7 +52,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   /**
    * Tests the specifying a format via query parameters gets used.
    *
-   * @legacy-covers ::getContentType
+   * @covers ::getContentType
    */
   public function testFormatViaQueryParameter(): void {
     $request = new Request();
@@ -67,7 +64,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   /**
    * Tests the getContentType() method when no priority format is found.
    *
-   * @legacy-covers ::getContentType
+   * @covers ::getContentType
    */
   public function testUnknownContentTypeReturnsNull(): void {
     $request = new Request();
@@ -78,7 +75,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   /**
    * Tests the getContentType() method when no priority format is found but it's an AJAX request.
    *
-   * @legacy-covers ::getContentType
+   * @covers ::getContentType
    */
   public function testUnknownContentTypeButAjaxRequest(): void {
     $request = new Request();
@@ -90,7 +87,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   /**
    * Tests that handle() correctly hands off to sub application.
    *
-   * @legacy-covers ::handle
+   * @covers ::handle
    */
   public function testHandle(): void {
     $request = $this->prophesize(Request::class);
@@ -123,9 +120,7 @@ class NegotiationMiddlewareTest extends UnitTestCase {
   }
 
   /**
-   * Tests set format.
-   *
-   * @legacy-covers ::registerFormat
+   * @covers ::registerFormat
    */
   public function testSetFormat(): void {
     $httpKernel = $this->createMock(HttpKernelInterface::class);

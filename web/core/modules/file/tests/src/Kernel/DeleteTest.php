@@ -7,14 +7,12 @@ namespace Drupal\Tests\file\Kernel;
 use Drupal\Core\Database\Database;
 use Drupal\file\Entity\File;
 use Drupal\file_test\FileTestHelper;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the file delete function.
+ *
+ * @group file
  */
-#[Group('file')]
-#[RunTestsInSeparateProcesses]
 class DeleteTest extends FileManagedUnitTestBase {
 
   /**
@@ -76,7 +74,7 @@ class DeleteTest extends FileManagedUnitTestBase {
       ->execute();
     \Drupal::service('cron')->run();
 
-    // file_cron() loads.
+    // file_cron() loads
     $this->assertFileHooksCalled(['delete']);
     $this->assertFileDoesNotExist($file->getFileUri());
     $this->assertNull(File::load($file->id()), 'File was removed from the database.');

@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\FunctionalTests;
 
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests BrowserTestBase functionality.
+ *
+ * @group browsertestbase
  */
-#[Group('browsertestbase')]
-#[RunTestsInSeparateProcesses]
 class BrowserTestBaseUserAgentTest extends BrowserTestBase {
 
   /**

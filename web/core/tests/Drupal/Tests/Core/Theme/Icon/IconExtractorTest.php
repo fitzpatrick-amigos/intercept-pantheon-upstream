@@ -9,14 +9,12 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Theme\Icon\Attribute\IconExtractor;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Theme\Icon\Attribute\IconExtractor.
+ * @coversDefaultClass \Drupal\Core\Theme\Icon\Attribute\IconExtractor
+ *
+ * @group icon
  */
-#[CoversClass(IconExtractor::class)]
-#[Group('icon')]
 class IconExtractorTest extends UnitTestCase {
 
   /**

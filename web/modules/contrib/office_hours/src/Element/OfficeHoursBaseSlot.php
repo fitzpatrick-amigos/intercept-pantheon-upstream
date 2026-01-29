@@ -3,7 +3,6 @@
 namespace Drupal\office_hours\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Url;
 use Drupal\office_hours\OfficeHoursDateHelper;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
@@ -11,12 +10,12 @@ use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
 /**
  * Provides a base class for OfficeHoursSlot form element.
  */
-class OfficeHoursBaseSlot extends FormElement {
+class OfficeHoursBaseSlot extends FormElementBase {
 
   /**
    * {@inheritdoc}
    */
-  public function getInfo() {
+  public function getInfo(): array {
     $info = [
       '#input' => TRUE,
       '#tree' => TRUE,
@@ -99,7 +98,7 @@ class OfficeHoursBaseSlot extends FormElement {
   /**
    * {@inheritdoc}
    */
-  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
+  public static function valueCallback(&$element, $input, FormStateInterface $form_state): array {
 
     if ($input ?? FALSE) {
       // Massage, normalize value after pressing Form button.
@@ -107,7 +106,6 @@ class OfficeHoursBaseSlot extends FormElement {
       // Add day_delta for label() or isEmpty() call.
       $day_delta = $element['#day_delta'];
       $value['day_delta'] = $day_delta;
-      return $value;
     }
     else {
       $value = $element['#default_value'];
@@ -139,7 +137,7 @@ class OfficeHoursBaseSlot extends FormElement {
    * @return array
    *   The enriched element, identical to first parameter.
    */
-  public static function processOfficeHoursSlot(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function processOfficeHoursSlot(array &$element, FormStateInterface $form_state, array &$complete_form): array {
 
     // The valueCallback() has populated the #value array.
     $value = $element['#value'];
@@ -237,7 +235,7 @@ class OfficeHoursBaseSlot extends FormElement {
    * @param array $complete_form
    *   The complete form structure.
    */
-  public static function validateOfficeHoursSlot(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function validateOfficeHoursSlot(array &$element, FormStateInterface $form_state, array &$complete_form): void {
     $error_text = '';
 
     // Return an array with starthours, endhours, comment.
@@ -261,9 +259,6 @@ class OfficeHoursBaseSlot extends FormElement {
       return;
     }
 
-    $pattern = 'long';
-    $label = OfficeHoursItem::formatLabel($pattern, $value, $day_delta);
-
     $field_settings = $element['#field_settings'];
     $date_helper = new OfficeHoursDateHelper();
     // Exception: end time 00:00 --> 24:00.
@@ -284,43 +279,88 @@ class OfficeHoursBaseSlot extends FormElement {
     // Generate message.
     if ($day !== 0 && !$day) {
       $label = t('Day');
-      $error_text = 'A day is required when hours are entered.';
+      $error_text = t('A day is required when hours are entered.');
       $erroneous_element = &$element['day'];
     }
     elseif (!$all_day && $required_start && empty($start)) {
-      $error_text = 'Opening hours must be set.';
+      $error_text = t('Opening hours must be set.');
       $erroneous_element = &$element['starthours'];
     }
     elseif (!$all_day && $required_end && empty($end)) {
-      $error_text = 'Closing hours must be set.';
+      $error_text = t('Closing hours must be set.');
       $erroneous_element = &$element['endhours'];
     }
     elseif ($validate_hours && $end < $start) {
       // Both Start and End must be entered. That is validated above already.
-      $error_text = 'Closing hours are earlier than Opening hours.';
+      $error_text = t('Closing hours are earlier than Opening hours.');
       $erroneous_element = &$element;
     }
     elseif (!$all_day_allowed && (!empty($limit_start) || !empty($limit_end))) {
       if ($start && ($limit_start > $start)
         || ($end && ($limit_end < $end))
       ) {
-        $error_text = 'Hours are outside limits ( @start - @end ).';
+        $error_text = t('Hours are outside limits ( @start - @end ).', [
+          '@start' => $date_helper->format($limit_start, $time_format, FALSE),
+          '@end' => $date_helper->format($limit_end, $time_format, FALSE),
+        ]);
         $erroneous_element = &$element;
       }
     }
 
     if ($error_text) {
+      $pattern = 'long';
+      $label = OfficeHoursItem::formatLabel($pattern, $value);
       $error_text = $label
         . ': '
-        . t($error_text,
-          [
-            '@start' => $date_helper->format($limit_start, $time_format, FALSE),
-            '@end' => $date_helper->format($limit_end, $time_format, FALSE),
-          ],
-          ['context' => 'office_hours']
-        );
+        . $error_text;
+
       $form_state->setError($erroneous_element, $error_text);
     }
+  }
+
+  /**
+   * Returns the translated label of a Weekday/Exception day, e.g., 'Tuesday'.
+   *
+   * @param string $pattern
+   *   The day/date formatting pattern.
+   * @param array $value
+   *   An Office hours value structure.
+   * @param int $day_delta
+   *   An optional day_delta.
+   *
+   * @return string
+   *   The formatted and translated day label, e.g., 'Tuesday'.
+   */
+  protected static function formatWeekday(string $pattern, array $value, $day_delta = 0): string {
+    $label = '';
+
+    $day = $value['day'];
+    $label = match (TRUE) {
+      // Return fast for a following slot.
+      $day_delta !== 0
+      => t('and'),
+
+      // Return fast if weekday is not to be displayed.
+      $pattern === 'none'
+      => '',
+
+      // A new Exception slot.
+      $day === '',
+      $day === NULL,
+      $day < 0
+      => '',
+
+      // Convert date into weekday in widget.
+      // OfficeHoursDateHelper::isExceptionDay($day),
+      // The day number is a weekday number + optional Season ID.
+      // OfficeHoursDateHelper::isSeasonHeader($day),
+      // OfficeHoursDateHelper::isSeasonDay($day),
+      // OfficeHoursDateHelper::isWeekDay($day),
+      default
+      => OfficeHoursDateHelper::weekDaysByFormat($pattern, $day),
+    };
+
+    return $label;
   }
 
 }

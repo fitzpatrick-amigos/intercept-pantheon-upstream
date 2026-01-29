@@ -6,25 +6,20 @@ namespace Drupal\Tests\Core\Render\Placeholder;
 
 use Drupal\Core\Render\Placeholder\ChainedPlaceholderStrategy;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophet;
 
 /**
- * Tests Drupal\Core\Render\Placeholder\ChainedPlaceholderStrategy.
+ * @coversDefaultClass \Drupal\Core\Render\Placeholder\ChainedPlaceholderStrategy
+ * @group Render
  */
-#[CoversClass(ChainedPlaceholderStrategy::class)]
-#[Group('Render')]
 class ChainedPlaceholderStrategyTest extends UnitTestCase {
 
   /**
-   * Tests process placeholders.
+   * @covers ::addPlaceholderStrategy
+   * @covers ::processPlaceholders
    *
-   * @legacy-covers ::addPlaceholderStrategy
-   * @legacy-covers ::processPlaceholders
+   * @dataProvider providerProcessPlaceholders
    */
-  #[DataProvider('providerProcessPlaceholders')]
   public function testProcessPlaceholders($strategies, $placeholders, $result): void {
     $chained_placeholder_strategy = new ChainedPlaceholderStrategy();
 
@@ -41,7 +36,7 @@ class ChainedPlaceholderStrategyTest extends UnitTestCase {
    * @return array
    *   An array of render strategies, placeholders and results.
    */
-  public static function providerProcessPlaceholders(): array {
+  public static function providerProcessPlaceholders() {
     $prophet = new Prophet();
     $data = [];
 
@@ -81,14 +76,7 @@ class ChainedPlaceholderStrategyTest extends UnitTestCase {
     $prophecy->processPlaceholders([])->shouldNotBeCalled();
     $single_flush_strategy = $prophecy->reveal();
 
-    $data['fake esi and single_flush strategy - esi replaces all'] = [
-      [
-        $esi_strategy,
-        $single_flush_strategy,
-      ],
-      $placeholders,
-      $result,
-    ];
+    $data['fake esi and single_flush strategy - esi replaces all'] = [[$esi_strategy, $single_flush_strategy], $placeholders, $result];
 
     // ESI + SingleFlush strategy (mixed).
     $placeholders = [
@@ -116,22 +104,13 @@ class ChainedPlaceholderStrategyTest extends UnitTestCase {
     $prophecy->processPlaceholders($normal_result)->willReturn($normal_result);
     $single_flush_strategy = $prophecy->reveal();
 
-    $data['fake esi and single_flush strategy - mixed'] = [
-      [
-        $esi_strategy,
-        $single_flush_strategy,
-      ],
-      $placeholders,
-      $result,
-    ];
+    $data['fake esi and single_flush strategy - mixed'] = [[$esi_strategy, $single_flush_strategy], $placeholders, $result];
 
     return $data;
   }
 
   /**
-   * Tests process placeholders no strategies.
-   *
-   * @legacy-covers ::processPlaceholders
+   * @covers ::processPlaceholders
    */
   public function testProcessPlaceholdersNoStrategies(): void {
     // Placeholders but no strategies defined.
@@ -146,9 +125,7 @@ class ChainedPlaceholderStrategyTest extends UnitTestCase {
   }
 
   /**
-   * Tests process placeholders with rogue placeholder strategy.
-   *
-   * @legacy-covers ::processPlaceholders
+   * @covers ::processPlaceholders
    */
   public function testProcessPlaceholdersWithRoguePlaceholderStrategy(): void {
     // Placeholders but no strategies defined.

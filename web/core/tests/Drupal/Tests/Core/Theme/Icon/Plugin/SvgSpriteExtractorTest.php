@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Core\Theme\Icon\Plugin;
 
+// cspell:ignore corge
+use Drupal\Tests\UnitTestCase;
 use Drupal\Core\Theme\Icon\IconDefinition;
 use Drupal\Core\Theme\Icon\IconFinder;
 use Drupal\Core\Theme\Plugin\IconExtractor\SvgSpriteExtractor;
 use Drupal\Tests\Core\Theme\Icon\IconTestTrait;
-use Drupal\Tests\UnitTestCase;
-// cspell:ignore corge
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Theme\Plugin\IconExtractor\SvgSpriteExtractor.
+ * @coversDefaultClass \Drupal\Core\Theme\Plugin\IconExtractor\SvgSpriteExtractor
+ *
+ * @group icon
  */
-#[CoversClass(SvgSpriteExtractor::class)]
-#[Group('icon')]
 class SvgSpriteExtractorTest extends UnitTestCase {
 
   use IconTestTrait;
@@ -138,10 +135,7 @@ class SvgSpriteExtractorTest extends UnitTestCase {
         ],
       ],
       [
-        [
-          '/path/source/foo.svg',
-          '<svg><symbol id="!script"></symbol><symbol id="not valid"></symbol><symbol id="_foo-bar_"></symbol></svg>',
-        ],
+        ['/path/source/foo.svg', '<svg><symbol id="!script"></symbol><symbol id="not valid"></symbol><symbol id="_foo-bar_"></symbol></svg>'],
       ],
       ['_foo-bar_'],
     ];
@@ -156,8 +150,9 @@ class SvgSpriteExtractorTest extends UnitTestCase {
    *   The content returned by fileGetContents() based on absolute_path.
    * @param array<string> $expected
    *   The icon ids expected.
+   *
+   * @dataProvider providerDiscoverIconsSvgSprite
    */
-  #[DataProvider('providerDiscoverIconsSvgSprite')]
   public function testDiscoverIconsSvgSprite(array $files = [], array $contents_map = [], array $expected = []): void {
     $this->iconFinder->method('getFilesFromSources')->willReturn($files);
     $this->iconFinder->method('getFileContents')

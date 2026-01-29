@@ -134,7 +134,7 @@ class OfficeHoursItemListSorter {
    * @param mixed $slot_date
    *   The date of the slot to work with.
    */
-  protected function addItem(array &$sorted_list, OfficeHoursItem|NULL $item, int $slot_date) {
+  protected function addItem(array &$sorted_list, OfficeHoursItem|NULL $item, int $slot_date): static {
 
     // Get the time slot that already occupies this date.
     $set_slot = $sorted_list[$slot_date][0] ?? NULL;
@@ -195,6 +195,7 @@ class OfficeHoursItemListSorter {
         break;
 
     }
+    return $this;
   }
 
   /**
@@ -205,8 +206,9 @@ class OfficeHoursItemListSorter {
    * @param mixed $slot_date
    *   The date of the slot to work with.
    */
-  protected function removeItem(array &$sorted_list, int $slot_date) {
+  protected function removeItem(array &$sorted_list, int $slot_date): static {
     $this->addItem($sorted_list, NULL, $slot_date);
+    return $this;
   }
 
   /**

@@ -11,15 +11,11 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Plugin\Context\ContextInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\Plugin\Block\ViewsBlock;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\views\Plugin\block\ViewsBlock.
+ * @coversDefaultClass \Drupal\views\Plugin\block\ViewsBlock
+ * @group views
  */
-#[CoversClass(ViewsBlock::class)]
-#[Group('views')]
 class ViewsBlockTest extends UnitTestCase {
 
   /**
@@ -184,9 +180,10 @@ class ViewsBlockTest extends UnitTestCase {
   /**
    * Tests that cacheable metadata is retrieved from the view and merged with block cacheable metadata.
    *
+   * @dataProvider providerTestCacheableMetadata
+   *
    * @see \Drupal\views\Plugin\block\ViewsBlock::build()
    */
-  #[DataProvider('providerTestCacheableMetadata')]
   public function testCacheableMetadata(int $blockCacheMaxAge, int $viewCacheMaxAge, int $expectedCacheMaxAge): void {
 
     $blockCacheTags = ['block-cachetag-1', 'block-cachetag-2'];
@@ -253,7 +250,7 @@ class ViewsBlockTest extends UnitTestCase {
   /**
    * Tests the build method.
    *
-   * @legacy-covers ::build
+   * @covers ::build
    */
   public function testBuildEmpty(): void {
     $build = [

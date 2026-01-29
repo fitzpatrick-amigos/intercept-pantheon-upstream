@@ -13,14 +13,12 @@ use Drupal\navigation\TopBarItemManager;
 use Drupal\navigation\TopBarItemManagerInterface;
 use Drupal\navigation\TopBarRegion;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\navigation\TopBarItemManager.
+ * @coversDefaultClass \Drupal\navigation\TopBarItemManager
+ *
+ * @group navigation
  */
-#[CoversClass(TopBarItemManager::class)]
-#[Group('navigation')]
 class TopBarItemManagerTest extends UnitTestCase {
 
   use StringTranslationTrait;
@@ -73,9 +71,7 @@ class TopBarItemManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests definitions.
-   *
-   * @legacy-covers ::getDefinitions
+   * @covers ::getDefinitions
    */
   public function testDefinitions(): void {
     $definitions = $this->manager->getDefinitions();
@@ -83,9 +79,7 @@ class TopBarItemManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests get definitions by region.
-   *
-   * @legacy-covers ::getDefinitionsByRegion
+   * @covers ::getDefinitionsByRegion
    */
   public function testGetDefinitionsByRegion(): void {
     $tools = $this->manager->getDefinitionsByRegion(TopBarRegion::Tools);

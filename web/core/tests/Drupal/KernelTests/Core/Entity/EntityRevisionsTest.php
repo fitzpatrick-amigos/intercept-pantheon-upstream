@@ -4,27 +4,26 @@ declare(strict_types=1);
 
 namespace Drupal\KernelTests\Core\Entity;
 
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\entity_test\Entity\EntityTestMulRev;
 use Drupal\language\Entity\ConfigurableLanguage;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the loaded Revision of an entity.
+ *
+ * @coversDefaultClass \Drupal\Core\Entity\ContentEntityBase
+ *
+ * @group entity
  */
-#[CoversClass(ContentEntityBase::class)]
-#[Group('entity')]
-#[RunTestsInSeparateProcesses]
 class EntityRevisionsTest extends EntityKernelTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
+    'system',
     'entity_test',
     'language',
+    'content_translation',
   ];
 
   /**
@@ -173,7 +172,7 @@ class EntityRevisionsTest extends EntityKernelTestBase {
   /**
    * Tests that latest revisions are working as expected.
    *
-   * @legacy-covers ::isLatestRevision
+   * @covers ::isLatestRevision
    */
   public function testIsLatestRevision(): void {
     // Create a basic EntityTestMulRev entity and save it.
@@ -204,9 +203,9 @@ class EntityRevisionsTest extends EntityKernelTestBase {
    * The latest revision affecting a particular translation behaves as the
    * latest revision for monolingual entities.
    *
-   * @legacy-covers ::isLatestTranslationAffectedRevision
-   * @legacy-covers \Drupal\Core\Entity\ContentEntityStorageBase::getLatestRevisionId
-   * @legacy-covers \Drupal\Core\Entity\ContentEntityStorageBase::getLatestTranslationAffectedRevisionId
+   * @covers ::isLatestTranslationAffectedRevision
+   * @covers \Drupal\Core\Entity\ContentEntityStorageBase::getLatestRevisionId
+   * @covers \Drupal\Core\Entity\ContentEntityStorageBase::getLatestTranslationAffectedRevisionId
    */
   public function testIsLatestAffectedRevisionTranslation(): void {
     ConfigurableLanguage::createFromLangcode('it')->save();
@@ -263,7 +262,7 @@ class EntityRevisionsTest extends EntityKernelTestBase {
   /**
    * Tests the automatic handling of the "revision_default" flag.
    *
-   * @legacy-covers \Drupal\Core\Entity\ContentEntityStorageBase::doSave
+   * @covers \Drupal\Core\Entity\ContentEntityStorageBase::doSave
    */
   public function testDefaultRevisionFlag(): void {
     // Create a basic EntityTestMulRev entity and save it.

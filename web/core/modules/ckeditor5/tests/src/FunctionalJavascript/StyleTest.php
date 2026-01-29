@@ -4,33 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\ckeditor5\FunctionalJavascript;
 
-use Drupal\ckeditor5\Plugin\CKEditor5Plugin\Style;
+// cspell:ignore sourceediting
+
 use Drupal\ckeditor5\Plugin\Editor\CKEditor5;
 use Drupal\editor\Entity\Editor;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\Tests\ckeditor5\Traits\CKEditor5TestTrait;
-// cspell:ignore sourceediting
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
- * Tests Drupal\ckeditor5\Plugin\CKEditor5Plugin\Style.
- *
+ * @coversDefaultClass \Drupal\ckeditor5\Plugin\CKEditor5Plugin\Style
+ * @group ckeditor5
  * @internal
  */
-#[CoversClass(Style::class)]
-#[Group('ckeditor5')]
-#[RunTestsInSeparateProcesses]
 class StyleTest extends CKEditor5TestBase {
 
   use CKEditor5TestTrait;
 
   /**
-   * Tests style settings form.
-   *
-   * @legacy-covers \Drupal\ckeditor5\Plugin\CKEditor5Plugin\Style::buildConfigurationForm
+   * @covers \Drupal\ckeditor5\Plugin\CKEditor5Plugin\Style::buildConfigurationForm
    */
   public function testStyleSettingsForm(): void {
     $this->drupalLogin($this->drupalCreateUser(['administer filters']));
@@ -198,7 +190,6 @@ JS;
             'properties' => [
               'reversed' => FALSE,
               'startIndex' => FALSE,
-              'styles' => FALSE,
             ],
             'multiBlock' => TRUE,
           ],
@@ -409,7 +400,7 @@ JS;
     // Close the dropdown.
     $style_dropdown->click();
 
-    // Select the <ul> and check the available styles.
+    // Select the <ul> and check the available styles
     $this->selectTextInsideElement('ul');
     $this->assertSame('Styles', $style_dropdown->getText());
     $style_dropdown->click();
@@ -450,7 +441,7 @@ JS;
     $this->assertTrue($buttons[8]->hasClass('ck-off'));
     $this->assertSame('Items', $style_dropdown->getText());
 
-    // Select the <ol> and check the available styles.
+    // Select the <ol> and check the available styles
     $this->selectTextInsideElement('ol');
     $this->assertSame('Styles', $style_dropdown->getText());
     $style_dropdown->click();
@@ -491,7 +482,7 @@ JS;
     $this->assertTrue($buttons[8]->hasClass('ck-off'));
     $this->assertSame('Steps', $style_dropdown->getText());
 
-    // Select the table and check the available styles.
+    // Select the table and check the available styles
     $this->selectTextInsideElement('table td');
     $this->assertSame('Styles', $style_dropdown->getText());
     $style_dropdown->click();

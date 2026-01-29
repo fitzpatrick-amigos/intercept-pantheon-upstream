@@ -10,15 +10,12 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Core\Theme\Icon\IconDefinition;
 use Drupal\Core\Theme\Icon\Plugin\IconPackManagerInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Render\Element\Icon.
+ * @coversDefaultClass \Drupal\Core\Render\Element\Icon
+ *
+ * @group icon
  */
-#[CoversClass(Icon::class)]
-#[Group('icon')]
 class IconTest extends UnitTestCase {
 
   use IconTestTrait;
@@ -189,8 +186,9 @@ class IconTest extends UnitTestCase {
    *   The icon data.
    * @param array $expected
    *   The result expected.
+   *
+   * @dataProvider providerPreRenderIcon
    */
-  #[DataProvider('providerPreRenderIcon')]
   public function testPreRenderIcon(array $data, array $expected): void {
     $icon = $this->createTestIcon($data);
     $icon_full_id = IconDefinition::createIconId($data['pack_id'], $data['icon_id']);

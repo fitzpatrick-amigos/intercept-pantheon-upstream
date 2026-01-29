@@ -11,9 +11,6 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\RequestHandler;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\RestResourceConfigInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
@@ -22,10 +19,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Test REST RequestHandler controller logic.
+ *
+ * @group rest
+ * @coversDefaultClass \Drupal\rest\RequestHandler
  */
-#[CoversClass(RequestHandler::class)]
-#[Group('rest')]
-#[RunTestsInSeparateProcesses]
 class RequestHandlerTest extends KernelTestBase {
 
   /**
@@ -58,9 +55,7 @@ class RequestHandlerTest extends KernelTestBase {
   }
 
   /**
-   * Tests handle.
-   *
-   * @legacy-covers ::handle
+   * @covers ::handle
    */
   public function testHandle(): void {
     $request = new Request([], [], [], [], [], ['CONTENT_TYPE' => 'application/json'], Json::encode(['this is an array']));

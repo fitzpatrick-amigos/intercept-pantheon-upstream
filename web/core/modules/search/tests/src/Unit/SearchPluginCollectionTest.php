@@ -6,14 +6,11 @@ namespace Drupal\Tests\search\Unit;
 
 use Drupal\search\Plugin\SearchPluginCollection;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\search\Plugin\SearchPluginCollection.
+ * @coversDefaultClass \Drupal\search\Plugin\SearchPluginCollection
+ * @group search
  */
-#[CoversClass(SearchPluginCollection::class)]
-#[Group('search')]
 class SearchPluginCollectionTest extends UnitTestCase {
 
   /**

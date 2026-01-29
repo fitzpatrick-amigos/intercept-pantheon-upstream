@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\language\Entity\ContentLanguageSettings;
-use Drupal\node\NodePreviewMode;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -118,8 +117,12 @@ class NodeTypeForm extends BundleEntityFormBase {
     $form['submission']['preview_mode'] = [
       '#type' => 'radios',
       '#title' => $this->t('Preview before submitting'),
-      '#default_value' => $type->getPreviewMode(FALSE)->value,
-      '#options' => NodePreviewMode::asOptions(),
+      '#default_value' => $type->getPreviewMode(),
+      '#options' => [
+        DRUPAL_DISABLED => $this->t('Disabled'),
+        DRUPAL_OPTIONAL => $this->t('Optional'),
+        DRUPAL_REQUIRED => $this->t('Required'),
+      ],
     ];
     $form['submission']['help'] = [
       '#type' => 'textarea',
@@ -232,6 +235,9 @@ class NodeTypeForm extends BundleEntityFormBase {
       $this->messenger()->addStatus($this->t('The content type %name has been updated.', $t_args));
     }
     elseif ($status == SAVED_NEW) {
+      if (\Drupal::installProfile() === 'testing') {
+        node_add_body_field($type);
+      }
       $this->messenger()->addStatus($this->t('The content type %name has been added.', $t_args));
       $context = array_merge($t_args, ['link' => $type->toLink($this->t('View'), 'collection')->toString()]);
       $this->logger('node')->notice('Added content type %name.', $context);

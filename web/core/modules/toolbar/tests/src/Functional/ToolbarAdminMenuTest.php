@@ -12,8 +12,6 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the caching of the admin menu subtree items.
@@ -29,9 +27,9 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
  *
  * Each hook invocation is simulated and then the previous hash of the admin
  * menu subtrees is compared to the new hash.
+ *
+ * @group toolbar
  */
-#[Group('toolbar')]
-#[RunTestsInSeparateProcesses]
 class ToolbarAdminMenuTest extends BrowserTestBase {
 
   use StringTranslationTrait;
@@ -391,15 +389,7 @@ class ToolbarAdminMenuTest extends BrowserTestBase {
     $this->drupalGet('toolbar/subtrees/' . $subtrees_hash, ['query' => [MainContentViewSubscriber::WRAPPER_FORMAT => 'drupal_ajax']], ['X-Requested-With' => 'XMLHttpRequest']);
     $ajax_result = json_decode($this->getSession()->getPage()->getContent(), TRUE);
     $this->assertEquals('setToolbarSubtrees', $ajax_result[0]['command'], 'Subtrees response uses the correct command.');
-    $this->assertEquals([
-      'system-admin_content',
-      'system-admin_structure',
-      'system-themes_page',
-      'system-modules_list',
-      'system-admin_config',
-      'entity-user-collection',
-      'front',
-    ], array_keys($ajax_result[0]['subtrees']), 'Correct subtrees returned.');
+    $this->assertEquals(['system-admin_content', 'system-admin_structure', 'system-themes_page', 'system-modules_list', 'system-admin_config', 'entity-user-collection', 'front'], array_keys($ajax_result[0]['subtrees']), 'Correct subtrees returned.');
   }
 
   /**

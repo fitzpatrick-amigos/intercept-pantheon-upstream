@@ -11,8 +11,6 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Template\TwigEnvironment;
 use Drupal\Core\Template\TwigPhpStorageCache;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\DependencyInjection\Definition;
 use Twig\Error\LoaderError;
 
@@ -20,9 +18,8 @@ use Twig\Error\LoaderError;
  * Tests the twig environment.
  *
  * @see \Drupal\Core\Template\TwigEnvironment
+ * @group Twig
  */
-#[Group('Twig')]
-#[RunTestsInSeparateProcesses]
 class TwigEnvironmentTest extends KernelTestBase {
 
   /**

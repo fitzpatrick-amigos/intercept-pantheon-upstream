@@ -8,18 +8,15 @@ use Drupal\Component\PhpStorage\MTimeProtectedFileStorage;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\system\PhpStorage\MockPhpStorage;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests the PHP storage factory.
  *
+ * @group PhpStorage
  * @see \Drupal\Core\PhpStorage\PhpStorageFactory
  */
-#[Group('PhpStorage')]
-#[RunTestsInSeparateProcesses]
 class PhpStorageFactoryTest extends KernelTestBase {
 
   /**

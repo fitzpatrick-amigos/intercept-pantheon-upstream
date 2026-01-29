@@ -13,18 +13,15 @@ use Drupal\Core\TypedData\Type\DateTimeInterface;
 use Drupal\serialization\Normalizer\DateTimeNormalizer;
 use Drupal\Tests\serialization\Traits\JsonSchemaTestTrait;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 /**
  * Unit test coverage for @DataTypes implementing DateTimeInterface.
  *
+ * @group serialization
+ * @coversDefaultClass \Drupal\serialization\Normalizer\DateTimeNormalizer
  * @see \Drupal\Core\TypedData\Type\DateTimeInterface
  */
-#[CoversClass(DateTimeNormalizer::class)]
-#[Group('serialization')]
 class DateTimeNormalizerTest extends UnitTestCase {
 
   use JsonSchemaTestTrait;
@@ -61,9 +58,7 @@ class DateTimeNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests supports normalization.
-   *
-   * @legacy-covers ::supportsNormalization
+   * @covers ::supportsNormalization
    */
   public function testSupportsNormalization(): void {
     $this->assertTrue($this->normalizer->supportsNormalization($this->data->reveal()));
@@ -76,18 +71,14 @@ class DateTimeNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests supports denormalization.
-   *
-   * @legacy-covers ::supportsDenormalization
+   * @covers ::supportsDenormalization
    */
   public function testSupportsDenormalization(): void {
     $this->assertTrue($this->normalizer->supportsDenormalization($this->data->reveal(), DateTimeInterface::class));
   }
 
   /**
-   * Tests normalize.
-   *
-   * @legacy-covers ::normalize
+   * @covers ::normalize
    */
   public function testNormalize(): void {
     $random_rfc_3339_string = $this->randomMachineName();
@@ -106,9 +97,7 @@ class DateTimeNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests normalize when null.
-   *
-   * @legacy-covers ::normalize
+   * @covers ::normalize
    */
   public function testNormalizeWhenNull(): void {
     $this->data->getDateTime()
@@ -121,9 +110,9 @@ class DateTimeNormalizerTest extends UnitTestCase {
   /**
    * Tests the denormalize function with good data.
    *
-   * @legacy-covers ::denormalize
+   * @covers ::denormalize
+   * @dataProvider providerTestDenormalizeValidFormats
    */
-  #[DataProvider('providerTestDenormalizeValidFormats')]
   public function testDenormalizeValidFormats($normalized, $expected): void {
     $denormalized = $this->normalizer->denormalize($normalized, DateTimeInterface::class, NULL, []);
     $this->assertSame(0, $denormalized->getTimestamp() - $expected->getTimestamp());
@@ -153,9 +142,9 @@ class DateTimeNormalizerTest extends UnitTestCase {
   /**
    * Tests the denormalize function with a user supplied format.
    *
-   * @legacy-covers ::denormalize
+   * @covers ::denormalize
+   * @dataProvider providerTestDenormalizeUserFormats
    */
-  #[DataProvider('providerTestDenormalizeUserFormats')]
   public function testDenormalizeUserFormats($normalized, $format, $expected): void {
     $denormalized = $this->normalizer->denormalize($normalized, DateTimeInterface::class, NULL, ['datetime_allowed_formats' => [$format]]);
     $this->assertSame(0, $denormalized->getTimestamp() - $expected->getTimestamp());
@@ -193,7 +182,7 @@ class DateTimeNormalizerTest extends UnitTestCase {
   /**
    * Tests the denormalize function with bad data.
    *
-   * @legacy-covers ::denormalize
+   * @covers ::denormalize
    */
   public function testDenormalizeException(): void {
     $this->expectException(UnexpectedValueException::class);

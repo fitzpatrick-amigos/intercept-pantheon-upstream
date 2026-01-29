@@ -5,17 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\views\Kernel\Plugin;
 
 use Drupal\views\Views;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the grid_responsive style plugin.
  *
+ * @group views
  * @see \Drupal\views\Plugin\views\style\GridResponsive
  */
-#[Group('views')]
-#[RunTestsInSeparateProcesses]
 class StyleGridResponsiveTest extends PluginKernelTestBase {
 
   /**
@@ -32,8 +28,9 @@ class StyleGridResponsiveTest extends PluginKernelTestBase {
    *   Options for the style plugin.
    * @param array $expected
    *   Expected values sued for assertions.
+   *
+   * @dataProvider providerTestResponsiveGrid
    */
-  #[DataProvider('providerTestResponsiveGrid')]
   public function testResponsiveGrid(array $options, array $expected): void {
     // Create and preview a View with the provided options.
     $view = Views::getView('test_grid_responsive');

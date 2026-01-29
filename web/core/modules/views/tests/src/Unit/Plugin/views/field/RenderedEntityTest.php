@@ -14,14 +14,11 @@ use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\Plugin\views\field\RenderedEntity;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\views\Plugin\views\field\RenderedEntity.
+ * @coversDefaultClass \Drupal\views\Plugin\views\field\RenderedEntity
+ * @group Views
  */
-#[CoversClass(RenderedEntity::class)]
-#[Group('Views')]
 class RenderedEntityTest extends UnitTestCase {
 
   use ViewsLoggerTestTrait;
@@ -37,7 +34,7 @@ class RenderedEntityTest extends UnitTestCase {
   /**
    * Tests the render method when getEntity returns NULL.
    *
-   * @legacy-covers ::render
+   * @covers ::render
    */
   public function testRenderNullEntity(): void {
     $row = new ResultRow();

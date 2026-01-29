@@ -6,21 +6,18 @@ namespace Drupal\Tests\Core\Form;
 
 use Drupal\Core\Form\FormStateValuesTrait;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Form\FormStateValuesTrait.
+ * @coversDefaultClass \Drupal\Core\Form\FormStateValuesTrait
+ *
+ * @group Form
  */
-#[CoversClass(FormStateValuesTrait::class)]
-#[Group('Form')]
 class FormStateValuesTraitTest extends UnitTestCase {
 
   /**
    * Tests that setting the value for an element adds to the values.
    *
-   * @legacy-covers ::setValueForElement
+   * @covers ::setValueForElement
    */
   public function testSetValueForElement(): void {
     $element = [
@@ -42,11 +39,10 @@ class FormStateValuesTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get value.
+   * @covers ::getValue
    *
-   * @legacy-covers ::getValue
+   * @dataProvider providerGetValue
    */
-  #[DataProvider('providerGetValue')]
   public function testGetValue($key, $expected, $default = NULL): void {
     $form_state = (new FormStateValuesTraitStub())->setValues([
       'foo' => 'one',
@@ -66,7 +62,7 @@ class FormStateValuesTraitTest extends UnitTestCase {
    *   - The expected value (mixed).
    *   - The default value (mixed).
    */
-  public static function providerGetValue(): array {
+  public static function providerGetValue() {
     $data = [];
     $data[] = [
       'foo', 'one',
@@ -93,9 +89,7 @@ class FormStateValuesTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get value modify return.
-   *
-   * @legacy-covers ::getValue
+   * @covers ::getValue
    */
   public function testGetValueModifyReturn(): void {
     $initial_values = $values = [
@@ -115,11 +109,10 @@ class FormStateValuesTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests set value.
+   * @covers ::setValue
    *
-   * @legacy-covers ::setValue
+   * @dataProvider providerSetValue
    */
-  #[DataProvider('providerSetValue')]
   public function testSetValue($key, $value, $expected): void {
     $form_state = (new FormStateValuesTraitStub())->setValues([
       'bar' => 'wrong',
@@ -137,7 +130,7 @@ class FormStateValuesTraitTest extends UnitTestCase {
    *   - The new value to set (mixed).
    *   - The expected form state values after setting the new value (mixed[]).
    */
-  public static function providerSetValue(): array {
+  public static function providerSetValue() {
     $data = [];
     $data[] = [
       'foo', 'one', ['bar' => 'wrong', 'foo' => 'one'],
@@ -152,11 +145,10 @@ class FormStateValuesTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests has value.
+   * @covers ::hasValue
    *
-   * @legacy-covers ::hasValue
+   * @dataProvider providerHasValue
    */
-  #[DataProvider('providerHasValue')]
   public function testHasValue($key, $expected): void {
     $form_state = (new FormStateValuesTraitStub())->setValues([
       'foo' => 'one',
@@ -178,7 +170,7 @@ class FormStateValuesTraitTest extends UnitTestCase {
    *   - The key to check for in the form state (string)
    *   - Whether the form state has an item with that key (bool).
    */
-  public static function providerHasValue(): array {
+  public static function providerHasValue() {
     $data = [];
     $data[] = [
       'foo', TRUE,
@@ -202,11 +194,10 @@ class FormStateValuesTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests is value empty.
+   * @covers ::isValueEmpty
    *
-   * @legacy-covers ::isValueEmpty
+   * @dataProvider providerIsValueEmpty
    */
-  #[DataProvider('providerIsValueEmpty')]
   public function testIsValueEmpty($key, $expected): void {
     $form_state = (new FormStateValuesTraitStub())->setValues([
       'foo' => 'one',
@@ -228,7 +219,7 @@ class FormStateValuesTraitTest extends UnitTestCase {
    *   - The key to check for in the form state (string)
    *   - Whether the value is empty or not (bool).
    */
-  public static function providerIsValueEmpty(): array {
+  public static function providerIsValueEmpty() {
     $data = [];
     $data[] = [
       'foo', FALSE,

@@ -41,12 +41,7 @@ class ConfigTestHooks {
     $config_test_no_status->set('id', 'config_test_no_status');
     $config_test_no_status->set('entity_keys', $keys);
     $config_test_no_status->set('config_prefix', 'no_status');
-    $config_test_no_status->set('mergedConfigExport', [
-      'id' => 'id',
-      'label' => 'label',
-      'uuid' => 'uuid',
-      'langcode' => 'langcode',
-    ]);
+    $config_test_no_status->set('mergedConfigExport', ['id' => 'id', 'label' => 'label', 'uuid' => 'uuid', 'langcode' => 'langcode']);
     if (\Drupal::service('state')->get('config_test.lookup_keys', FALSE)) {
       $entity_types['config_test']->set('lookup_keys', ['uuid', 'style']);
     }

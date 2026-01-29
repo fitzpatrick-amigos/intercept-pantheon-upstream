@@ -11,7 +11,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Url;
 use Drupal\link\AttributeXss;
 use Drupal\link\LinkItemInterface;
-use Drupal\link\LinkTitleVisibility;
 use Drupal\menu_link_content\Form\MenuLinkContentDeleteForm;
 use Drupal\menu_link_content\Form\MenuLinkContentForm;
 use Drupal\menu_link_content\MenuLinkContentAccessControlHandler;
@@ -49,7 +48,6 @@ use Drupal\menu_link_content\MenuLinkListBuilder;
       'default' => MenuLinkContentForm::class,
       'delete' => MenuLinkContentDeleteForm::class,
     ],
-    'link_target' => ['view' => MenuLinkContentLinkTarget::class],
     'list_builder' => MenuLinkListBuilder::class,
   ],
   links: [
@@ -345,7 +343,7 @@ class MenuLinkContent extends EditorialContentEntityBase implements MenuLinkCont
       ->setRequired(TRUE)
       ->setSettings([
         'link_type' => LinkItemInterface::LINK_GENERIC,
-        'title' => LinkTitleVisibility::Disabled->value,
+        'title' => DRUPAL_DISABLED,
       ])
       ->setDisplayOptions('form', [
         'type' => 'link_default',

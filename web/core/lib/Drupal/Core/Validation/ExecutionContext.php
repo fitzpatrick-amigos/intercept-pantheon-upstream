@@ -248,18 +248,4 @@ class ExecutionContext implements ExecutionContextInterface {
     $this->violations = clone $this->violations;
   }
 
-  /**
-   * Gets the current constraint.
-   *
-   * @return \Symfony\Component\Validator\Constraint|null
-   *   The constraint.
-   *
-   * @internal
-   *   This method is not part of the public API. It is only used to make
-   *   recursive calls work.
-   */
-  public function getConstraint(): ?Constraint {
-    return $this->constraint ?? NULL;
-  }
-
 }

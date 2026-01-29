@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace Drupal\Tests\media\Functional;
 
 use Drupal\media\OEmbed\Resource;
-use Drupal\media\OEmbed\ResourceFetcher;
 use Drupal\Tests\media\Traits\OEmbedTestTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 // cspell:ignore dailymotion Schipulcon
+
 /**
  * Tests the oEmbed resource fetcher service.
+ *
+ * @coversDefaultClass \Drupal\media\OEmbed\ResourceFetcher
+ *
+ * @group media
  */
-#[CoversClass(ResourceFetcher::class)]
-#[Group('media')]
-#[RunTestsInSeparateProcesses]
 class ResourceFetcherTest extends MediaFunctionalTestBase {
 
   use OEmbedTestTrait;
@@ -68,9 +65,10 @@ class ResourceFetcherTest extends MediaFunctionalTestBase {
    * @param string $title
    *   The expected title of the resource.
    *
-   * @legacy-covers ::fetchResource
+   * @covers ::fetchResource
+   *
+   * @dataProvider providerFetchResource
    */
-  #[DataProvider('providerFetchResource')]
   public function testFetchResource($resource_url, $provider_name, $title): void {
     /** @var \Drupal\media\OEmbed\Resource $resource */
     $resource = $this->container->get('media.oembed.resource_fetcher')

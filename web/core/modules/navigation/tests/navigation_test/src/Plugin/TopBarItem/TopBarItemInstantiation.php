@@ -16,7 +16,6 @@ use Drupal\navigation\TopBarRegion;
   id: 'test_item',
   region: TopBarRegion::Actions,
   label: new TranslatableMarkup('Test Item'),
-  weight: 0,
 )]
 class TopBarItemInstantiation extends TopBarItemBase {
 

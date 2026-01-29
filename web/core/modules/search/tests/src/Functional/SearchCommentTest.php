@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Drupal\Tests\search\Functional;
 
 use Behat\Mink\Exception\ResponseTextException;
-use Drupal\comment\CommentPreviewMode;
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
 use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\filter\Entity\FilterFormat;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\Traits\Core\CronRunTrait;
 use Drupal\user\RoleInterface;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\filter\Entity\FilterFormat;
 
 /**
  * Tests integration searching comments.
+ *
+ * @group search
  */
-#[Group('search')]
-#[RunTestsInSeparateProcesses]
 class SearchCommentTest extends BrowserTestBase {
 
   use CommentTestTrait;
@@ -119,7 +116,7 @@ class SearchCommentTest extends BrowserTestBase {
 
     // Make preview optional.
     $field = FieldConfig::loadByName('node', 'article', 'comment');
-    $field->setSetting('preview', CommentPreviewMode::Optional->value);
+    $field->setSetting('preview', DRUPAL_OPTIONAL);
     $field->save();
 
     // Allow anonymous users to search content.
@@ -251,7 +248,7 @@ class SearchCommentTest extends BrowserTestBase {
     // Create a node.
     // Make preview optional.
     $field = FieldConfig::loadByName('node', 'article', 'comment');
-    $field->setSetting('preview', CommentPreviewMode::Optional->value);
+    $field->setSetting('preview', DRUPAL_OPTIONAL);
     $field->save();
     $this->node = $this->drupalCreateNode(['type' => 'article']);
 

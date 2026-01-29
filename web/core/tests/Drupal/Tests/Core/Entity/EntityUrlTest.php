@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\Tests\Core\Entity;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\Entity\EntityBase;
 use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -14,17 +13,16 @@ use Drupal\Core\GeneratedUrl;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 
 /**
  * Tests URL handling of the \Drupal\Core\Entity\EntityBase class.
+ *
+ * @coversDefaultClass \Drupal\Core\Entity\EntityBase
+ *
+ * @group Entity
  */
-#[CoversClass(EntityBase::class)]
-#[Group('Entity')]
 class EntityUrlTest extends UnitTestCase {
 
   /**
@@ -94,7 +92,7 @@ class EntityUrlTest extends UnitTestCase {
   /**
    * Tests the toUrl() method without an entity ID.
    *
-   * @legacy-covers ::toUrl
+   * @covers ::toUrl
    */
   public function testToUrlNoId(): void {
     $entity = $this->getEntity(StubEntityBase::class, []);
@@ -110,7 +108,7 @@ class EntityUrlTest extends UnitTestCase {
    * It should throw an exception when neither canonical and edit-form link
    * templates exist if no parameters are passed in.
    *
-   * @legacy-covers ::toUrl
+   * @covers ::toUrl
    */
   public function testToUrlDefaultException(): void {
     $values = ['id' => static::ENTITY_ID];
@@ -128,7 +126,7 @@ class EntityUrlTest extends UnitTestCase {
    * It should return the edit-form or canonical link templates by default if
    * they are registered.
    *
-   * @legacy-covers ::toUrl
+   * @covers ::toUrl
    */
   public function testToUrlDefaultFallback(): void {
     $values = ['id' => static::ENTITY_ID, 'langcode' => $this->langcode];
@@ -161,11 +159,12 @@ class EntityUrlTest extends UnitTestCase {
    * @param string $expected_route_name
    *   The expected route name of the generated URL.
    *
-   * @legacy-covers ::toUrl
-   * @legacy-covers ::linkTemplates
-   * @legacy-covers ::urlRouteParameters
+   * @dataProvider providerTestToUrlLinkTemplates
+   *
+   * @covers ::toUrl
+   * @covers ::linkTemplates
+   * @covers ::urlRouteParameters
    */
-  #[DataProvider('providerTestToUrlLinkTemplates')]
   public function testToUrlLinkTemplates($link_template, $expected_route_name): void {
     $values = ['id' => static::ENTITY_ID, 'langcode' => $this->langcode];
     $entity = $this->getEntity(StubEntityBase::class, $values);
@@ -184,7 +183,7 @@ class EntityUrlTest extends UnitTestCase {
    * @return array
    *   An array of test cases for testToUrlLinkTemplates().
    */
-  public static function providerTestToUrlLinkTemplates(): array {
+  public static function providerTestToUrlLinkTemplates() {
     $test_cases = [];
 
     $test_cases['canonical'] = ['canonical', 'entity.test_entity.canonical'];
@@ -208,11 +207,12 @@ class EntityUrlTest extends UnitTestCase {
    * @param array $expected_route_parameters
    *   The expected route parameters of the generated URL.
    *
-   * @legacy-covers ::toUrl
-   * @legacy-covers ::linkTemplates
-   * @legacy-covers ::urlRouteParameters
+   * @dataProvider providerTestToUrlLinkTemplateRevision
+   *
+   * @covers ::toUrl
+   * @covers ::linkTemplates
+   * @covers ::urlRouteParameters
    */
-  #[DataProvider('providerTestToUrlLinkTemplateRevision')]
   public function testToUrlLinkTemplateRevision(bool $is_default_revision, string $link_template, string $expected_route_name, array $expected_route_parameters): void {
     $values = ['id' => static::ENTITY_ID, 'langcode' => $this->langcode];
     $entity = $this->getEntity(StubRevisionableEntity::class, $values, ['getRevisionId', 'isDefaultRevision']);
@@ -241,26 +241,11 @@ class EntityUrlTest extends UnitTestCase {
     $test_cases = [];
 
     $route_parameters = ['test_entity' => static::ENTITY_ID];
-    $test_cases['default_revision'] = [
-      static::DEFAULT_REVISION,
-      'canonical',
-      'entity.test_entity.canonical',
-      $route_parameters,
-    ];
+    $test_cases['default_revision'] = [static::DEFAULT_REVISION, 'canonical', 'entity.test_entity.canonical', $route_parameters];
     // Add the revision ID to the expected route parameters.
     $route_parameters['test_entity_revision'] = static::REVISION_ID;
-    $test_cases['non_default_revision'] = [
-      static::NON_DEFAULT_REVISION,
-      'revision',
-      'entity.test_entity.revision',
-      $route_parameters,
-    ];
-    $test_cases['revision-delete'] = [
-      static::NON_DEFAULT_REVISION,
-      'revision-delete-form',
-      'entity.test_entity.revision_delete_form',
-      $route_parameters,
-    ];
+    $test_cases['non_default_revision'] = [static::NON_DEFAULT_REVISION, 'revision', 'entity.test_entity.revision', $route_parameters];
+    $test_cases['revision-delete'] = [static::NON_DEFAULT_REVISION, 'revision-delete-form', 'entity.test_entity.revision_delete_form', $route_parameters];
 
     return $test_cases;
   }
@@ -273,11 +258,12 @@ class EntityUrlTest extends UnitTestCase {
    * @param string $expected_route_name
    *   The expected route name of the generated URL.
    *
-   * @legacy-covers ::toUrl
-   * @legacy-covers ::linkTemplates
-   * @legacy-covers ::urlRouteParameters
+   * @dataProvider providerTestToUrlLinkTemplateNoId
+   *
+   * @covers ::toUrl
+   * @covers ::linkTemplates
+   * @covers ::urlRouteParameters
    */
-  #[DataProvider('providerTestToUrlLinkTemplateNoId')]
   public function testToUrlLinkTemplateNoId($link_template, $expected_route_name): void {
     $entity = $this->getEntity(StubEntityBase::class, ['id' => static::ENTITY_ID]);
     $this->registerLinkTemplate($link_template);
@@ -293,7 +279,7 @@ class EntityUrlTest extends UnitTestCase {
    * @return array
    *   An array of test cases for testToUrlLinkTemplateNoId().
    */
-  public static function providerTestToUrlLinkTemplateNoId(): array {
+  public static function providerTestToUrlLinkTemplateNoId() {
     $test_cases = [];
 
     $test_cases['collection'] = ['collection', 'entity.test_entity.collection'];
@@ -316,11 +302,12 @@ class EntityUrlTest extends UnitTestCase {
    * @param array $expected_route_parameters
    *   The expected route parameters of the generated URL.
    *
-   * @legacy-covers ::toUrl
-   * @legacy-covers ::linkTemplates
-   * @legacy-covers ::urlRouteParameters
+   * @dataProvider providerTestToUrlLinkTemplateAddForm
+   *
+   * @covers ::toUrl
+   * @covers ::linkTemplates
+   * @covers ::urlRouteParameters
    */
-  #[DataProvider('providerTestToUrlLinkTemplateAddForm')]
   public function testToUrlLinkTemplateAddForm(bool $has_bundle_key, ?string $bundle_entity_type, string|false $bundle_key, array $expected_route_parameters): void {
     $values = ['id' => static::ENTITY_ID, 'langcode' => $this->langcode];
     $entity = $this->getEntity(StubEntityBase::class, $values);
@@ -362,10 +349,11 @@ class EntityUrlTest extends UnitTestCase {
    * @param string $uri_callback
    *   The entity type URI callback to register.
    *
-   * @legacy-covers ::toUrl
-   * @legacy-covers ::linkTemplates
+   * @dataProvider providerTestToUrlUriCallbackUndefined
+   *
+   * @covers ::toUrl
+   * @covers ::linkTemplates
    */
-  #[DataProvider('providerTestToUrlUriCallbackUndefined')]
   public function testToUrlUriCallbackUndefined(array $bundle_info, $uri_callback): void {
     $entity = $this->getEntity(StubEntityBase::class, ['id' => static::ENTITY_ID]);
 
@@ -384,7 +372,7 @@ class EntityUrlTest extends UnitTestCase {
    * @return array
    *   An array of test cases for testToUrlUriCallbackUndefined().
    */
-  public static function providerTestToUrlUriCallbackUndefined(): array {
+  public static function providerTestToUrlUriCallbackUndefined() {
     $test_cases = [];
 
     $test_cases['no_callback'] = [[], NULL];
@@ -402,10 +390,11 @@ class EntityUrlTest extends UnitTestCase {
    * @param \Closure|null $uri_callback
    *   The entity type URI callback to register.
    *
-   * @legacy-covers ::toUrl
-   * @legacy-covers ::linkTemplates
+   * @covers ::toUrl
+   * @covers ::linkTemplates
+   *
+   * @dataProvider providerTestToUrlUriCallback
    */
-  #[DataProvider('providerTestToUrlUriCallback')]
   public function testToUrlUriCallback(array $bundle_info, ?\Closure $uri_callback): void {
     $entity = $this->getEntity(StubEntityBase::class, ['id' => static::ENTITY_ID, 'langcode' => $this->langcode]);
 
@@ -441,7 +430,7 @@ class EntityUrlTest extends UnitTestCase {
   /**
    * Tests the uriRelationships() method.
    *
-   * @legacy-covers ::uriRelationships
+   * @covers ::uriRelationships
    */
   public function testUriRelationships(): void {
     $entity = $this->getEntity(StubEntityBase::class, ['id' => static::ENTITY_ID]);

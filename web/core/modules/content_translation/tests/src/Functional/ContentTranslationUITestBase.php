@@ -49,12 +49,7 @@ abstract class ContentTranslationUITestBase extends ContentTranslationTestBase {
    *
    * @var string[]
    */
-  protected $defaultCacheContexts = [
-    'languages:language_interface',
-    'theme',
-    'url.query_args:_wrapper_format',
-    'user.permissions',
-  ];
+  protected $defaultCacheContexts = ['languages:language_interface', 'theme', 'url.query_args:_wrapper_format', 'user.permissions'];
 
   /**
    * Tests the basic translation UI.

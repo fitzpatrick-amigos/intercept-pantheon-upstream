@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Core\Theme;
 
-use Drupal\Core\Breadcrumb\BreadcrumbPreprocess;
 use Drupal\Core\Datetime\DatePreprocess;
-use Drupal\Core\Field\FieldPreprocess;
-use Drupal\Core\Form\FormPreprocess;
-use Drupal\Core\Menu\MenuPreprocess;
-use Drupal\Core\Pager\PagerPreprocess;
 
 /**
  * Provide common theme render elements.
@@ -39,7 +34,6 @@ class ThemeCommonElements {
       ],
       'region' => [
         'render element' => 'elements',
-        'initial preprocess' => ThemePreprocess::class . ':preprocessRegion',
       ],
       'time' => [
         'variables' => [
@@ -104,13 +98,11 @@ class ThemeCommonElements {
           'srcset' => [],
           'style_name' => NULL,
         ],
-        'initial preprocess' => ImagePreprocess::class . ':preprocessImage',
       ],
       'breadcrumb' => [
         'variables' => [
           'links' => [],
         ],
-        'initial preprocess' => BreadcrumbPreprocess::class . ':preprocessBreadcrumb',
       ],
       'table' => [
         'variables' => [
@@ -124,13 +116,11 @@ class ThemeCommonElements {
           'responsive' => TRUE,
           'empty' => '',
         ],
-        'initial preprocess' => ThemePreprocess::class . ':preprocessTable',
       ],
       'tablesort_indicator' => [
         'variables' => [
           'style' => NULL,
         ],
-        'initial preprocess' => ThemePreprocess::class . ':preprocessTablesortIndicator',
       ],
       'mark' => [
         'variables' => [
@@ -147,7 +137,6 @@ class ThemeCommonElements {
           'empty' => NULL,
           'context' => [],
         ],
-        'initial preprocess' => ThemePreprocess::class . ':preprocessItemList',
       ],
       'feed_icon' => [
         'variables' => [
@@ -166,13 +155,12 @@ class ThemeCommonElements {
       'indentation' => [
         'variables' => ['size' => 1],
       ],
+      // From theme.maintenance.inc.
       'maintenance_page' => [
         'render element' => 'page',
-        'initial preprocess' => ThemePreprocess::class . ':preprocessMaintenancePage',
       ],
       'install_page' => [
         'render element' => 'page',
-        'initial preprocess' => ThemePreprocess::class . ':preprocessInstallPage',
       ],
       'maintenance_task_list' => [
         'variables' => [
@@ -180,19 +168,18 @@ class ThemeCommonElements {
           'active' => NULL,
           'variant' => NULL,
         ],
-        'initial preprocess' => ThemePreprocess::class . ':preprocessMaintenanceTaskList',
       ],
       'authorize_report' => [
         'variables' => [
           'messages' => [],
           'attributes' => [],
         ],
+        'includes' => ['core/includes/theme.maintenance.inc'],
         'template' => 'authorize-report',
         'deprecated' => 'The "authorize-report" template is deprecated in drupal:11.2.0 and is removed from drupal:12.0.0. There is no replacement. Use composer to manage the code for your site. See https://www.drupal.org/node/3522119',
       ],
       'pager' => [
         'render element' => 'pager',
-        'initial preprocess' => PagerPreprocess::class . ':preprocessPager',
       ],
       'menu' => [
         'variables' => [
@@ -203,11 +190,9 @@ class ThemeCommonElements {
       ],
       'menu_local_task' => [
         'render element' => 'element',
-        'initial preprocess' => MenuPreprocess::class . ':preprocessMenuLocalTask',
       ],
       'menu_local_action' => [
         'render element' => 'element',
-        'initial preprocess' => MenuPreprocess::class . ':preprocessMenuLocalAction',
       ],
       'menu_local_tasks' => [
         'variables' => [
@@ -215,50 +200,39 @@ class ThemeCommonElements {
           'secondary' => [],
         ],
       ],
-      // From form system.
+      // From form.inc.
       'input' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessInput',
       ],
       'select' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessSelect',
       ],
       'fieldset' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessFieldset',
       ],
       'details' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessDetails',
       ],
       'radios' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessRadios',
       ],
       'checkboxes' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessCheckboxes',
       ],
       'form' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessForm',
       ],
       'textarea' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessTextArea',
       ],
       'form_element' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessFormElement',
       ],
       'form_element_label' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessFormElementLabel',
       ],
       'vertical_tabs' => [
         'render element' => 'element',
-        'initial preprocess' => FormPreprocess::class . ':preprocessVerticalTabs',
       ],
       'container' => [
         'render element' => 'element',
@@ -267,11 +241,9 @@ class ThemeCommonElements {
       // From field system.
       'field' => [
         'render element' => 'element',
-        'initial preprocess' => FieldPreprocess::class . ':preprocessField',
       ],
       'field_multiple_value_form' => [
         'render element' => 'element',
-        'initial preprocess' => FieldPreprocess::class . ':preprocessFieldMultipleValueForm',
       ],
       'off_canvas_page_wrapper' => [
         'variables' => [

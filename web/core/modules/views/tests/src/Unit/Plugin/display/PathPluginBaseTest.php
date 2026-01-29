@@ -6,17 +6,13 @@ namespace Drupal\Tests\views\Unit\Plugin\display;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Tests\UnitTestCase;
-use Drupal\views\Plugin\views\display\PathPluginBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Tests Drupal\views\Plugin\views\display\PathPluginBase.
+ * @coversDefaultClass \Drupal\views\Plugin\views\display\PathPluginBase
+ * @group views
  */
-#[CoversClass(PathPluginBase::class)]
-#[Group('views')]
 class PathPluginBaseTest extends UnitTestCase {
 
   /**

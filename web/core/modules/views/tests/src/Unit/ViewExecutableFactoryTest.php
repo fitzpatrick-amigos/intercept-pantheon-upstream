@@ -6,16 +6,13 @@ namespace Drupal\Tests\views\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\ViewExecutableFactory;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests Drupal\views\ViewExecutableFactory.
+ * @coversDefaultClass \Drupal\views\ViewExecutableFactory
+ * @group views
  */
-#[CoversClass(ViewExecutableFactory::class)]
-#[Group('views')]
 class ViewExecutableFactoryTest extends UnitTestCase {
 
   /**
@@ -89,7 +86,7 @@ class ViewExecutableFactoryTest extends UnitTestCase {
   /**
    * Tests the get method.
    *
-   * @legacy-covers ::get
+   * @covers ::get
    */
   public function testGet(): void {
     $request_1 = new Request();

@@ -8,18 +8,12 @@ use Drupal\package_manager\Event\CollectPathsToExcludeEvent;
 use Drupal\package_manager\Event\StatusCheckEvent;
 use Drupal\package_manager\StatusCheckTrait;
 use Drupal\package_manager\ValidationResult;
-use PHPUnit\Framework\Attributes\CoversTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Status Check Trait.
- *
+ * @covers \Drupal\package_manager\StatusCheckTrait
+ * @group package_manager
  * @internal
  */
-#[Group('package_manager')]
-#[CoversTrait(StatusCheckTrait::class)]
-#[RunTestsInSeparateProcesses]
 class StatusCheckTraitTest extends PackageManagerKernelTestBase {
 
   use StatusCheckTrait;

@@ -12,23 +12,20 @@ use Drupal\Tests\UnitTestCase;
 use Drupal\views\Entity\View;
 use Drupal\views\ViewExecutableFactory;
 use Drupal\views_ui\ViewListBuilder;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests Drupal\views_ui\ViewListBuilder.
+ * @coversDefaultClass \Drupal\views_ui\ViewListBuilder
+ * @group views_ui
  */
-#[CoversClass(ViewListBuilder::class)]
-#[Group('views_ui')]
 class ViewListBuilderTest extends UnitTestCase {
 
   /**
    * Tests the listing of displays on a views list builder.
    *
    * @see \Drupal\views_ui\ViewListBuilder::getDisplaysList()
-   * @legacy-covers ::buildRow
+   * @covers ::buildRow
    */
   public function testBuildRowEntityList(): void {
     $storage = $this->getMockBuilder('Drupal\Core\Config\Entity\ConfigEntityStorage')

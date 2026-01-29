@@ -7,25 +7,22 @@ namespace Drupal\Tests\link\Unit\Plugin\Validation\Constraint;
 use Drupal\link\Plugin\Validation\Constraint\LinkAccessConstraint;
 use Drupal\link\Plugin\Validation\Constraint\LinkAccessConstraintValidator;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 /**
  * Tests the LinkAccessConstraintValidator validator.
+ *
+ * @coversDefaultClass \Drupal\link\Plugin\Validation\Constraint\LinkAccessConstraintValidator
+ * @group validation
  */
-#[CoversClass(LinkAccessConstraintValidator::class)]
-#[Group('validation')]
 class LinkAccessConstraintValidatorTest extends UnitTestCase {
 
   /**
    * Tests the access validation constraint for links.
    *
-   * @legacy-covers ::validate
+   * @covers ::validate
+   * @dataProvider providerValidate
    */
-  #[DataProvider('providerValidate')]
   public function testValidate(bool $mayLinkAnyPage, bool $urlAccess, bool $valid): void {
     // Mock a Url object that returns a boolean indicating user access.
     $url = $this->getMockBuilder('Drupal\Core\Url')
@@ -56,20 +53,13 @@ class LinkAccessConstraintValidatorTest extends UnitTestCase {
       ->willReturn($mayLinkAnyPage);
 
     $context = $this->createMock(ExecutionContextInterface::class);
-
-    $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
-    $constraintViolationBuilder->method('atPath')
-      ->with('uri')
-      ->willReturn($constraintViolationBuilder);
-
     if ($valid) {
       $context->expects($this->never())
-        ->method('buildViolation');
+        ->method('addViolation');
     }
     else {
       $context->expects($this->once())
-        ->method('buildViolation')
-        ->willReturn($constraintViolationBuilder);
+        ->method('addViolation');
     }
 
     $constraint = new LinkAccessConstraint();

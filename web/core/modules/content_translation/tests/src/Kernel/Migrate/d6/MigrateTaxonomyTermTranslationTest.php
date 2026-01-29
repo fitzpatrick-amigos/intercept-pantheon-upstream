@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\content_translation\Kernel\Migrate\d6;
 
 use Drupal\taxonomy\Entity\Term;
-use Drupal\taxonomy\TermInterface;
 use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Test migration of translated taxonomy terms.
+ *
+ * @group migrate_drupal_6
  */
-#[Group('migrate_drupal_6')]
-#[RunTestsInSeparateProcesses]
 class MigrateTaxonomyTermTranslationTest extends MigrateDrupal6TestBase {
 
   /**
@@ -24,6 +22,7 @@ class MigrateTaxonomyTermTranslationTest extends MigrateDrupal6TestBase {
     'content_translation',
     'language',
     'menu_ui',
+    'node',
     'taxonomy',
   ];
 

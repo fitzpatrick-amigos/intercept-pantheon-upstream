@@ -7,20 +7,15 @@ namespace Drupal\Tests\Core\Menu;
 use Drupal\Core\Menu\MenuLinkDefault;
 use Drupal\Core\Menu\StaticMenuLinkOverridesInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Menu\MenuLinkDefault.
+ * @coversDefaultClass \Drupal\Core\Menu\MenuLinkDefault
+ * @group Menu
  */
-#[CoversClass(MenuLinkDefault::class)]
-#[Group('Menu')]
 class MenuLinkDefaultTest extends UnitTestCase {
 
   /**
-   * Tests update link.
-   *
-   * @legacy-covers ::updateLink
+   * @covers ::updateLink
    */
   public function testUpdateLink(): void {
     $plugin_definition = [
@@ -44,9 +39,7 @@ class MenuLinkDefaultTest extends UnitTestCase {
   }
 
   /**
-   * Tests update link without persist.
-   *
-   * @legacy-covers ::updateLink
+   * @covers ::updateLink
    */
   public function testUpdateLinkWithoutPersist(): void {
     $plugin_definition = [

@@ -55,7 +55,7 @@ class OfficeHoursSeasonUnitTest extends UnitTestCase {
     $yesterday = strtotime('-1 day', $today);
     $tomorrow = strtotime('+1 day', $today);
 
-    $season = new OfficeHoursSeason(123, 'yesterday', $yesterday, $today);
+    $season = new OfficeHoursSeason(123, 'yesterday & today', $yesterday, $today);
     $this::assertTrue($season->isInRange($time, $time), 'Test Season::isInRange(time, time).');
     $this::assertFalse($season->isInRange($time, 0), 'Test Season::isInRange(time, 0).');
     $this::assertTrue($season->isInRange($time, 1), 'Test Season::isInRange(time, 1).');
@@ -65,7 +65,7 @@ class OfficeHoursSeasonUnitTest extends UnitTestCase {
     $this::assertFalse($season->isInRange($time, 0), 'Test Season::isInRange(time, 0).');
     $this::assertTrue($season->isInRange($time, 1), 'Test Season::isInRange(time, 1).');
 
-    $season = new OfficeHoursSeason(125, 'today', $today, $tomorrow);
+    $season = new OfficeHoursSeason(125, 'today & tomorrow', $today, $tomorrow);
     $this::assertTrue($season->isInRange($time, $time), 'Test Season::isInRange(time, time).');
     $this::assertFalse($season->isInRange($time, 0), 'Test Season::isInRange(time, 0).');
     $this::assertTrue($season->isInRange($time, 1), 'Test Season::isInRange(time, 1).');

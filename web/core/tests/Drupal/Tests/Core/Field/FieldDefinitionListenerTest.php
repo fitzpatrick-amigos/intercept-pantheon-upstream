@@ -15,15 +15,12 @@ use Drupal\Core\Field\FieldDefinitionListener;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
- * Tests Drupal\Core\Field\FieldDefinitionListener.
+ * @coversDefaultClass \Drupal\Core\Field\FieldDefinitionListener
+ * @group Field
  */
-#[CoversClass(FieldDefinitionListener::class)]
-#[Group('Field')]
 class FieldDefinitionListenerTest extends UnitTestCase {
 
   /**
@@ -109,9 +106,7 @@ class FieldDefinitionListenerTest extends UnitTestCase {
   }
 
   /**
-   * Tests on field definition create new field.
-   *
-   * @legacy-covers ::onFieldDefinitionCreate
+   * @covers ::onFieldDefinitionCreate
    */
   public function testOnFieldDefinitionCreateNewField(): void {
     $field_definition = $this->prophesize(FieldDefinitionInterface::class);
@@ -142,9 +137,7 @@ class FieldDefinitionListenerTest extends UnitTestCase {
   }
 
   /**
-   * Tests on field definition create existing field.
-   *
-   * @legacy-covers ::onFieldDefinitionCreate
+   * @covers ::onFieldDefinitionCreate
    */
   public function testOnFieldDefinitionCreateExistingField(): void {
     $field_definition = $this->prophesize(FieldDefinitionInterface::class);
@@ -180,9 +173,7 @@ class FieldDefinitionListenerTest extends UnitTestCase {
   }
 
   /**
-   * Tests on field definition update.
-   *
-   * @legacy-covers ::onFieldDefinitionUpdate
+   * @covers ::onFieldDefinitionUpdate
    */
   public function testOnFieldDefinitionUpdate(): void {
     $field_definition = $this->prophesize(FieldDefinitionInterface::class);
@@ -199,9 +190,7 @@ class FieldDefinitionListenerTest extends UnitTestCase {
   }
 
   /**
-   * Tests on field definition delete multiple bundles.
-   *
-   * @legacy-covers ::onFieldDefinitionDelete
+   * @covers ::onFieldDefinitionDelete
    */
   public function testOnFieldDefinitionDeleteMultipleBundles(): void {
     $field_definition = $this->prophesize(FieldDefinitionInterface::class);
@@ -241,9 +230,7 @@ class FieldDefinitionListenerTest extends UnitTestCase {
   }
 
   /**
-   * Tests on field definition delete single bundles.
-   *
-   * @legacy-covers ::onFieldDefinitionDelete
+   * @covers ::onFieldDefinitionDelete
    */
   public function testOnFieldDefinitionDeleteSingleBundles(): void {
     $field_definition = $this->prophesize(FieldDefinitionInterface::class);

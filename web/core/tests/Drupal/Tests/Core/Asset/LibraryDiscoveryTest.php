@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Core\Asset;
 
-use Drupal\Core\Asset\LibraryDiscovery;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Asset\LibraryDiscovery.
+ * @coversDefaultClass \Drupal\Core\Asset\LibraryDiscovery
+ * @group Asset
  */
-#[CoversClass(LibraryDiscovery::class)]
-#[Group('Asset')]
 class LibraryDiscoveryTest extends UnitTestCase {
 
   /**
@@ -81,7 +77,7 @@ class LibraryDiscoveryTest extends UnitTestCase {
   /**
    * Tests getting a library by name.
    *
-   * @legacy-covers ::getLibraryByName
+   * @covers ::getLibraryByName
    */
   public function testGetLibraryByName(): void {
     $this->assertSame($this->libraryData['test_1'], $this->libraryDiscovery->getLibraryByName('test', 'test_1'));
@@ -91,8 +87,7 @@ class LibraryDiscoveryTest extends UnitTestCase {
    * Tests getting a deprecated library.
    */
   public function testAssetLibraryDeprecation(): void {
-    $previous_error_handler = get_error_handler();
-    set_error_handler(function ($severity, $message, $file, $line) use (&$previous_error_handler) {
+    $previous_error_handler = set_error_handler(function ($severity, $message, $file, $line) use (&$previous_error_handler) {
       // Convert deprecation error into a catchable exception.
       if ($severity === E_USER_DEPRECATED) {
         throw new \ErrorException($message, 0, $severity, $file, $line);

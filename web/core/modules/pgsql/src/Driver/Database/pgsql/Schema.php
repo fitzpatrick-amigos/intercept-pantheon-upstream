@@ -514,10 +514,7 @@ EOD;
   public function tableExists($table, $add_prefix = TRUE) {
     $prefixInfo = $this->getPrefixInfo($table, $add_prefix);
 
-    return (bool) $this->connection->query("SELECT 1 FROM pg_tables WHERE schemaname = :schema AND tablename = :table", [
-      ':schema' => $prefixInfo['schema'],
-      ':table' => $prefixInfo['table'],
-    ])->fetchField();
+    return (bool) $this->connection->query("SELECT 1 FROM pg_tables WHERE schemaname = :schema AND tablename = :table", [':schema' => $prefixInfo['schema'], ':table' => $prefixInfo['table']])->fetchField();
   }
 
   /**
@@ -573,10 +570,7 @@ EOD;
     $table_name = $this->connection->getPrefix() . $table;
     // Index names and constraint names are global in PostgreSQL, so we need to
     // rename them when renaming the table.
-    $indexes = $this->connection->query('SELECT indexname FROM pg_indexes WHERE schemaname = :schema AND tablename = :table', [
-      ':schema' => $this->defaultSchema,
-      ':table' => $table_name,
-    ]);
+    $indexes = $this->connection->query('SELECT indexname FROM pg_indexes WHERE schemaname = :schema AND tablename = :table', [':schema' => $this->defaultSchema, ':table' => $table_name]);
 
     foreach ($indexes as $index) {
       // Get the index type by suffix, e.g. idx/key/pkey.
@@ -725,10 +719,7 @@ EOD;
   public function fieldExists($table, $column) {
     $prefixInfo = $this->getPrefixInfo($table);
 
-    return (bool) $this->connection->query("SELECT 1 FROM pg_attribute WHERE attrelid = :key::regclass AND attname = :column AND NOT attisdropped AND attnum > 0", [
-      ':key' => $prefixInfo['schema'] . '.' . $prefixInfo['table'],
-      ':column' => $column,
-    ])->fetchField();
+    return (bool) $this->connection->query("SELECT 1 FROM pg_attribute WHERE attrelid = :key::regclass AND attname = :column AND NOT attisdropped AND attnum > 0", [':key' => $prefixInfo['schema'] . '.' . $prefixInfo['table'], ':column' => $column])->fetchField();
   }
 
   /**
@@ -1065,30 +1056,16 @@ EOD;
   }
 
   /**
-   * Retrieves a table or column comment.
-   *
-   * @param string $table
-   *   The table name.
-   * @param string|null $column
-   *   (optional) The column name.
-   *
-   * @return string|false
-   *   The table or column comment. FALSE if the table or column does not exist.
+   * Retrieve a table or column comment.
    */
   public function getComment($table, $column = NULL) {
     $info = $this->getPrefixInfo($table);
     // Don't use {} around pg_class, pg_attribute tables.
     if (isset($column)) {
-      return $this->connection->query('SELECT col_description(oid, attnum) FROM pg_class, pg_attribute WHERE attrelid = oid AND relname = ? AND attname = ?', [
-        $info['table'],
-        $column,
-      ])->fetchField() ?? FALSE;
+      return $this->connection->query('SELECT col_description(oid, attnum) FROM pg_class, pg_attribute WHERE attrelid = oid AND relname = ? AND attname = ?', [$info['table'], $column])->fetchField();
     }
     else {
-      return $this->connection->query('SELECT obj_description(oid, ?) FROM pg_class WHERE relname = ?', [
-        'pg_class',
-        $info['table'],
-      ])->fetchField() ?? FALSE;
+      return $this->connection->query('SELECT obj_description(oid, ?) FROM pg_class WHERE relname = ?', ['pg_class', $info['table']])->fetchField();
     }
   }
 
@@ -1129,7 +1106,7 @@ EOD;
   }
 
   /**
-   * Retrieves a sequence name that is owned by the table and column.
+   * Retrieves a sequence name that is owned by the table and column..
    *
    * @param string $table
    *   A table name that is not prefixed or quoted.

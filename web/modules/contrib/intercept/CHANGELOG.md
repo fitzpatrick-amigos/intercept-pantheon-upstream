@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.21] - 2026-01-28
+
+* Fixed an accessibility issue with low color contrast on My Account > Events > Past
+* Fixed an issue where the same event could appear twice on the events calendar
+* Fixed an issue where bulk room reservations could have an incorrect end time
+
 ## [2.0.20] - 2025-12-17
 
 * Prevented event registration active SMS messages from sending to customers on the waitlist

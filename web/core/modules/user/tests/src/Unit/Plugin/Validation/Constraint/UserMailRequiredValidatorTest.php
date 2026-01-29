@@ -14,17 +14,13 @@ use Drupal\user\Plugin\Validation\Constraint\UserMailRequired;
 use Drupal\user\Plugin\Validation\Constraint\UserMailRequiredValidator;
 use Drupal\user\UserInterface;
 use Drupal\user\UserStorageInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Prophet;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Tests Drupal\user\Plugin\Validation\Constraint\UserMailRequiredValidator.
+ * @coversDefaultClass \Drupal\user\Plugin\Validation\Constraint\UserMailRequiredValidator
+ * @group user
  */
-#[CoversClass(UserMailRequiredValidator::class)]
-#[Group('user')]
 class UserMailRequiredValidatorTest extends UnitTestCase {
 
   /**
@@ -58,11 +54,10 @@ class UserMailRequiredValidatorTest extends UnitTestCase {
   }
 
   /**
-   * Tests validate.
+   * @covers ::validate
    *
-   * @legacy-covers ::validate
+   * @dataProvider providerTestValidate
    */
-  #[DataProvider('providerTestValidate')]
   public function testValidate($items, $expected_violation, $is_admin = FALSE): void {
     $constraint = new UserMailRequired();
 

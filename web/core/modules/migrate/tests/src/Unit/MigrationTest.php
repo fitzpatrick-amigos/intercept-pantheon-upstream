@@ -5,24 +5,20 @@ declare(strict_types=1);
 namespace Drupal\Tests\migrate\Unit;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\Migration;
 use Drupal\migrate\Exception\RequirementsException;
 use Drupal\migrate\Plugin\MigrateDestinationInterface;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
-use Drupal\migrate\Plugin\Migration;
-use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 use Drupal\migrate\Plugin\RequirementsInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
 /**
- * Tests Drupal\migrate\Plugin\Migration.
+ * @coversDefaultClass \Drupal\migrate\Plugin\Migration
+ *
+ * @group migrate
  */
-#[CoversClass(Migration::class)]
-#[Group('migrate')]
 class MigrationTest extends UnitTestCase {
 
   /**
@@ -31,9 +27,10 @@ class MigrationTest extends UnitTestCase {
    * @param array $dependencies
    *   An array of migration dependencies.
    *
-   * @legacy-covers ::__construct
+   * @covers ::__construct
+   *
+   * @dataProvider getInvalidMigrationDependenciesProvider
    */
-  #[DataProvider('getInvalidMigrationDependenciesProvider')]
   public function testMigrationDependenciesInConstructor(array $dependencies): void {
 
     $configuration = ['migration_dependencies' => $dependencies];
@@ -52,7 +49,7 @@ class MigrationTest extends UnitTestCase {
   /**
    * Tests checking requirements for source plugins.
    *
-   * @legacy-covers ::checkRequirements
+   * @covers ::checkRequirements
    */
   public function testRequirementsForSourcePlugin(): void {
     $migration = new TestMigration();
@@ -74,7 +71,7 @@ class MigrationTest extends UnitTestCase {
   /**
    * Tests checking requirements for destination plugins.
    *
-   * @legacy-covers ::checkRequirements
+   * @covers ::checkRequirements
    */
   public function testRequirementsForDestinationPlugin(): void {
     $migration = new TestMigration();
@@ -96,7 +93,7 @@ class MigrationTest extends UnitTestCase {
   /**
    * Tests checking requirements for destination plugins.
    *
-   * @legacy-covers ::checkRequirements
+   * @covers ::checkRequirements
    */
   public function testRequirementsForMigrations(): void {
     $migration = new TestMigration();
@@ -141,7 +138,7 @@ class MigrationTest extends UnitTestCase {
   /**
    * Tests getting requirement list.
    *
-   * @legacy-covers ::getRequirements
+   * @covers ::getRequirements
    */
   public function testGetMigrations(): void {
     $migration = new TestMigration();
@@ -159,11 +156,11 @@ class MigrationTest extends UnitTestCase {
    * @param array $expected_value
    *   The migration dependencies configuration array expected.
    *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @covers ::getMigrationDependencies
+   * @dataProvider getValidMigrationDependenciesProvider
    *
-   * @legacy-covers ::getMigrationDependencies
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  #[DataProvider('getValidMigrationDependenciesProvider')]
   public function testMigrationDependenciesWithValidConfig($source, array $expected_value): void {
     $migration = new TestMigration();
 
@@ -186,10 +183,12 @@ class MigrationTest extends UnitTestCase {
    * @param array $dependencies
    *   An array of migration dependencies.
    *
-   * @legacy-covers ::getMigrationDependencies
+   * @covers ::getMigrationDependencies
+   *
+   * @dataProvider getInvalidMigrationDependenciesProvider
+   *
+   * @group legacy
    */
-  #[DataProvider('getInvalidMigrationDependenciesProvider')]
-  #[IgnoreDeprecations]
   public function testMigrationDependenciesWithInvalidConfig(array $dependencies): void {
     $migration = new TestMigration();
 
@@ -260,11 +259,11 @@ class MigrationTest extends UnitTestCase {
    * @param string[] $expected
    *   The migration dependencies configuration array expected.
    *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @covers ::addRequiredDependencies
+   * @dataProvider providerTestAddRequiredDependencies
    *
-   * @legacy-covers ::addRequiredDependencies
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  #[DataProvider('providerTestAddRequiredDependencies')]
   public function testAddRequiredDependencies(?array $initial_dependency, array $addition, array $expected): void {
     $migration = new TestMigration($initial_dependency);
     $migration->setMigrationPluginManager($this->getMockPluginManager());
@@ -347,9 +346,9 @@ class MigrationTest extends UnitTestCase {
    * @param string[] $expected
    *   The migration dependencies configuration array expected.
    *
-   * @legacy-covers ::addOptionalDependencies
+   * @covers ::addOptionalDependencies
+   * @dataProvider providerTestAddOptionalDependencies
    */
-  #[DataProvider('providerTestAddOptionalDependencies')]
   public function testAddOptionalDependencies(?array $initial_dependency, array $addition, array $expected): void {
     $migration = new TestMigration($initial_dependency);
     $migration->setMigrationPluginManager($this->getMockPluginManager());

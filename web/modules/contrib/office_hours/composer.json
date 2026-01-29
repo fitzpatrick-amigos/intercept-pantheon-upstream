@@ -16,5 +16,10 @@
   },
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
-  "require": { }
+  "require": { },
+  "require-dev": {
+    "drupal/diff": "^1 || ^2",
+    "drupal/feeds": "^3",
+    "drupal/webform": "^6"
+  }
 }

@@ -16,6 +16,7 @@ use Drupal\Core\Url;
 use Drupal\office_hours\Controller\StatusUpdateController;
 use Drupal\office_hours\OfficeHoursCacheHelper;
 use Drupal\office_hours\OfficeHoursDateHelper;
+use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursExceptionsItem;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -73,7 +74,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static(
       $plugin_id,
       $plugin_definition,
@@ -91,7 +92,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     $default_settings = [
       'day_format' => 'long',
       'time_format' => 'G',
@@ -133,27 +134,19 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
   /**
    * {@inheritdoc}
    */
-  protected function mergeDefaults() {
+  protected function mergeDefaults(): void {
     // Override parent, since that does not support sub-arrays.
-    if (isset($this->settings['exceptions'])) {
-      if (!is_array($this->settings['exceptions'])) {
-        $this->settings['exceptions'] = [];
-      }
-      $this->settings['exceptions'] += static::defaultSettings()['exceptions'];
-    }
-    if (isset($this->settings['schema'])) {
-      if (!is_array($this->settings['schema'])) {
-        $this->settings['schema'] = [];
-      }
-      $this->settings['schema'] += static::defaultSettings()['schema'];
-    }
+    $this->settings['exceptions'] = (array) ($this->settings['exceptions'] ?? []);
+    $this->settings['exceptions'] += static::defaultSettings()['exceptions'];
+    $this->settings['schema'] = (array) ($this->settings['schema'] ?? []);
+    $this->settings['schema'] += static::defaultSettings()['schema'];
     parent::mergeDefaults();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = parent::settingsForm($form, $form_state);
 
     $settings = $this->getSettings();
@@ -214,10 +207,10 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
       '#title' => $this->t('Time notation'),
       '#type' => 'select',
       '#options' => [
-        'G' => $this->t('24 hour time') . ' (9:00)',
-        'H' => $this->t('24 hour time') . ' (09:00)',
-        'g' => $this->t('12 hour time') . ' (9:00 am)',
-        'h' => $this->t('12 hour time') . ' (09:00 am)',
+        'G' => $this->t('24 hour time @example', ['@example' => '(9:00)']),
+        'H' => $this->t('24 hour time @example', ['@example' => '(09:00)']),
+        'g' => $this->t('12 hour time @example', ['@example' => '(9:00 am)']),
+        'h' => $this->t('12 hour time @example', ['@example' => '(09:00 am)']),
       ],
       '#default_value' => $settings['time_format'],
       '#required' => FALSE,
@@ -357,12 +350,6 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
         can only be maintained using the '(week) with exceptions' widget."),
     ];
     // Get the exception day formats.
-    $formats = $this->entityTypeManager->getStorage('date_format')->loadMultiple();
-    // @todo Set date format options using OptionsProviderInterface.
-    $options = [];
-    foreach ($formats as $format) {
-      $options[$format->id()] = $format->get('label');
-    }
     $element['exceptions']['replace_exceptions'] = [
       '#title' => $this->t('Replace weekday time slots with exception dates'),
       '#type' => 'checkbox',
@@ -392,6 +379,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
       '#required' => TRUE,
     ];
     // @todo Add link to admin/config/regional/date-time.
+    $options = OfficeHoursDateHelper::getDateFormatPossibleOptions();
     $element['exceptions']['date_format'] = [
       '#title' => $this->t('Date format for exception day'),
       '#type' => 'select',
@@ -463,7 +451,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = parent::settingsSummary();
 
     $settings = $this->getSettings();
@@ -485,7 +473,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
     $summary[] = $this->t("Show '@title' until @time days in the future. Example: @label.", [
       '@time' => $settings['exceptions']['restrict_exceptions_to_num_days'],
       '@title' => $this->t($settings['exceptions']['title'] ?: 'Exception days'),
-      '@label' => OfficeHoursItem::formatLabel(
+      '@label' => OfficeHoursExceptionsItem::formatLabel(
         $settings['exceptions']['date_format'], ['day' => $date]),
     ]);
     $summary[] = $this->t("Show '@title' until @time days in the future.", [
@@ -494,7 +482,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
     ]);
     $summary[] = $this->t("Show @yesno current opening status @status the time slots.", [
       '@yesno' => $current_status == '' ? $this->t('no') : '',
-      '@status' => $current_status == 'after' ? $this->t($current_status) : $this->t('before'),
+      '@status' => $current_status == 'after' ? $this->t('after') : $this->t('before'),
     ]);
     $summary[] = $this->t("A schema.org/openingHours formatter is @yesno added.", [
       '@yesno' => $settings['schema']['enabled'] ? '' : $this->t('not'),
@@ -525,14 +513,14 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
    * @return \Drupal\Core\Field\FieldDefinitionInterface
    *   The wrapped field definition.
    */
-  public function getFieldDefinition() {
+  public function getFieldDefinition(): FieldDefinitionInterface {
     return $this->fieldDefinition;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     /** @var \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface $items */
     $elements = [];
 
@@ -584,7 +572,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
    * @return array
    *   A formatter element.
    */
-  protected function attachSchemaFormatter(OfficeHoursItemListInterface $items, $langcode, array &$elements) {
+  protected function attachSchemaFormatter(OfficeHoursItemListInterface $items, $langcode, array &$elements): array {
 
     if (empty($this->settings['schema']['enabled'])) {
       return $elements;
@@ -616,7 +604,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
    * @return array
    *   A formatter element.
    */
-  protected function attachStatusFormatter(OfficeHoursItemListInterface $items, $langcode, array &$elements) {
+  protected function attachStatusFormatter(OfficeHoursItemListInterface $items, $langcode, array &$elements): array {
     $position = $this->settings['current_status']['position'];
 
     if (empty($position)) {
@@ -649,7 +637,7 @@ abstract class OfficeHoursFormatterBase extends FormatterBase implements Contain
    * @return array
    *   An array of 'attachments' for the formatter element.
    */
-  protected function attachCacheData(OfficeHoursItemListInterface $items, $langcode) {
+  protected function attachCacheData(OfficeHoursItemListInterface $items, $langcode): array {
     $elements = [];
 
     $formatter_settings = $this->getSettings();

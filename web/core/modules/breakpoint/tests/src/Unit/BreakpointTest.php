@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Drupal\Tests\breakpoint\Unit;
 
 use Drupal\breakpoint\Breakpoint;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Tests Drupal\breakpoint\Breakpoint.
+ * @coversDefaultClass \Drupal\breakpoint\Breakpoint
+ * @group Breakpoint
  */
-#[CoversClass(Breakpoint::class)]
-#[Group('Breakpoint')]
 class BreakpointTest extends UnitTestCase {
 
   /**
@@ -65,9 +62,7 @@ class BreakpointTest extends UnitTestCase {
   }
 
   /**
-   * Tests get label.
-   *
-   * @legacy-covers ::getLabel
+   * @covers ::getLabel
    */
   public function testGetLabel(): void {
     $this->pluginDefinition['label'] = 'Test label';
@@ -76,9 +71,7 @@ class BreakpointTest extends UnitTestCase {
   }
 
   /**
-   * Tests get weight.
-   *
-   * @legacy-covers ::getWeight
+   * @covers ::getWeight
    */
   public function testGetWeight(): void {
     $this->pluginDefinition['weight'] = '4';
@@ -88,9 +81,7 @@ class BreakpointTest extends UnitTestCase {
   }
 
   /**
-   * Tests get media query.
-   *
-   * @legacy-covers ::getMediaQuery
+   * @covers ::getMediaQuery
    */
   public function testGetMediaQuery(): void {
     $this->pluginDefinition['mediaQuery'] = 'only screen and (min-width: 1220px)';
@@ -99,9 +90,7 @@ class BreakpointTest extends UnitTestCase {
   }
 
   /**
-   * Tests get multipliers.
-   *
-   * @legacy-covers ::getMultipliers
+   * @covers ::getMultipliers
    */
   public function testGetMultipliers(): void {
     $this->pluginDefinition['multipliers'] = ['1x', '2x'];
@@ -110,9 +99,7 @@ class BreakpointTest extends UnitTestCase {
   }
 
   /**
-   * Tests get provider.
-   *
-   * @legacy-covers ::getProvider
+   * @covers ::getProvider
    */
   public function testGetProvider(): void {
     $this->pluginDefinition['provider'] = 'Breakpoint';
@@ -121,9 +108,7 @@ class BreakpointTest extends UnitTestCase {
   }
 
   /**
-   * Tests get group.
-   *
-   * @legacy-covers ::getGroup
+   * @covers ::getGroup
    */
   public function testGetGroup(): void {
     $this->pluginDefinition['group'] = 'Breakpoint';

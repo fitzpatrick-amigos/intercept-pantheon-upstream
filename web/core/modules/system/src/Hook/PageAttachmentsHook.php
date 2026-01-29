@@ -19,7 +19,7 @@ final class PageAttachmentsHook {
   /**
    * Implements hook_page_attachments().
    *
-   * @see \Drupal\Core\Theme\ThemePreprocess::preprocessMaintenancePage()
+   * @see template_preprocess_maintenance_page()
    * @see \Drupal\Core\EventSubscriber\ActiveLinkResponseFilter
    */
   #[Hook('page_attachments')]

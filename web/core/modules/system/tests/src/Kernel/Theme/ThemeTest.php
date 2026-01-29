@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\system\Kernel\Theme;
 
-use Drupal\Component\Render\MarkupInterface;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\Component\Render\MarkupInterface;
 
 /**
  * Tests low-level theme functions.
+ *
+ * @group Theme
  */
-#[Group('Theme')]
-#[RunTestsInSeparateProcesses]
 class ThemeTest extends KernelTestBase {
 
   /**
@@ -36,7 +34,7 @@ class ThemeTest extends KernelTestBase {
    * must ensure the attributes at different occasions are all merged correctly:
    *   - $variables['attributes'] as passed in to the theme hook implementation.
    *   - the render element's #attributes
-   *   - any attributes set in the template's preprocessing function.
+   *   - any attributes set in the template's preprocessing function
    */
   public function testAttributeMerging(): void {
     $theme_test_render_element = [

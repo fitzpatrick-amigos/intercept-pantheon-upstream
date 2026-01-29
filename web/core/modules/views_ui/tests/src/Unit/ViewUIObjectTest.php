@@ -9,15 +9,12 @@ use Drupal\Core\TempStore\Lock;
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\Entity\View;
 use Drupal\views_ui\ViewUI;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Tests Drupal\views_ui\ViewUI.
+ * @coversDefaultClass \Drupal\views_ui\ViewUI
+ * @group views_ui
  */
-#[CoversClass(ViewUI::class)]
-#[Group('views_ui')]
 class ViewUIObjectTest extends UnitTestCase {
 
   /**

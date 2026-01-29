@@ -53,7 +53,7 @@ trait CacheTagsChecksumTrait {
   }
 
   /**
-   * {@inheritdoc}
+   * Implements \Drupal\Core\Cache\CacheTagsInvalidatorInterface::invalidateTags()
    */
   public function invalidateTags(array $tags) {
     foreach ($tags as $key => $tag) {
@@ -84,7 +84,7 @@ trait CacheTagsChecksumTrait {
   }
 
   /**
-   * {@inheritdoc}
+   * Implements \Drupal\Core\Cache\CacheTagsChecksumInterface::getCurrentChecksum()
    */
   public function getCurrentChecksum(array $tags) {
     // Any cache writes in this request containing cache tags whose invalidation

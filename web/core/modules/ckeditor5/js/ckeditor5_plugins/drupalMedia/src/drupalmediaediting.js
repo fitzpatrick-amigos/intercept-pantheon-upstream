@@ -36,9 +36,6 @@ export default class DrupalMediaEditing extends Plugin {
       drupalMediaAlt: 'alt',
       drupalMediaEntityType: 'data-entity-type',
       drupalMediaEntityUuid: 'data-entity-uuid',
-      drupalLinkEntityUuid: 'data-link-entity-uuid',
-      drupalLinkEntityType: 'data-link-entity-type',
-      drupalLinkEntityMetadata: 'data-link-entity-metadata',
     };
     this.converterAttributes = [
       'drupalMediaEntityUuid',
@@ -80,7 +77,7 @@ export default class DrupalMediaEditing extends Plugin {
   /**
    * Upcast `drupalMediaIsImage` from Drupal Media metadata.
    *
-   * @param {module:engine/model/node~ModelNode} modelElement
+   * @param {module:engine/model/node~Node} modelElement
    *   The `drupalMedia` model element.
    *
    * @see module:drupalMedia/drupalmediametadatarepository~DrupalMediaMetadataRepository
@@ -129,7 +126,7 @@ export default class DrupalMediaEditing extends Plugin {
   /**
    * Upcast `drupalMediaType` from Drupal Media metadata.
    *
-   * @param {module:engine/model/node~ModelNode} modelElement
+   * @param {module:engine/model/node~Node} modelElement
    *   The `drupalMedia` model element.
    *
    * @see module:drupalMedia/drupalmediametadatarepository~DrupalMediaMetadataRepository
@@ -173,7 +170,7 @@ export default class DrupalMediaEditing extends Plugin {
   /**
    * Fetches preview from the server.
    *
-   * @param {module:engine/model/element~ModelElement} modelElement
+   * @param {module:engine/model/element~Element} modelElement
    *   The model element which preview should be loaded.
    * @return {Promise<{preview: string, label: string}>}
    *   A promise that returns an object.
@@ -470,7 +467,7 @@ export default class DrupalMediaEditing extends Plugin {
    *
    * Not previewing data-caption since it does not get updated by new changes.
    *
-   * @param {module:engine/model/element~ModelElement} modelElement
+   * @param {module:engine/model/element~Element} modelElement
    *   The drupalMedia model element to be converted.
    * @return {string}
    *   The model element converted into HTML.

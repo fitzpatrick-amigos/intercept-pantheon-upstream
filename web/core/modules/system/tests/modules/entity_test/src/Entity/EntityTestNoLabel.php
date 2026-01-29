@@ -23,7 +23,6 @@ use Drupal\entity_test\EntityTestAccessControlHandler;
   handlers: [
     'access' => EntityTestAccessControlHandler::class,
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_no_label',
   internal: TRUE,
 )]

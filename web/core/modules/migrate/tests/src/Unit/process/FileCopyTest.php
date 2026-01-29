@@ -9,15 +9,14 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\migrate\Plugin\migrate\process\FileCopy;
 use Drupal\migrate\Plugin\MigrateProcessInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the file copy process plugin.
+ *
+ * @group migrate
+ *
+ * @coversDefaultClass \Drupal\migrate\Plugin\migrate\process\FileCopy
  */
-#[CoversClass(FileCopy::class)]
-#[Group('migrate')]
 class FileCopyTest extends MigrateProcessTestCase {
 
   /**
@@ -27,8 +26,9 @@ class FileCopyTest extends MigrateProcessTestCase {
    *   The plugin configuration.
    * @param \Drupal\Core\File\FileExists $expected
    *   The expected value of the plugin configuration.
+   *
+   * @dataProvider providerFileProcessBaseConstructor
    */
-  #[DataProvider('providerFileProcessBaseConstructor')]
   public function testFileProcessBaseConstructor(array $configuration, FileExists $expected): void {
     $this->assertPlugin($configuration, $expected);
   }

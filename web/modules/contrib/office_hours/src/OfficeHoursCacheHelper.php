@@ -67,7 +67,7 @@ class OfficeHoursCacheHelper implements CacheableDependencyInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheContexts() {
+  public function getCacheContexts(): array {
     // Do not set caching for anonymous users.
     if (\Drupal::currentUser()->isAnonymous()) {
       // return ['session'];
@@ -78,7 +78,7 @@ class OfficeHoursCacheHelper implements CacheableDependencyInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
+  public function getCacheTags(): array {
     $entity = $this->items->getEntity();
     if (!$entity) {
       return [];
@@ -114,7 +114,7 @@ class OfficeHoursCacheHelper implements CacheableDependencyInterface {
    *
    * @see https://www.drupal.org/docs/drupal-apis/cache-api/cache-max-age
    */
-  public function getCacheMaxAge() {
+  public function getCacheMaxAge(): int {
 
     // @todo Add CacheMaxAge when entity has Exception days in/out of horizon.
     // If there are no open days, cache forever.
@@ -238,7 +238,7 @@ class OfficeHoursCacheHelper implements CacheableDependencyInterface {
    * @return bool
    *   TRUE if '#cache' is needed, else FALSE.
    */
-  public function isCacheNeeded() {
+  public function isCacheNeeded(): bool {
     // Determine if this entity display must be formatted.
     // Return TRUE if render caching must be active.
     // This is the case when:

@@ -6,14 +6,12 @@ namespace Drupal\Tests\field\Kernel\Migrate\d7;
 
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\migrate\MigrateExecutable;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Migrates and rolls back Drupal 7 fields.
+ *
+ * @group field
  */
-#[Group('field')]
-#[RunTestsInSeparateProcesses]
 class RollbackFieldTest extends MigrateFieldTest {
 
   /**
@@ -54,6 +52,7 @@ class RollbackFieldTest extends MigrateFieldTest {
 
     // Check that fields that should persist have not been rolled back.
     $non_rolled_back_field_ids = [
+      'node.body',
       'comment.comment_body',
     ];
     foreach ($non_rolled_back_field_ids as $field_id) {

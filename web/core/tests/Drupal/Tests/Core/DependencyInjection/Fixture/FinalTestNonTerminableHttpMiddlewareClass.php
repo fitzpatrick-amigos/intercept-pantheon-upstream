@@ -13,9 +13,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 final class FinalTestNonTerminableHttpMiddlewareClass implements HttpKernelInterface {
 
-  public function __construct(protected readonly HttpKernelInterface $inner) {
-  }
-
   /**
    * {@inheritdoc}
    */

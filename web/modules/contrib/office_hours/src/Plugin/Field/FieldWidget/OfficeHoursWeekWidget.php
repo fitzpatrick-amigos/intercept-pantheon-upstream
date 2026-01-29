@@ -3,9 +3,7 @@
 namespace Drupal\office_hours\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\office_hours\OfficeHoursDateHelper;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
 
 /**
@@ -26,7 +24,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       'collapsed' => FALSE,
     ];
@@ -38,7 +36,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
    * @todo Fix Warning: Undefined array key "translation" in EntityDisplayFormBase->copyFormValuesToEntity()
    * @todo Fix Warning: Trying to access array offset on value of type null in Drupal\field_ui\Form\EntityDisplayFormBase->copyFormValuesToEntity() (line 628 of EntityDisplayFormBase.php).
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     // Clear settingsform to avoid error with Paragraphs module [#3413697].
     $form = parent::settingsForm($form, $form_state);
 
@@ -50,7 +48,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
 
     // "In order to get proper UX, check User interface translation page
     // "for the strings From and To in Context 'A point in time'.
-    OfficeHoursItem::addMessage();
+    OfficeHoursItem::addTranslationMessage('locale_hint');
 
     return $form;
   }
@@ -58,7 +56,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary[] = $this->t('Collapse time slots: @collapsed', ['@collapsed' => $this->getSetting('collapsed') ? $this->t('Yes') : $this->t('No')]);
     return $summary;
   }
@@ -66,7 +64,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     // In D8, we have a (deliberate) anomaly in the widget.
     // We prepare 1 widget for the whole week,
     // but the field has unlimited cardinality.
@@ -102,7 +100,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
     if (Weekwidget && contains exceptions or season) {
       // Add a user message, in case normal weekday widget is used.
       // In complex widget, this message is removed, again.
-      $this->addMessage($item);
+      $this->addInvalidTimeSlotMessage($item);
     }
      */
 
@@ -112,7 +110,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function afterBuild(array $element, FormStateInterface $form_state) {
+  public static function afterBuild(array $element, FormStateInterface $form_state): array {
     $element = parent::afterBuild($element, $form_state);
     return $element;
   }
@@ -126,7 +124,7 @@ class OfficeHoursWeekWidget extends OfficeHoursWidgetBase {
    *
    * {@inheritdoc}
    */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
     if ($this->handlesMultipleValues()) {
       // Below line works fine with Annotation: multiple_values = TRUE.
       // Deduction of weekday/season/exception values.

@@ -18,9 +18,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\Core\Routing\RoutingFixtures;
 use Drupal\Tests\Traits\Core\PathAliasTestTrait;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -30,9 +27,9 @@ use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Confirm that the default route provider is working correctly.
+ *
+ * @group Routing
  */
-#[Group('Routing')]
-#[RunTestsInSeparateProcesses]
 class RouteProviderTest extends KernelTestBase {
 
   use PathAliasTestTrait;
@@ -42,6 +39,7 @@ class RouteProviderTest extends KernelTestBase {
    */
   protected static $modules = [
     'url_alter_test',
+    'system',
     'language',
     'path_alias',
   ];
@@ -210,7 +208,7 @@ class RouteProviderTest extends KernelTestBase {
   /**
    * Data provider for testMixedCasePaths()
    */
-  public static function providerMixedCaseRoutePaths(): array {
+  public static function providerMixedCaseRoutePaths() {
     // cSpell:disable
     return [
       ['/path/one', 'route_a'],
@@ -231,8 +229,9 @@ class RouteProviderTest extends KernelTestBase {
 
   /**
    * Confirms that we find routes using a case-insensitive path match.
+   *
+   * @dataProvider providerMixedCaseRoutePaths
    */
-  #[DataProvider('providerMixedCaseRoutePaths')]
   public function testMixedCasePaths($path, $expected_route_name, $method = 'GET'): void {
     $connection = Database::getConnection();
     $provider = new RouteProvider($connection, $this->state, $this->currentPath, $this->cache, $this->pathProcessor, $this->cacheTagsInvalidator, 'test_routes');
@@ -259,7 +258,7 @@ class RouteProviderTest extends KernelTestBase {
   /**
    * Data provider for testMixedCasePaths()
    */
-  public static function providerDuplicateRoutePaths(): array {
+  public static function providerDuplicateRoutePaths() {
     // When matching routes with the same fit the route with the lowest-sorting
     // name should end up first in the resulting route collection.
     return [
@@ -274,8 +273,9 @@ class RouteProviderTest extends KernelTestBase {
 
   /**
    * Confirms that we find all routes with the same path.
+   *
+   * @dataProvider providerDuplicateRoutePaths
    */
-  #[DataProvider('providerDuplicateRoutePaths')]
   public function testDuplicateRoutePaths($path, $number, $expected_route_name = NULL): void {
     $connection = Database::getConnection();
     $provider = new RouteProvider($connection, $this->state, $this->currentPath, $this->cache, $this->pathProcessor, $this->cacheTagsInvalidator, 'test_routes');
@@ -706,7 +706,7 @@ class RouteProviderTest extends KernelTestBase {
     $this->assertEquals(0, $result->count());
     $candidates = $provider->getCandidateOutlines(explode('/', trim($shortest, '/')));
     $this->assertCount(7, $candidates);
-    // A longer patten is not found and returns no candidates.
+    // A longer patten is not found and returns no candidates
     $path_to_test = '/test/1/test2/2/test3/3/4/5/6/test4';
     $result = $provider->getRoutesByPattern($path_to_test);
     $this->assertEquals(0, $result->count());
@@ -750,9 +750,7 @@ class RouteProviderTest extends KernelTestBase {
   }
 
   /**
-   * Tests route aliases.
-   *
-   * @legacy-covers \Drupal\Core\Routing\RouteProvider::getRouteAliases
+   * @covers \Drupal\Core\Routing\RouteProvider::getRouteAliases
    */
   public function testRouteAliases(): void {
     $connection = Database::getConnection();

@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\filter\Unit;
 
-use Drupal\filter\Plugin\Filter\FilterHtml;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\filter\Plugin\Filter\FilterHtml;
 
 /**
- * Tests Drupal\filter\Plugin\Filter\FilterHtml.
+ * @coversDefaultClass \Drupal\filter\Plugin\Filter\FilterHtml
+ * @group filter
  */
-#[CoversClass(FilterHtml::class)]
-#[Group('filter')]
 class FilterHtmlTest extends UnitTestCase {
 
   /**
@@ -39,16 +35,15 @@ class FilterHtmlTest extends UnitTestCase {
   }
 
   /**
-   * Tests filter attributes.
+   * @covers ::filterAttributes
+   *
+   * @dataProvider providerFilterAttributes
    *
    * @param string $html
    *   Input HTML.
    * @param string $expected
    *   The expected output string.
-   *
-   * @legacy-covers ::filterAttributes
    */
-  #[DataProvider('providerFilterAttributes')]
   public function testFilterAttributes($html, $expected): void {
     $this->assertSame($expected, $this->filter->filterAttributes($html));
   }
@@ -120,9 +115,7 @@ class FilterHtmlTest extends UnitTestCase {
   }
 
   /**
-   * Tests set configuration.
-   *
-   * @legacy-covers ::setConfiguration
+   * @covers ::setConfiguration
    */
   public function testSetConfiguration(): void {
     $configuration['settings'] = [

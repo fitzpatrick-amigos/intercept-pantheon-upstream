@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\migrate\Unit\process;
 
 use Drupal\migrate\Plugin\migrate\process\Get;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the get process plugin.
+ *
+ * @group migrate
  */
-#[Group('migrate')]
 class GetTest extends MigrateProcessTestCase {
 
   /**
@@ -80,8 +79,9 @@ class GetTest extends MigrateProcessTestCase {
 
   /**
    * Tests the Get plugin when source has integer values.
+   *
+   * @dataProvider integerValuesDataProvider
    */
-  #[DataProvider('integerValuesDataProvider')]
   public function testIntegerValues($source, $expected_value): void {
     $this->row->expects($this->atMost(2))
       ->method('get')

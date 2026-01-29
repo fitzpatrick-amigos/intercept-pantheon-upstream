@@ -95,7 +95,7 @@ class NodeListBuilder extends EntityListBuilder {
       '#title' => $entity->label(),
       '#url' => $entity->toUrl(),
     ];
-    $row['type'] = $entity->getBundleEntity()->label();
+    $row['type'] = node_get_type_label($entity);
     $row['author']['data'] = [
       '#theme' => 'username',
       '#account' => $entity->getOwner(),

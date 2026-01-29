@@ -7,29 +7,25 @@ namespace Drupal\Tests\package_manager\Unit;
 use Drupal\package_manager\InstalledPackage;
 use Drupal\package_manager\InstalledPackagesList;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\TestWith;
 
 /**
- * Tests Drupal\package_manager\InstalledPackagesList.
+ * @coversDefaultClass \Drupal\package_manager\InstalledPackagesList
+ *
+ * @group package_manager
  */
-#[CoversClass(InstalledPackagesList::class)]
-#[Group('package_manager')]
 class InstalledPackagesListTest extends UnitTestCase {
 
   /**
-   * Tests immutability.
+   * @covers ::offsetSet
+   * @covers ::offsetUnset
+   * @covers ::append
+   * @covers ::exchangeArray
    *
-   * @legacy-covers ::offsetSet
-   * @legacy-covers ::offsetUnset
-   * @legacy-covers ::append
-   * @legacy-covers ::exchangeArray
+   * @testWith ["offsetSet", ["new", "thing"]]
+   *   ["offsetUnset", ["existing"]]
+   *   ["append", ["new thing"]]
+   *   ["exchangeArray", [{"evil": "twin"}]]
    */
-  #[TestWith(["offsetSet", ["new", "thing"]])]
-  #[TestWith(["offsetUnset", ["existing"]])]
-  #[TestWith(["offsetSet", ["new", "thing"]])]
-  #[TestWith(["exchangeArray", [["evil" => "twin"]]])]
   public function testImmutability(string $method, array $arguments): void {
     $list = new InstalledPackagesList(['existing' => 'thing']);
     $this->expectException(\LogicException::class);
@@ -38,10 +34,8 @@ class InstalledPackagesListTest extends UnitTestCase {
   }
 
   /**
-   * Tests package comparison.
-   *
-   * @legacy-covers ::getPackagesNotIn
-   * @legacy-covers ::getPackagesWithDifferentVersionsIn
+   * @covers ::getPackagesNotIn
+   * @covers ::getPackagesWithDifferentVersionsIn
    */
   public function testPackageComparison(): void {
     $active = new InstalledPackagesList([
@@ -96,9 +90,7 @@ class InstalledPackagesListTest extends UnitTestCase {
   }
 
   /**
-   * Tests core packages.
-   *
-   * @legacy-covers ::getCorePackages
+   * @covers ::getCorePackages
    */
   public function testCorePackages(): void {
     $data = [

@@ -7,20 +7,20 @@ namespace Drupal\Tests\Core\Batch;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests for the batch builder class.
+ *
+ * @coversDefaultClass \Drupal\Core\Batch\BatchBuilder
+ *
+ * @group system
  */
-#[CoversClass(BatchBuilder::class)]
-#[Group('system')]
 class BatchBuilderTest extends UnitTestCase {
 
   /**
    * Tests the default values.
    *
-   * @legacy-covers ::toArray
+   * @covers ::toArray
    */
   public function testDefaultValues(): void {
     $batch = (new BatchBuilder())->toArray();
@@ -49,7 +49,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setTitle().
    *
-   * @legacy-covers ::setTitle
+   * @covers ::setTitle
    */
   public function testSetTitle(): void {
     $batch = (new BatchBuilder())
@@ -62,7 +62,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setFinishCallback().
    *
-   * @legacy-covers ::setFinishCallback
+   * @covers ::setFinishCallback
    */
   public function testSetFinishCallback(): void {
     $batch = (new BatchBuilder())
@@ -75,7 +75,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setInitMessage().
    *
-   * @legacy-covers ::setInitMessage
+   * @covers ::setInitMessage
    */
   public function testSetInitMessage(): void {
     $batch = (new BatchBuilder())
@@ -88,7 +88,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setProgressMessage().
    *
-   * @legacy-covers ::setProgressMessage
+   * @covers ::setProgressMessage
    */
   public function testSetProgressMessage(): void {
     $batch = (new BatchBuilder())
@@ -112,7 +112,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setFile().
    *
-   * @legacy-covers ::setFile
+   * @covers ::setFile
    */
   public function testSetFile(): void {
     $filename = $this->root . '/core/modules/system/tests/modules/batch_test/batch_test.set_file.inc';
@@ -134,7 +134,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setting and adding libraries.
    *
-   * @legacy-covers ::setLibraries
+   * @covers ::setLibraries
    */
   public function testAddingLibraries(): void {
     $batch = (new BatchBuilder())
@@ -147,7 +147,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setProgressive().
    *
-   * @legacy-covers ::setProgressive
+   * @covers ::setProgressive
    */
   public function testSetProgressive(): void {
     $batch_builder = new BatchBuilder();
@@ -167,7 +167,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setQueue().
    *
-   * @legacy-covers ::setQueue
+   * @covers ::setQueue
    */
   public function testSetQueue(): void {
     $batch = (new BatchBuilder())
@@ -183,7 +183,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests queue class exists.
    *
-   * @legacy-covers ::setQueue
+   * @covers ::setQueue
    */
   public function testQueueExists(): void {
     $batch_builder = (new BatchBuilder());
@@ -195,7 +195,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests queue class implements \Drupal\Core\Queue\QueueInterface.
    *
-   * @legacy-covers ::setQueue
+   * @covers ::setQueue
    */
   public function testQueueImplements(): void {
     $batch_builder = (new BatchBuilder());
@@ -207,7 +207,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests setUrlOptions().
    *
-   * @legacy-covers ::setUrlOptions
+   * @covers ::setUrlOptions
    */
   public function testSetUrlOptions(): void {
     $options = [
@@ -224,7 +224,7 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests addOperation().
    *
-   * @legacy-covers ::addOperation
+   * @covers ::addOperation
    */
   public function testAddOperation(): void {
     $batch_builder = new BatchBuilder();
@@ -251,8 +251,8 @@ class BatchBuilderTest extends UnitTestCase {
   /**
    * Tests registering IDs of built batches.
    *
-   * @legacy-covers ::isSetIdRegistered
-   * @legacy-covers ::registerSetId
+   * @covers ::isSetIdRegistered
+   * @covers ::registerSetId
    */
   public function testRegisterIds(): void {
     $setId = $this->randomMachineName();

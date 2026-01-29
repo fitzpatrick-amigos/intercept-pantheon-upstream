@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\intercept_bulk_room_reservation\BulkRoomReservationInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Defines the bulk room reservation entity class.
@@ -130,7 +131,8 @@ class BulkRoomReservation extends RevisionableContentEntityBase implements BulkR
     if ($success) {
       if ($results['room_reservations']) {
         \Drupal::service('messenger')->addMessage(\Drupal::translation()
-          ->formatPlural(count($results['room_reservations']), 'Deleted 1 reservation.', 'Deleted @count reservations.'));
+          ->formatPlural($results['room_reservations'], 'Deleted 1 reservation.', 'Deleted @count reservations.'));
+        return new RedirectResponse('/manage/bulk-room-reservations');
       }
       else {
         \Drupal::service('messenger')

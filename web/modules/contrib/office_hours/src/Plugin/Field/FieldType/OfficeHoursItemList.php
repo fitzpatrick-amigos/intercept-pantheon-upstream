@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\Factory\DefaultFactory;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Field\PluginSettingsBase;
+use Drupal\Core\Field\PluginSettingsInterface;
 use Drupal\office_hours\OfficeHoursDateHelper;
 use Drupal\office_hours\OfficeHoursItemListFormatter;
 use Drupal\office_hours\OfficeHoursSeason;
@@ -36,11 +37,11 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
    *
    * {@inheritdoc}
    */
-  public function createItem($offset = 0, $value = NULL) {
+  public function createItem($offset = 0, $value = NULL): OfficeHoursItemBase {
     $day = $value['day'] ?? NULL;
 
     static $pluginManager = NULL;
-    // Avoid PHP8.2 Fatal error: Constant expression contains invalid operations
+    // Avoid PHP8.2 Fatal error: Constant expression contains invalid operations.
     $plugin_type = 'field_type';
     $pluginManager ??= \Drupal::service("plugin.manager.field.$plugin_type");
 
@@ -84,7 +85,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function setValue($values, $notify = TRUE) {
+  public function setValue($values, $notify = TRUE): OfficeHoursItemListInterface {
     parent::setValue($values, $notify);
 
     // Make sure all (exception) days are in correct sort order,
@@ -96,6 +97,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
 
     // Create the formatter AFTER setting the value.
     $this->formatter ??= new OfficeHoursItemListFormatter($this);
+    return $this;
   }
 
   /**
@@ -103,7 +105,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
    *
    * {@inheritdoc}
    */
-  public function sort() {
+  public function sort(): OfficeHoursItemListInterface {
     usort($this->list, [OfficeHoursItem::class, 'sort']);
     return $this;
   }
@@ -111,7 +113,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function getRows(array $settings, array $field_settings, array $third_party_settings, int $time = 0, ?PluginSettingsBase $plugin = NULL) {
+  public function getRows(array $settings, array $field_settings, array $third_party_settings, int $time = 0, ?PluginSettingsBase $plugin = NULL): array {
     // The formatter is only set when entity has values.
     // But still render the field, due to setting 'display even when empty'.
     $this->formatter ??= new OfficeHoursItemListFormatter($this);
@@ -121,7 +123,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function getSeasons($add_weekdays_as_season = FALSE, $add_new_season = FALSE, $sort = '', $from = 0, $to = 0) {
+  public function getSeasons($add_weekdays_as_season = FALSE, $add_new_season = FALSE, $sort = '', $from = 0, $to = 0): array {
     $season_max = 0;
 
     // Use static, to avoid recursive calling of getSeasons()/getSeason().
@@ -175,14 +177,11 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function getExceptionItems() {
+  public function getExceptionItems(): OfficeHoursItemListInterface {
     $list = clone $this;
 
-    $list->filter(function ($item) {
-      /** @var \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem $item */
-      if ($item->isExceptionDay()) {
-        return TRUE;
-      }
+    $list->filter(function (OfficeHoursItem $item): bool {
+      return $item->isExceptionDay();
     });
 
     return $list;
@@ -191,10 +190,10 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function getSeasonItems(int $season_id) {
+  public function getSeasonItems(int $season_id): OfficeHoursItemListInterface {
     $list = clone $this;
 
-    $list->filter(function ($item) use ($season_id) {
+    $list->filter(function (OfficeHoursItem $item) use ($season_id): bool {
       /** @var \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem $item */
       if ($item->isExceptionDay()) {
         if (OfficeHoursDateHelper::isExceptionHeader($season_id)) {
@@ -214,7 +213,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function countExceptionDays() {
+  public function countExceptionDays(): int {
     $items = $this->getExceptionItems();
     $exception_days = [];
     foreach ($items as $item) {
@@ -233,7 +232,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function getCurrentSlot(int $time = 0) {
+  public function getCurrentSlot(int $time = 0): ?OfficeHoursItem {
     $this->formatter ??= new OfficeHoursItemListFormatter($this);
     return $this->formatter->getCurrentSlot($time);
   }
@@ -241,7 +240,7 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   /**
    * {@inheritdoc}
    */
-  public function getNextDay(int $time = 0) {
+  public function getNextDay(int $time = 0): array {
     $this->formatter ??= new OfficeHoursItemListFormatter($this);
     return $this->formatter->getNextDay($time);
   }
@@ -262,6 +261,8 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
    *   The plugin type to retrieve: 'widget' or 'formatter'.
    * @param string $plugin_id
    *   The plugin id.
+   * @param string $view_mode
+   *   The view mode.
    * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
    *   The field definition.
    * @param array $settings
@@ -270,10 +271,11 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
    * @return \Drupal\Core\Field\PluginSettingsInterface|null
    *   A widget or formatter plugin or NULL if the field does not exist.
    */
-  private function getPlugin($plugin_type, $plugin_id, $view_mode, FieldDefinitionInterface $field_definition, array $settings) {
+  private function getPlugin($plugin_type, $plugin_id, $view_mode, FieldDefinitionInterface $field_definition, array $settings): ?PluginSettingsInterface {
     static $plugins;
 
-    $id = $field_definition->id();
+    // $id = $field_definition->id(); // does not exist for WebformOfficeHours.
+    $id = $field_definition->getName();
     if (!isset($plugins[$plugin_type][$plugin_id][$view_mode][$id])) {
       // @todo Keep aligned between WebformOfficeHours and ~Widget.
       $pluginManager = \Drupal::service("plugin.manager.field.$plugin_type");
@@ -293,27 +295,53 @@ class OfficeHoursItemList extends FieldItemList implements OfficeHoursItemListIn
   }
 
   /**
-   * @see $this->getPlugin().
+   * Get the formatter plugin.
+   *
+   * @param string $plugin_id
+   *   The plugin id.
+   * @param string $view_mode
+   *   The view mode.
+   * @param array $settings
+   *   The plugin settings.
+   *
+   * @return \Drupal\Core\Field\PluginSettingsInterface|null
+   *   A formatter plugin or NULL if the field does not exist.
+   *
+   * @see $this->getPlugin()
    */
-  public function getFormatter(string $plugin_id, $view_mode, array $settings) {
+  public function getFormatter(string $plugin_id, $view_mode, array $settings): ?PluginSettingsInterface {
+    /** @var \Drupal\Core\Field\FieldDefinitionInterface $definition */
+    $definition = $this->getFieldDefinition();
     return $this->getPlugin(
       'formatter',
       $plugin_id,
       $view_mode,
-      $this->getFieldDefinition(),
+      $definition,
       $settings
     );
   }
 
   /**
-   * @see $this->getPlugin().
+   * Get the widget plugin.
+   *
+   * @param string $plugin_id
+   *   The plugin id.
+   * @param array $settings
+   *   The plugin settings.
+   *
+   * @return \Drupal\office_hours\Plugin\Field\FieldWidget\OfficeHoursWidgetBase|null
+   *   A widget plugin or NULL if the field does not exist.
+   *
+   * @see $this->getPlugin()
    */
-  public function getWidget(string $plugin_id, array $settings) {
+  public function getWidget(string $plugin_id, array $settings): ?PluginSettingsInterface {
+    /** @var \Drupal\Core\Field\FieldDefinitionInterface $definition */
+    $definition = $this->getFieldDefinition();
     return $this->getPlugin(
       'widget',
       $plugin_id,
       '',
-      $this->getFieldDefinition(),
+      $definition,
       $settings
     );
   }

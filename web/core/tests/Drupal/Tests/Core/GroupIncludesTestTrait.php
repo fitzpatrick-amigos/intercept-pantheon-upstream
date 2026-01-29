@@ -7,7 +7,8 @@ namespace Drupal\Tests\Core;
 use org\bovigo\vfs\vfsStream;
 
 /**
- * Setup group includes trait.
+ * @coversDefaultClass \Drupal\Core\Hook\HookCollectorPass
+ * @group Hook
  */
 trait GroupIncludesTestTrait {
 
@@ -37,10 +38,6 @@ EOD
     );
     file_put_contents('vfs://drupal_root/test_module.tokens.inc', <<<'EOD'
 <?php
-
-function test_module_token_info() {
-  return [];
-}
 
 function _test_module_helper() {}
 

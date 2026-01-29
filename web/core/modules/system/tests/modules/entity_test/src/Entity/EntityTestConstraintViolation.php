@@ -28,7 +28,6 @@ use Drupal\entity_test\EntityTestForm;
       'default' => EntityTestForm::class,
     ],
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_constraint_violation',
 )]
 class EntityTestConstraintViolation extends EntityTest {

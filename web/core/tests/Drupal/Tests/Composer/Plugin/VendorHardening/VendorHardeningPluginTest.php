@@ -11,17 +11,13 @@ use Composer\Package\RootPackageInterface;
 use Drupal\Composer\Plugin\VendorHardening\Config;
 use Drupal\Composer\Plugin\VendorHardening\VendorHardeningPlugin;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
- * Tests Drupal\Composer\Plugin\VendorHardening\VendorHardeningPlugin.
+ * @coversDefaultClass \Drupal\Composer\Plugin\VendorHardening\VendorHardeningPlugin
+ * @group VendorHardening
  */
-#[CoversClass(VendorHardeningPlugin::class)]
-#[Group('VendorHardening')]
 class VendorHardeningPluginTest extends TestCase {
 
   use ProphecyTrait;
@@ -44,9 +40,7 @@ class VendorHardeningPluginTest extends TestCase {
   }
 
   /**
-   * Tests clean package.
-   *
-   * @legacy-covers ::cleanPackage
+   * @covers ::cleanPackage
    */
   public function testCleanPackage(): void {
 
@@ -82,9 +76,7 @@ class VendorHardeningPluginTest extends TestCase {
   }
 
   /**
-   * Tests clean paths for package.
-   *
-   * @legacy-covers ::cleanPathsForPackage
+   * @covers ::cleanPathsForPackage
    */
   public function testCleanPathsForPackage(): void {
     $plugin = $this->getMockBuilder(VendorHardeningPlugin::class)
@@ -112,9 +104,7 @@ class VendorHardeningPluginTest extends TestCase {
   }
 
   /**
-   * Tests clean all packages.
-   *
-   * @legacy-covers ::cleanAllPackages
+   * @covers ::cleanAllPackages
    */
   public function testCleanAllPackages(): void {
     $config = $this->getMockBuilder(Config::class)
@@ -154,9 +144,7 @@ class VendorHardeningPluginTest extends TestCase {
   }
 
   /**
-   * Tests write access restriction files.
-   *
-   * @legacy-covers ::writeAccessRestrictionFiles
+   * @covers ::writeAccessRestrictionFiles
    */
   public function testWriteAccessRestrictionFiles(): void {
     $dir = vfsStream::url('vendor');
@@ -182,7 +170,7 @@ class VendorHardeningPluginTest extends TestCase {
     $this->assertFileExists($dir . '/.htaccess');
   }
 
-  public static function providerFindBinOverlap(): array {
+  public static function providerFindBinOverlap() {
     return [
       [
         [],
@@ -228,11 +216,9 @@ class VendorHardeningPluginTest extends TestCase {
   }
 
   /**
-   * Tests find bin overlap.
-   *
-   * @legacy-covers ::findBinOverlap
+   * @covers ::findBinOverlap
+   * @dataProvider providerFindBinOverlap
    */
-  #[DataProvider('providerFindBinOverlap')]
   public function testFindBinOverlap($expected, $binaries, $clean_paths): void {
     $plugin = $this->getMockBuilder(VendorHardeningPlugin::class)
       ->disableOriginalConstructor()

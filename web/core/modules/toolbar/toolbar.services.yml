@@ -1,5 +1,5 @@
 parameters:
-  toolbar.skip_procedural_hook_scan: true
+  toolbar.skip_procedural_hook_scan: false
 
 services:
   _defaults:

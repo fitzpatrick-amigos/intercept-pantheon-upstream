@@ -5,8 +5,6 @@
  * Hooks and documentation related to the theme and render system.
  */
 
-use Drupal\Core\Extension\ThemeSettingsProvider;
-
 /**
  * @defgroup themeable Theme system overview
  * @{
@@ -34,10 +32,10 @@ use Drupal\Core\Extension\ThemeSettingsProvider;
  * 8 themes.
  *
  * For further information on theming in Drupal 8 see
- * https://www.drupal.org/docs/develop/theming-drupal
+ * https://www.drupal.org/docs/8/theming
  *
  * For further Twig documentation see
- * https://twig.symfony.com/doc/3.x/templates.html
+ * https://twig.symfony.com/doc/1.x/templates.html
  *
  * @section sec_theme_hooks Theme Hooks
  * The theme system is invoked in \Drupal\Core\Render\Renderer::doRender() by
@@ -49,8 +47,7 @@ use Drupal\Core\Extension\ThemeSettingsProvider;
  * implementing hook_theme() also need to provide a default implementation for
  * each of their theme hooks in a Twig file, and they may also provide
  * preprocessing functions. For example, the core Search module defines a theme
- * hook for a search result item in
- * \Drupal\search\Hook\SearchThemeHooks::theme():
+ * hook for a search result item in search_theme():
  * @code
  * return [
  *   'search_result' => [
@@ -58,15 +55,15 @@ use Drupal\Core\Extension\ThemeSettingsProvider;
  *       'result' => NULL,
  *       'plugin_id' => NULL,
  *     ],
- *    'initial preprocess' => static::class . ':preprocessSearchResult',
+ *    'file' => 'search.pages.inc',
  *   ],
  * ];
  * @endcode
  * Given this definition, the template file with the default implementation is
  * search-result.html.twig, which can be found in the
  * core/modules/search/templates directory, and the variables for rendering are
- * the search result and the plugin ID. In addition, there is the initial
- * preprocess method preprocessSearchResult in the same class, which
+ * the search result and the plugin ID. In addition, there is a function
+ * template_preprocess_search_result(), located in file search.pages.inc, which
  * preprocesses the information from the input variables so that it can be
  * rendered by the Twig template; the processed variables that the Twig template
  * receives are documented in the header of the default Twig template file.
@@ -230,7 +227,7 @@ use Drupal\Core\Extension\ThemeSettingsProvider;
  * same, which gives users fewer user interface patterns to learn.
  *
  * For further information on the Theme and Render APIs, see:
- * - https://www.drupal.org/docs/develop/theming-drupal
+ * - https://www.drupal.org/docs/8/theming
  * - https://www.drupal.org/developing/api/8/render
  * - @link themeable Theme system overview @endlink.
  *
@@ -540,7 +537,7 @@ function hook_form_system_theme_settings_alter(&$form, \Drupal\Core\Form\FormSta
   $form['toggle_breadcrumb'] = [
     '#type' => 'checkbox',
     '#title' => t('Display the breadcrumb'),
-    '#default_value' => \Drupal::service(ThemeSettingsProvider::class)->getSetting('features.breadcrumb'),
+    '#default_value' => theme_get_setting('features.breadcrumb'),
     '#description'   => t('Show a trail of links from the homepage to the current page.'),
   ];
 }
@@ -608,9 +605,8 @@ function hook_preprocess(&$variables, $hook): void {
  *   The variables array (modify in place).
  */
 function hook_preprocess_HOOK(&$variables): void {
-  // This example is from \Drupal\node\Hook\NodeThemeHooks::preprocessHtml().
-  // It adds the node type to the body classes, when on an individual node page
-  // or node preview page.
+  // This example is from node_preprocess_html(). It adds the node type to
+  // the body classes, when on an individual node page or node preview page.
   if (($node = \Drupal::routeMatch()->getParameter('node')) || ($node = \Drupal::routeMatch()->getParameter('node_preview'))) {
     if ($node instanceof NodeInterface) {
       $variables['node_type'] = $node->getType();
@@ -669,11 +665,6 @@ function hook_theme_suggestions_HOOK(array $variables): array {
   $suggestions = [];
 
   $suggestions[] = 'hookname__' . $variables['elements']['#langcode'];
-
-  // Theme suggestions can be deprecated by specifying them in the __DEPRECATED
-  // key.
-  $suggestions[] = 'hookname__outdated';
-  $suggestions['__DEPRECATED']['hookname__outdated'] = 'Theme suggestion hookname__outdated is deprecated in drupal:X.0.0 and is removed from drupal:Y.0.0. See http://drupal.org/node/the-change-notice-nid.';
 
   return $suggestions;
 }
@@ -1299,6 +1290,7 @@ function hook_theme($existing, $type, $theme, $path): array {
     ],
     'status_report' => [
       'render element' => 'requirements',
+      'file' => 'system.admin.inc',
     ],
   ];
 }
@@ -1319,18 +1311,21 @@ function hook_theme($existing, $type, $theme, $path): array {
  *
  * For example:
  * @code
- * $theme_registry['entity_add_list'] = [
- *   'template' => 'entity-add-list',
+ * $theme_registry['block_content_add_list'] = [
+ *   'template' => 'block-content-add-list',
  *   'path' => 'core/themes/claro/templates',
  *   'type' => 'theme_engine',
  *   'theme path' => 'core/themes/claro',
+ *   'includes' => [
+ *     0 => 'core/modules/block_content/block_content.pages.inc',
+ *   ],
  *   'variables' => [
- *     'bundles' => NULL,
+ *     'content' => NULL,
  *   ],
  *   'preprocess functions' => [
- *     1 => 'template_preprocess_entity_add_list',
+ *     1 => 'template_preprocess_block_content_add_list',
  *     2 => 'contextual_preprocess',
- *     3 => 'claro_preprocess_entity_add_list',
+ *     3 => 'claro_preprocess_block_content_add_list',
  *   ],
  * ];
  * @endcode

@@ -24,7 +24,7 @@ class OfficeHoursListWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
     $default_value = [];
 
@@ -39,7 +39,7 @@ class OfficeHoursListWidget extends OfficeHoursWidgetBase {
 
     // @todo Enable List widget for Season, Exception days.
     if (!$item->isWeekDay()) {
-      $this->addMessage($item);
+      $this->addInvalidTimeSlotMessage($item);
       return $default_value;
     }
 
@@ -67,7 +67,7 @@ class OfficeHoursListWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function afterBuild(array $element, FormStateInterface $form_state) {
+  public static function afterBuild(array $element, FormStateInterface $form_state): array {
     $element = parent::afterBuild($element, $form_state);
 
     foreach (Element::children($element) as $key) {
@@ -91,7 +91,7 @@ class OfficeHoursListWidget extends OfficeHoursWidgetBase {
    *
    * {@inheritdoc}
    */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
     // Reformat the $values, before passing to database.
     foreach ($values as &$item) {
       $item = $item['value'];

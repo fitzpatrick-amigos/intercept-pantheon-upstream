@@ -9,22 +9,19 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Language\Language;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\TypedData\Exception\MissingDataException;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
 use Drupal\Tests\Core\Entity\ContentEntityBaseMockableClass;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\Language\Language;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Tests Drupal\Core\Entity\Plugin\DataType\EntityAdapter.
+ * @coversDefaultClass \Drupal\Core\Entity\Plugin\DataType\EntityAdapter
+ * @group Entity
+ * @group TypedData
  */
-#[CoversClass(EntityAdapter::class)]
-#[Group('Entity')]
-#[Group('TypedData')]
 class EntityAdapterUnitTest extends UnitTestCase {
 
   /**
@@ -143,14 +140,6 @@ class EntityAdapterUnitTest extends UnitTestCase {
       ->willReturn([
         'id' => 'id',
         'uuid' => 'uuid',
-        'langcode' => 'langcode',
-      ]);
-    $this->entityType->expects($this->any())
-      ->method('getKey')
-      ->willReturnMap([
-        ['id', 'id'],
-        ['uuid', 'uuid'],
-        ['langcode', 'langcode'],
       ]);
 
     $this->entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
@@ -235,54 +224,42 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get constraints.
-   *
-   * @legacy-covers ::getConstraints
+   * @covers ::getConstraints
    */
   public function testGetConstraints(): void {
     $this->assertIsArray($this->entityAdapter->getConstraints());
   }
 
   /**
-   * Tests get name.
-   *
-   * @legacy-covers ::getName
+   * @covers ::getName
    */
   public function testGetName(): void {
     $this->assertNull($this->entityAdapter->getName());
   }
 
   /**
-   * Tests get root.
-   *
-   * @legacy-covers ::getRoot
+   * @covers ::getRoot
    */
   public function testGetRoot(): void {
     $this->assertSame(spl_object_hash($this->entityAdapter), spl_object_hash($this->entityAdapter->getRoot()));
   }
 
   /**
-   * Tests get property path.
-   *
-   * @legacy-covers ::getPropertyPath
+   * @covers ::getPropertyPath
    */
   public function testGetPropertyPath(): void {
     $this->assertSame('', $this->entityAdapter->getPropertyPath());
   }
 
   /**
-   * Tests get parent.
-   *
-   * @legacy-covers ::getParent
+   * @covers ::getParent
    */
   public function testGetParent(): void {
     $this->assertNull($this->entityAdapter->getParent());
   }
 
   /**
-   * Tests set context.
-   *
-   * @legacy-covers ::setContext
+   * @covers ::setContext
    */
   public function testSetContext(): void {
     $name = $this->randomMachineName();
@@ -294,27 +271,21 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get value.
-   *
-   * @legacy-covers ::getValue
+   * @covers ::getValue
    */
   public function testGetValue(): void {
     $this->assertEquals($this->entity, $this->entityAdapter->getValue());
   }
 
   /**
-   * Tests get entity.
-   *
-   * @legacy-covers ::getEntity
+   * @covers ::getEntity
    */
   public function testGetEntity(): void {
     $this->assertSame($this->entity, $this->entityAdapter->getEntity());
   }
 
   /**
-   * Tests set value.
-   *
-   * @legacy-covers ::setValue
+   * @covers ::setValue
    */
   public function testSetValue(): void {
     $this->entityAdapter->setValue(NULL);
@@ -322,18 +293,14 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get.
-   *
-   * @legacy-covers ::get
+   * @covers ::get
    */
   public function testGet(): void {
     $this->assertInstanceOf('\Drupal\Core\Field\FieldItemListInterface', $this->entityAdapter->get('id'));
   }
 
   /**
-   * Tests get invalid field.
-   *
-   * @legacy-covers ::get
+   * @covers ::get
    */
   public function testGetInvalidField(): void {
     $this->expectException(\InvalidArgumentException::class);
@@ -341,9 +308,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get without data.
-   *
-   * @legacy-covers ::get
+   * @covers ::get
    */
   public function testGetWithoutData(): void {
     $this->entityAdapter->setValue(NULL);
@@ -352,9 +317,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests set.
-   *
-   * @legacy-covers ::set
+   * @covers ::set
    */
   public function testSet(): void {
     $id_items = [['value' => $this->id + 1]];
@@ -367,9 +330,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests set without data.
-   *
-   * @legacy-covers ::set
+   * @covers ::set
    */
   public function testSetWithoutData(): void {
     $this->entityAdapter->setValue(NULL);
@@ -379,9 +340,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get properties.
-   *
-   * @legacy-covers ::getProperties
+   * @covers ::getProperties
    */
   public function testGetProperties(): void {
     $fields = $this->entityAdapter->getProperties();
@@ -390,9 +349,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests to array.
-   *
-   * @legacy-covers ::toArray
+   * @covers ::toArray
    */
   public function testToArray(): void {
     $array = $this->entityAdapter->toArray();
@@ -403,9 +360,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests to array without data.
-   *
-   * @legacy-covers ::toArray
+   * @covers ::toArray
    */
   public function testToArrayWithoutData(): void {
     $this->entityAdapter->setValue(NULL);
@@ -414,9 +369,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests is empty.
-   *
-   * @legacy-covers ::isEmpty
+   * @covers ::isEmpty
    */
   public function testIsEmpty(): void {
     $this->assertFalse($this->entityAdapter->isEmpty());
@@ -425,9 +378,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests on change.
-   *
-   * @legacy-covers ::onChange
+   * @covers ::onChange
    */
   public function testOnChange(): void {
     $entity = $this->createMock('\Drupal\Core\Entity\ContentEntityInterface');
@@ -440,9 +391,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get data definition.
-   *
-   * @legacy-covers ::getDataDefinition
+   * @covers ::getDataDefinition
    */
   public function testGetDataDefinition(): void {
     $definition = $this->entityAdapter->getDataDefinition();
@@ -452,9 +401,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get string.
-   *
-   * @legacy-covers ::getString
+   * @covers ::getString
    */
   public function testGetString(): void {
     $entity = $this->createMock('\Drupal\Core\Entity\ContentEntityInterface');
@@ -468,9 +415,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests apply default value.
-   *
-   * @legacy-covers ::applyDefaultValue
+   * @covers ::applyDefaultValue
    */
   public function testApplyDefaultValue(): void {
     // For each field on the entity the mock method has to be invoked once.
@@ -480,9 +425,7 @@ class EntityAdapterUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get iterator.
-   *
-   * @legacy-covers ::getIterator
+   * @covers ::getIterator
    */
   public function testGetIterator(): void {
     // Content entity test.

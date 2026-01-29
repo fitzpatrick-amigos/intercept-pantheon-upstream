@@ -8,18 +8,14 @@ use Drupal\fixture_manipulator\ActiveFixtureManipulator;
 use Drupal\fixture_manipulator\FixtureManipulator;
 use Drupal\package_manager\ComposerInspector;
 use Drupal\package_manager\InstalledPackagesList;
-use Drupal\package_manager\PathLocator;
 use Drupal\Tests\package_manager\Traits\InstalledPackagesListTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\package_manager\PathLocator;
 
 /**
- * Tests Drupal\fixture_manipulator\FixtureManipulator.
+ * @coversDefaultClass \Drupal\fixture_manipulator\FixtureManipulator
+ *
+ * @group package_manager
  */
-#[CoversClass(FixtureManipulator::class)]
-#[Group('package_manager')]
-#[RunTestsInSeparateProcesses]
 class FixtureManipulatorTest extends PackageManagerKernelTestBase {
 
   use InstalledPackagesListTrait;
@@ -82,9 +78,7 @@ class FixtureManipulatorTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests add package.
-   *
-   * @legacy-covers ::addPackage
+   * @covers ::addPackage
    */
   public function testAddPackage(): void {
     // Packages cannot be added without a name.
@@ -146,9 +140,7 @@ class FixtureManipulatorTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests modify package config.
-   *
-   * @legacy-covers ::modifyPackageConfig
+   * @covers ::modifyPackageConfig
    */
   public function testModifyPackageConfig(): void {
     // Assert ::modifyPackage() works with a package in an existing fixture not
@@ -180,9 +172,7 @@ class FixtureManipulatorTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests remove package.
-   *
-   * @legacy-covers ::removePackage
+   * @covers ::removePackage
    */
   public function testRemovePackage(): void {
     // We should not be able to remove a package that's not installed.
@@ -223,9 +213,7 @@ class FixtureManipulatorTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests add dot git folder.
-   *
-   * @legacy-covers ::addDotGitFolder
+   * @covers ::addDotGitFolder
    */
   public function testAddDotGitFolder(): void {
     $path_locator = $this->container->get(PathLocator::class);

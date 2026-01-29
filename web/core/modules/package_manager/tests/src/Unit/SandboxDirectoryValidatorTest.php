@@ -12,24 +12,19 @@ use Drupal\package_manager\Validator\SandboxDirectoryValidator;
 use Drupal\Tests\package_manager\Traits\ValidationTestTrait;
 use Drupal\Tests\UnitTestCase;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Filesystem\Path;
 
 /**
- * Tests Drupal\package_manager\Validator\SandboxDirectoryValidator.
- *
+ * @coversDefaultClass \Drupal\package_manager\Validator\SandboxDirectoryValidator
+ * @group package_manager
  * @internal
  */
-#[CoversClass(SandboxDirectoryValidator::class)]
-#[Group('package_manager')]
 class SandboxDirectoryValidatorTest extends UnitTestCase {
 
   use ValidationTestTrait;
 
   /**
-   * Tests check not in active.
+   * @covers ::validate
    *
    * @param \Drupal\package_manager\ValidationResult[] $expected
    *   The expected result.
@@ -38,9 +33,8 @@ class SandboxDirectoryValidatorTest extends UnitTestCase {
    * @param string $staging_root
    *   The staging root.
    *
-   * @legacy-covers ::validate
+   * @dataProvider providerTestCheckNotInActive
    */
-  #[DataProvider('providerTestCheckNotInActive')]
   public function testCheckNotInActive(array $expected, string $project_root, string $staging_root): void {
     $path_locator_prophecy = $this->prophesize(PathLocator::class);
     $path_locator_prophecy->getProjectRoot()->willReturn(Path::canonicalize($project_root));

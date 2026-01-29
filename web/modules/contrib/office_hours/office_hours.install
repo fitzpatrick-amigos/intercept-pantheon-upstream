@@ -8,18 +8,6 @@
 use Drupal\Core\Database\Database;
 
 /**
- * Re-saving data needed.
- *
- * @param mixed $sandbox
- *   The sandbox variable.
- */
-function office_hours_update_8001(&$sandbox) {
-  \Drupal::messenger()->addMessage(t(
-    'Please review the Field, Widget and Formatter settings,
-    and save them again.'));
-}
-
-/**
  * Add 'comment' column.
  *
  * @param mixed $sandbox
@@ -116,17 +104,19 @@ function office_hours_update_8005(&$sandbox) {
       $entity_definition_update_manager->updateFieldStorageDefinition($field_storage_definition);
     }
   }
+}
 
-  /**
-   * Re-saving data needed.
-   *
-   * @param mixed $sandbox
-   *   The sandbox variable.
-   */
-  function office_hours_update_8013(&$sandbox) {
-    \Drupal::messenger()->addMessage(t(
-      'Please review the new settings for Seasonal and Exceptional Office hours
-      in Field, Widget, Formatter and Views.'));
-  }
-
+/**
+ * Re-saving data needed.
+ *
+ * @param mixed $sandbox
+ *   The sandbox variable.
+ */
+function office_hours_update_8013(&$sandbox) {
+  // Developer note: When changing, take care of KernelTest and UnitTest.
+  $message = t(
+    'Please review the new settings for Seasonal and Exceptional
+    Office hours in Field, Widget, Formatter and Views and save them again,
+    if needed.');
+  \Drupal::messenger()->addMessage($message);
 }

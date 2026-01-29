@@ -19,7 +19,7 @@ class OfficeHoursSeasonHeader extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     // @todo Add random Season ID in past and in near future.
     $value = [];
     return $value;
@@ -28,7 +28,7 @@ class OfficeHoursSeasonHeader extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public function formatTimeSlot(array $settings) {
+  public function formatTimeSlot(array $settings): string {
     // @todo For now, do not show the season dates in the formatter.
     // The user can set them in the Season name, too.
     // This saves many feature requests :-).
@@ -39,12 +39,14 @@ class OfficeHoursSeasonHeader extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public function label(array $settings) {
+  public function label(array $settings): string {
     return $this->comment;
   }
 
   /**
    * {@inheritdoc}
+   *
+   * Season headers are never in range.
    */
   public function isInRange(int $from, int $to): bool {
     if ($to < $from || $to < 0) {
@@ -53,10 +55,7 @@ class OfficeHoursSeasonHeader extends OfficeHoursItem {
       return FALSE;
     }
 
-    // Exclude season headers.
-    $result = FALSE;
-
-    return $result;
+    return FALSE;
   }
 
 }

@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\field\Unit;
 
+use Drupal\Core\Entity\EntityType;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityType;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\field\Entity\FieldConfig.
+ * @coversDefaultClass \Drupal\field\Entity\FieldConfig
+ * @group field
  */
-#[CoversClass(FieldConfig::class)]
-#[Group('field')]
 class FieldConfigEntityUnitTest extends UnitTestCase {
 
   /**
@@ -114,9 +111,7 @@ class FieldConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests calculate dependencies.
-   *
-   * @legacy-covers ::calculateDependencies
+   * @covers ::calculateDependencies
    */
   public function testCalculateDependencies(): void {
     // Mock the interfaces necessary to create a dependency on a bundle entity.
@@ -205,9 +200,7 @@ class FieldConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests on dependency removal.
-   *
-   * @legacy-covers ::onDependencyRemoval
+   * @covers ::onDependencyRemoval
    */
   public function testOnDependencyRemoval(): void {
     $this->fieldTypePluginManager->expects($this->any())
@@ -236,9 +229,7 @@ class FieldConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests to array.
-   *
-   * @legacy-covers ::toArray
+   * @covers ::toArray
    */
   public function testToArray(): void {
     $field = new FieldConfig([
@@ -283,9 +274,7 @@ class FieldConfigEntityUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get type.
-   *
-   * @legacy-covers ::getType
+   * @covers ::getType
    */
   public function testGetType(): void {
     // Ensure that FieldConfig::getType() is not delegated to

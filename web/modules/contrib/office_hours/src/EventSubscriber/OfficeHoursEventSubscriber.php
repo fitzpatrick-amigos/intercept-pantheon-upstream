@@ -29,7 +29,7 @@ abstract class OfficeHoursEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\office_hours\Event\OfficeHoursEvent $event
    *   The Event object.
    */
-  public function updateProcess(OfficeHoursEvent $event) {
+  public function updateProcess(OfficeHoursEvent $event): void {
   }
 
   /**
@@ -38,7 +38,7 @@ abstract class OfficeHoursEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\office_hours\Event\OfficeHoursEvent $event
    *   The Event object.
    */
-  public function preFormatProcess(OfficeHoursEvent $event) {
+  public function preFormatProcess(OfficeHoursEvent $event): void {
     // Example, remove a time slot from the day.
     // $event->getItems()->offsetUnset(1);
   }
@@ -49,7 +49,7 @@ abstract class OfficeHoursEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\office_hours\Event\OfficeHoursEvent $event
    *   The Event object.
    */
-  public function postFormatProcess(OfficeHoursEvent $event) {
+  public function postFormatProcess(OfficeHoursEvent $event): void {
     // $event->office_hours = ...;
   }
 

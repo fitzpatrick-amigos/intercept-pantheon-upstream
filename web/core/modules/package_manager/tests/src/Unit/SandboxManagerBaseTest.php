@@ -6,21 +6,16 @@ namespace Drupal\Tests\package_manager\Unit;
 
 use Drupal\package_manager\SandboxManagerBase;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\package_manager\SandboxManagerBase.
- *
+ * @coversDefaultClass \Drupal\package_manager\SandboxManagerBase
+ * @group package_manager
  * @internal
  */
-#[CoversClass(SandboxManagerBase::class)]
-#[Group('package_manager')]
 class SandboxManagerBaseTest extends UnitTestCase {
 
   /**
-   * Tests validate requirements.
+   * @covers ::validateRequirements
    *
    * @param string|null $expected_exception
    *   The exception class that should be thrown, or NULL if there should not be
@@ -28,9 +23,8 @@ class SandboxManagerBaseTest extends UnitTestCase {
    * @param string $requirement
    *   The requirement (package name and optional constraint) to validate.
    *
-   * @legacy-covers ::validateRequirements
+   * @dataProvider providerValidateRequirements
    */
-  #[DataProvider('providerValidateRequirements')]
   public function testValidateRequirements(?string $expected_exception, string $requirement): void {
     $reflector = new \ReflectionClass(SandboxManagerBase::class);
     $method = $reflector->getMethod('validateRequirements');
@@ -126,9 +120,7 @@ class SandboxManagerBaseTest extends UnitTestCase {
   }
 
   /**
-   * Tests type must be explicitly overridden.
-   *
-   * @legacy-covers ::getType
+   * @covers ::getType
    */
   public function testTypeMustBeExplicitlyOverridden(): void {
     $good_grandchild = new class () extends ChildSandboxManager {
@@ -136,7 +128,7 @@ class SandboxManagerBaseTest extends UnitTestCase {
       /**
        * {@inheritdoc}
        */
-      // phpcs:ignore DrupalPractice.CodeAnalysis.VariableAnalysis.UnusedVariable
+      // phpcs:ignore DrupalPractice.CodeAnalysis.VariableAnalysis.UnusedVariable, Drupal.Commenting.VariableComment.Missing
       protected string $type = 'package_manager:good_grandchild';
 
     };

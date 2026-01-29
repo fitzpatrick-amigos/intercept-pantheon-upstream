@@ -4,7 +4,6 @@ namespace Drupal\office_hours\Element;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\office_hours\OfficeHoursDateHelper;
-use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
 
 /**
  * Provides a one-line text field form element for Exception days.
@@ -16,7 +15,7 @@ class OfficeHoursExceptionsSlot extends OfficeHoursBaseSlot {
   /**
    * {@inheritdoc}
    */
-  public static function processOfficeHoursSlot(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function processOfficeHoursSlot(&$element, FormStateInterface $form_state, &$complete_form): array {
     parent::processOfficeHoursSlot($element, $form_state, $complete_form);
 
     // The valueCallback() has populated the #value array.
@@ -27,8 +26,8 @@ class OfficeHoursExceptionsSlot extends OfficeHoursBaseSlot {
     // Add day_delta for label() or isEmpty() call.
     $value['day_delta'] = $day_delta;
 
-    $pattern = 'l';
-    $label = OfficeHoursItem::formatLabel($pattern, $value, $day_delta);
+    $pattern = 'long';
+    $label = static::formatWeekday($pattern, $value, $day_delta);
 
     // Override the hidden (Week widget) or select (List widget)
     // first time slot 'day', setting a 'date' select element + day name.
@@ -45,7 +44,9 @@ class OfficeHoursExceptionsSlot extends OfficeHoursBaseSlot {
         // Add 'day_delta' to facilitate changing and closing Exception days.
         ? 'exception_day_delta'
         // Format the numeric day number to Y-m-d format for the widget.
-        : (is_numeric($day) ? OfficeHoursDateHelper::format($day, $format) : ''),
+        : (is_numeric($day)
+          ? OfficeHoursDateHelper::format($day, $format)
+          : ''),
       // Add wrapper attribute for improved (a11y) screen reader experience.
       '#wrapper_attributes' => ['header' => !$day_delta],
     ];

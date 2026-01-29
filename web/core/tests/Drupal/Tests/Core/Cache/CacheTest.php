@@ -8,16 +8,12 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\DependencyInjection\Container;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
- * Tests Drupal\Core\Cache\Cache.
+ * @coversDefaultClass \Drupal\Core\Cache\Cache
+ * @group Cache
  */
-#[CoversClass(Cache::class)]
-#[Group('Cache')]
 class CacheTest extends UnitTestCase {
 
   /**
@@ -26,7 +22,7 @@ class CacheTest extends UnitTestCase {
    * @return array
    *   An array of cache tags arrays.
    */
-  public function validateTagsProvider(): array {
+  public function validateTagsProvider() {
     return [
       [[], FALSE],
       [['foo'], FALSE],
@@ -56,7 +52,7 @@ class CacheTest extends UnitTestCase {
    * @return array
    *   An array of pairs of cache tags arrays to be merged.
    */
-  public static function mergeTagsProvider(): array {
+  public static function mergeTagsProvider() {
     return [
       [[], [], []],
       [['bar', 'foo'], ['bar'], ['foo']],
@@ -70,11 +66,10 @@ class CacheTest extends UnitTestCase {
   }
 
   /**
-   * Tests merge tags.
+   * @covers ::mergeTags
    *
-   * @legacy-covers ::mergeTags
+   * @dataProvider mergeTagsProvider
    */
-  #[DataProvider('mergeTagsProvider')]
   public function testMergeTags(array $expected, ...$cache_tags): void {
     $this->assertEqualsCanonicalizing($expected, Cache::mergeTags(...$cache_tags));
   }
@@ -85,7 +80,7 @@ class CacheTest extends UnitTestCase {
    * @return array
    *   An array of pairs of cache tags arrays to be merged.
    */
-  public static function mergeMaxAgesProvider(): array {
+  public static function mergeMaxAgesProvider() {
     return [
       [Cache::PERMANENT, Cache::PERMANENT, Cache::PERMANENT],
       [60, 60, 60],
@@ -111,11 +106,10 @@ class CacheTest extends UnitTestCase {
   }
 
   /**
-   * Tests merge max ages.
+   * @covers ::mergeMaxAges
    *
-   * @legacy-covers ::mergeMaxAges
+   * @dataProvider mergeMaxAgesProvider
    */
-  #[DataProvider('mergeMaxAgesProvider')]
   public function testMergeMaxAges($expected, ...$max_ages): void {
     $this->assertSame($expected, Cache::mergeMaxAges(...$max_ages));
   }
@@ -126,7 +120,7 @@ class CacheTest extends UnitTestCase {
    * @return array
    *   An array of pairs of cache contexts arrays to be merged.
    */
-  public static function mergeCacheContextsProvide(): array {
+  public static function mergeCacheContextsProvide() {
     return [
       [[], [], []],
       [['foo'], [], ['foo']],
@@ -147,11 +141,10 @@ class CacheTest extends UnitTestCase {
   }
 
   /**
-   * Tests merge cache contexts.
+   * @covers ::mergeContexts
    *
-   * @legacy-covers ::mergeContexts
+   * @dataProvider mergeCacheContextsProvide
    */
-  #[DataProvider('mergeCacheContextsProvide')]
   public function testMergeCacheContexts(array $expected, ...$contexts): void {
     $cache_contexts_manager = $this->prophesize(CacheContextsManager::class);
     $cache_contexts_manager->assertValidTokens(Argument::any())->willReturn(TRUE);
@@ -167,7 +160,7 @@ class CacheTest extends UnitTestCase {
    * @return array
    *   An array of pairs of (prefix, suffixes) to build cache tags from.
    */
-  public static function buildTagsProvider(): array {
+  public static function buildTagsProvider() {
     return [
       ['node', [1], ['node:1']],
       ['node', [1, 2, 3], ['node:1', 'node:2', 'node:3']],
@@ -190,11 +183,10 @@ class CacheTest extends UnitTestCase {
   }
 
   /**
-   * Tests build tags.
+   * @covers ::buildTags
    *
-   * @legacy-covers ::buildTags
+   * @dataProvider buildTagsProvider
    */
-  #[DataProvider('buildTagsProvider')]
   public function testBuildTags($prefix, array $suffixes, array $expected, $glue = ':'): void {
     $this->assertEquals($expected, Cache::buildTags($prefix, $suffixes, $glue));
   }

@@ -19,7 +19,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
   /**
    * A warning.
    */
-  protected const MESSAGE_TYPE = MessengerInterface::TYPE_WARNING;
+  protected const MESSAGE_TYPE_WARNING = MessengerInterface::TYPE_WARNING;
 
   /**
    * The season data. Can only be changed in SeasonWidget, not WeekWidget.
@@ -46,7 +46,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     return new static(
       $plugin_id,
       $plugin_definition,
@@ -60,7 +60,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
 
     $element['value'] = [
       // Add field settings, for usage in each Element.
@@ -79,7 +79,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
     // Remove 'value' of the 'Add exception' button.
     unset($values['add_more']);
 
@@ -94,7 +94,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
    * @return \Drupal\Core\Field\FieldDefinitionInterface
    *   The wrapped field definition.
    */
-  public function getFieldDefinition() {
+  public function getFieldDefinition(): FieldDefinitionInterface {
     return $this->fieldDefinition;
   }
 
@@ -104,7 +104,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
    * @return \Drupal\office_hours\OfficeHoursSeason
    *   The season.
    */
-  public function getSeason() {
+  public function getSeason(): OfficeHoursSeason {
     // Use season, or normal Weekdays (empty season).
     $this->season = $this->season ?? new OfficeHoursSeason();
     return $this->season;
@@ -119,7 +119,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
    * @return \Drupal\office_hours\Plugin\Field\FieldWidget\OfficeHoursWidgetBase
    *   The widget object itself.
    */
-  public function setSeason(?OfficeHoursSeason $season = NULL) {
+  public function setSeason(?OfficeHoursSeason $season = NULL): static {
     $this->season = $season;
     return $this;
   }
@@ -130,7 +130,7 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
    * @param \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem $item
    *   An OfficeHoursItem.
    */
-  protected function addMessage(OfficeHoursItem $item) {
+  protected function addInvalidTimeSlotMessage(OfficeHoursItem $item): void {
 
     // First, set a general message. It will not be repeated on screen.
     // Then, add a date-specific message.
@@ -165,8 +165,18 @@ abstract class OfficeHoursWidgetBase extends WidgetBase {
         break;
     }
 
-    $this->messenger->addMessage($message1, self::MESSAGE_TYPE);
-    $this->messenger->addMessage($message2, self::MESSAGE_TYPE);
+    $this->messenger->addMessage($message1, self::MESSAGE_TYPE_WARNING);
+    $this->messenger->addMessage($message2, self::MESSAGE_TYPE_WARNING);
+  }
+
+  /**
+   * Removes generated messages from addInvalidTimeSlotMessage().
+   */
+  protected function deleteInvalidTimeSlotMessage(): void {
+    // @todo Perhaps first fetch MessengerInterface::all(), then restore.
+    // This now removes ALL message, not only the generated messages
+    // @see https://www.drupal.org/project/office_hours/issues/3537957
+    // \Drupal::messenger()->deleteByType(static::MESSAGE_TYPE_WARNING);
   }
 
 }

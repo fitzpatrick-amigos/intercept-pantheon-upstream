@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\KernelTests\Core\Bootstrap;
 
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests.
+ *
+ * @group Bootstrap
  */
-#[Group('Bootstrap')]
-#[RunTestsInSeparateProcesses]
 class ShutdownFunctionTest extends KernelTestBase {
 
   /**

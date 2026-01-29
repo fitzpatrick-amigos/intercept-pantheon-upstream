@@ -8,15 +8,12 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\RouteProcessor\RouteProcessorManager;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\Core\RouteProcessor\RouteProcessorManager.
+ * @coversDefaultClass \Drupal\Core\RouteProcessor\RouteProcessorManager
+ * @group RouteProcessor
  */
-#[CoversClass(RouteProcessorManager::class)]
-#[Group('RouteProcessor')]
 class RouteProcessorManagerTest extends UnitTestCase {
 
   /**

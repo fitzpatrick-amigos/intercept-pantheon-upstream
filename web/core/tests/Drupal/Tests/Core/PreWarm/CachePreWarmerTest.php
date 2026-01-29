@@ -8,15 +8,12 @@ use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\PreWarm\CachePreWarmer;
 use Drupal\Core\PreWarm\PreWarmableInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Tests Drupal\Core\PreWarm\CachePreWarmer.
+ * @coversDefaultClass \Drupal\Core\PreWarm\CachePreWarmer
+ * @group PreWarm
  */
-#[CoversClass(CachePreWarmer::class)]
-#[Group('PreWarm')]
 class CachePreWarmerTest extends UnitTestCase {
 
   /**
@@ -50,7 +47,7 @@ class CachePreWarmerTest extends UnitTestCase {
       $this->warmedMap[$serviceMock] = 0;
 
       $serviceMock->method('preWarm')
-        ->willReturnCallback(function () use ($serviceMock): void {
+        ->willReturnCallback(function () use ($serviceMock) {
           $this->warmedMap[$serviceMock] = 1 + $this->warmedMap[$serviceMock];
         });
 
@@ -62,9 +59,7 @@ class CachePreWarmerTest extends UnitTestCase {
   }
 
   /**
-   * Tests pre warm only one.
-   *
-   * @legacy-covers ::preWarmOneCache
+   * @covers ::preWarmOneCache
    */
   public function testPreWarmOnlyOne(): void {
     $this->setupCacheServices();
@@ -81,9 +76,7 @@ class CachePreWarmerTest extends UnitTestCase {
   }
 
   /**
-   * Tests pre warm by one.
-   *
-   * @legacy-covers ::preWarmOneCache
+   * @covers ::preWarmOneCache
    */
   public function testPreWarmByOne(): void {
     $this->setupCacheServices();
@@ -100,9 +93,7 @@ class CachePreWarmerTest extends UnitTestCase {
   }
 
   /**
-   * Tests pre warm all.
-   *
-   * @legacy-covers ::preWarmAllCaches
+   * @covers ::preWarmAllCaches
    */
   public function testPreWarmAll(): void {
     $this->setupCacheServices();

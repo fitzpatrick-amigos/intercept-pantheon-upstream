@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\KernelTests\Core\ParamConverter;
 
-use Drupal\Core\ParamConverter\EntityConverter;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\entity_test\EntityTestHelper;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the entity param converter.
+ *
+ * @group ParamConverter
+ * @coversDefaultClass \Drupal\Core\ParamConverter\EntityConverter
  */
-#[CoversClass(EntityConverter::class)]
-#[Group('ParamConverter')]
-#[RunTestsInSeparateProcesses]
 class EntityConverterTest extends KernelTestBase {
 
   use UserCreationTrait;
@@ -49,7 +45,7 @@ class EntityConverterTest extends KernelTestBase {
   /**
    * Tests an entity route parameter having 'bundle' definition property.
    *
-   * @legacy-covers ::convert
+   * @covers ::convert
    */
   public function testRouteParamWithBundleDefinition(): void {
     $converter = $this->container->get('paramconverter.entity');

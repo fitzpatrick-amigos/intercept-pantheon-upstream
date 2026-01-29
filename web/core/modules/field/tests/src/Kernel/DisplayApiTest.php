@@ -8,14 +8,12 @@ use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the field display API.
+ *
+ * @group field
  */
-#[Group('field')]
-#[RunTestsInSeparateProcesses]
 class DisplayApiTest extends FieldKernelTestBase {
 
   /**
@@ -59,6 +57,11 @@ class DisplayApiTest extends FieldKernelTestBase {
    * @var array
    */
   protected $values;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = ['system'];
 
   /**
    * {@inheritdoc}

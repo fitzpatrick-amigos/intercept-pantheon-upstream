@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\contact\Unit;
 
-use Drupal\contact\Hook\ContactHooks;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\contact\Hook\ContactHooks;
 
 /**
  * Tests for Contact hooks.
+ *
+ * @group contact
  */
-#[Group('contact')]
 class ContactTest extends UnitTestCase {
 
   /**

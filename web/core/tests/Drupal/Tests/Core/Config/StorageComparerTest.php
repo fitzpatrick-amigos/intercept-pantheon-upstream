@@ -9,14 +9,11 @@ use Drupal\Core\Config\MemoryStorage;
 use Drupal\Core\Config\StorageComparer;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Config\StorageComparer.
+ * @coversDefaultClass \Drupal\Core\Config\StorageComparer
+ * @group Config
  */
-#[CoversClass(StorageComparer::class)]
-#[Group('Config')]
 class StorageComparerTest extends UnitTestCase {
 
   /**
@@ -62,7 +59,7 @@ class StorageComparerTest extends UnitTestCase {
     $this->storageComparer = new StorageComparer($this->sourceStorage, $this->targetStorage);
   }
 
-  protected function getConfigData(): array {
+  protected function getConfigData() {
     $uuid = new Php();
     // Mock data using minimal data to use ConfigDependencyManger.
     $this->configData = [
@@ -111,9 +108,7 @@ class StorageComparerTest extends UnitTestCase {
   }
 
   /**
-   * Tests create changelist no change.
-   *
-   * @legacy-covers ::createChangelist
+   * @covers ::createChangelist
    */
   public function testCreateChangelistNoChange(): void {
     $config_data = $this->getConfigData();
@@ -144,9 +139,7 @@ class StorageComparerTest extends UnitTestCase {
   }
 
   /**
-   * Tests create changelist create.
-   *
-   * @legacy-covers ::createChangelist
+   * @covers ::createChangelist
    */
   public function testCreateChangelistCreate(): void {
     $target_data = $source_data = $this->getConfigData();
@@ -185,9 +178,7 @@ class StorageComparerTest extends UnitTestCase {
   }
 
   /**
-   * Tests create changelist delete.
-   *
-   * @legacy-covers ::createChangelist
+   * @covers ::createChangelist
    */
   public function testCreateChangelistDelete(): void {
     $target_data = $source_data = $this->getConfigData();
@@ -226,9 +217,7 @@ class StorageComparerTest extends UnitTestCase {
   }
 
   /**
-   * Tests create changelist update.
-   *
-   * @legacy-covers ::createChangelist
+   * @covers ::createChangelist
    */
   public function testCreateChangelistUpdate(): void {
     $target_data = $source_data = $this->getConfigData();
@@ -267,9 +256,7 @@ class StorageComparerTest extends UnitTestCase {
   }
 
   /**
-   * Tests different collections.
-   *
-   * @legacy-covers ::createChangelist
+   * @covers ::createChangelist
    */
   public function testDifferentCollections(): void {
     $source = new MemoryStorage();

@@ -1,0 +1,42 @@
+/**
+ * @file
+ * Accessibility enhancements for webform_image_select module.
+ *
+ * Provides proper hiding of the backing select element and enhanced
+ * focus indicators for better keyboard navigation and screen reader support.
+ */
+
+/**
+ * Properly hide the backing select element.
+ * Override the default opacity-based hiding with display: none for better
+ * accessibility. Screen readers will still access it through the ARIA
+ * attributes on the visible radio buttons.
+ */
+html.js select.webform-image-select {
+  // visually hidden but still accessible
+  opacity: 1 !important;
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px !important;
+  height: 1px !important;
+  word-wrap: normal;
+  background-color: initial !important;
+  color: initial !important;
+}
+
+/**
+ * Enhanced focus indicators for keyboard navigation.
+ * Ensure thumbnails have a clear visible focus state.
+ */
+.image_picker_selector .thumbnail:focus {
+  outline: 2px solid #4A90E2;
+  outline-offset: 2px;
+}
+
+/**
+ * Additional visual indicator for focused and checked state.
+ */
+.image_picker_selector .thumbnail:focus[aria-checked="true"] {
+  outline-color: #2E7D32;
+}

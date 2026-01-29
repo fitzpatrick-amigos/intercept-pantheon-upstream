@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\views\Unit\Plugin\pager;
 
-use Drupal\Core\Database\Query\Select;
-use Drupal\Core\Database\StatementInterface;
 use Drupal\Tests\UnitTestCase;
-use Drupal\views\Plugin\views\pager\PagerPluginBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\Database\StatementInterface;
+use Drupal\Core\Database\Query\Select;
 
 /**
- * Tests Drupal\views\Plugin\views\pager\PagerPluginBase.
+ * @coversDefaultClass \Drupal\views\Plugin\views\pager\PagerPluginBase
+ * @group views
  */
-#[CoversClass(PagerPluginBase::class)]
-#[Group('views')]
 class PagerPluginBaseTest extends UnitTestCase {
 
   /**
@@ -175,9 +170,10 @@ class PagerPluginBaseTest extends UnitTestCase {
   /**
    * Tests the hasMoreRecords() method.
    *
+   * @dataProvider providerTestHasMoreRecords
+   *
    * @see \Drupal\views\Plugin\views\pager\PagerPluginBase::hasMoreRecords()
    */
-  #[DataProvider('providerTestHasMoreRecords')]
   public function testHasMoreRecords($items_per_page, $total_items, $current_page, $has_more_records): void {
     $this->pager->setItemsPerPage($items_per_page);
     $this->pager->total_items = $total_items;

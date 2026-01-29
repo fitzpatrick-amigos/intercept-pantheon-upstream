@@ -14,7 +14,7 @@ class ViewsDataProvider {
    *
    * Note: When using full pager on a view, less results might be displayed.
    */
-  public static function viewsFieldData(FieldStorageConfigInterface $field_storage, array $data) {
+  public static function viewsFieldData(FieldStorageConfigInterface $field_storage, array $data): array {
     // Builds upon data from views_field_default_views_data($field_storage);
     $columns = [
       'season' => 'office_hours_season',

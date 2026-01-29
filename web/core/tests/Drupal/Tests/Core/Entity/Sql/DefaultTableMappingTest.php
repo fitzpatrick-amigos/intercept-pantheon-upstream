@@ -7,15 +7,11 @@ namespace Drupal\Tests\Core\Entity\Sql;
 use Drupal\Core\Entity\Sql\DefaultTableMapping;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorageException;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Entity\Sql\DefaultTableMapping.
+ * @coversDefaultClass \Drupal\Core\Entity\Sql\DefaultTableMapping
+ * @group Entity
  */
-#[CoversClass(DefaultTableMapping::class)]
-#[Group('Entity')]
 class DefaultTableMappingTest extends UnitTestCase {
 
   /**
@@ -41,7 +37,7 @@ class DefaultTableMappingTest extends UnitTestCase {
   /**
    * Tests DefaultTableMapping::getTableNames().
    *
-   * @legacy-covers ::getTableNames
+   * @covers ::getTableNames
    */
   public function testGetTableNames(): void {
     // The storage definitions are only used in getColumnNames() so we do not
@@ -66,13 +62,13 @@ class DefaultTableMappingTest extends UnitTestCase {
   /**
    * Tests DefaultTableMapping::getAllColumns().
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::getAllColumns
-   * @legacy-covers ::getFieldNames
-   * @legacy-covers ::getColumnNames
-   * @legacy-covers ::setFieldNames
-   * @legacy-covers ::getExtraColumns
-   * @legacy-covers ::setExtraColumns
+   * @covers ::__construct
+   * @covers ::getAllColumns
+   * @covers ::getFieldNames
+   * @covers ::getColumnNames
+   * @covers ::setFieldNames
+   * @covers ::getExtraColumns
+   * @covers ::setExtraColumns
    */
   public function testGetAllColumns(): void {
     // Set up single-column and multi-column definitions.
@@ -177,8 +173,8 @@ class DefaultTableMappingTest extends UnitTestCase {
   /**
    * Tests DefaultTableMapping::getFieldNames().
    *
-   * @legacy-covers ::getFieldNames
-   * @legacy-covers ::setFieldNames
+   * @covers ::getFieldNames
+   * @covers ::setFieldNames
    */
   public function testGetFieldNames(): void {
     // The storage definitions are only used in getColumnNames() so we do not
@@ -207,8 +203,8 @@ class DefaultTableMappingTest extends UnitTestCase {
   /**
    * Tests DefaultTableMapping::getColumnNames().
    *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::getColumnNames
+   * @covers ::__construct
+   * @covers ::getColumnNames
    */
   public function testGetColumnNames(): void {
     $definitions['test'] = $this->setUpDefinition('test', []);
@@ -239,8 +235,8 @@ class DefaultTableMappingTest extends UnitTestCase {
   /**
    * Tests DefaultTableMapping::getExtraColumns().
    *
-   * @legacy-covers ::getExtraColumns
-   * @legacy-covers ::setExtraColumns
+   * @covers ::getExtraColumns
+   * @covers ::setExtraColumns
    */
   public function testGetExtraColumns(): void {
     // The storage definitions are only used in getColumnNames() so we do not
@@ -279,9 +275,10 @@ class DefaultTableMappingTest extends UnitTestCase {
    * @param string $expected
    *   The expected result.
    *
-   * @legacy-covers ::getFieldColumnName
+   * @covers ::getFieldColumnName
+   *
+   * @dataProvider providerTestGetFieldColumnName
    */
-  #[DataProvider('providerTestGetFieldColumnName')]
   public function testGetFieldColumnName($base_field, $columns, $column, $expected): void {
     $definitions['test'] = $this->setUpDefinition('test', $columns, $base_field);
     $table_mapping = new TestDefaultTableMapping($this->entityType, $definitions);
@@ -300,9 +297,10 @@ class DefaultTableMappingTest extends UnitTestCase {
    * @param string $column
    *   The name of the column to be processed.
    *
-   * @legacy-covers ::getFieldColumnName
+   * @covers ::getFieldColumnName
+   *
+   * @dataProvider providerTestGetFieldColumnName
    */
-  #[DataProvider('providerTestGetFieldColumnName')]
   public function testGetFieldColumnNameInvalid($base_field, $columns, $column): void {
     $definitions['test'] = $this->setUpDefinition('test', $columns, $base_field);
 
@@ -325,7 +323,7 @@ class DefaultTableMappingTest extends UnitTestCase {
    *   field name, base field status, list of field columns, name of the column
    *   to be retrieved, expected result, whether an exception is expected.
    */
-  public static function providerTestGetFieldColumnName(): array {
+  public static function providerTestGetFieldColumnName() {
     $data = [];
     // Base field with single column.
     $data[] = [TRUE, ['foo'], 'foo', 'test'];
@@ -353,9 +351,10 @@ class DefaultTableMappingTest extends UnitTestCase {
    * @param string $expected
    *   The expected table name.
    *
-   * @legacy-covers ::getFieldTableName
+   * @covers ::getFieldTableName
+   *
+   * @dataProvider providerTestGetFieldTableName
    */
-  #[DataProvider('providerTestGetFieldTableName')]
   public function testGetFieldTableName($table_names, $expected): void {
     $field_name = 'test';
     $columns = ['test'];
@@ -417,7 +416,7 @@ class DefaultTableMappingTest extends UnitTestCase {
    *   A nested array where each inner array has the following values: a list of
    *   table names and the expected table name.
    */
-  public static function providerTestGetFieldTableName(): array {
+  public static function providerTestGetFieldTableName() {
     $data = [];
 
     $data[] = [['data' => 'data_table', 'base' => 'base_table', 'revision' => 'revision_table'], 'data_table'];
@@ -443,7 +442,7 @@ class DefaultTableMappingTest extends UnitTestCase {
   /**
    * Tests DefaultTableMapping::getFieldTableName() with an invalid parameter.
    *
-   * @legacy-covers ::getFieldTableName
+   * @covers ::getFieldTableName
    */
   public function testGetFieldTableNameInvalid(): void {
     $table_mapping = new TestDefaultTableMapping($this->entityType, []);
@@ -453,12 +452,11 @@ class DefaultTableMappingTest extends UnitTestCase {
   }
 
   /**
-   * Tests get dedicated table name.
+   * @covers ::getDedicatedDataTableName
+   * @covers ::getDedicatedRevisionTableName
    *
-   * @legacy-covers ::getDedicatedDataTableName
-   * @legacy-covers ::getDedicatedRevisionTableName
+   * @dataProvider providerTestGetDedicatedTableName
    */
-  #[DataProvider('providerTestGetDedicatedTableName')]
   public function testGetDedicatedTableName($info, $expected_data_table, $expected_revision_table): void {
     $entity_type_id = $info['entity_type_id'];
     $field_name = $info['field_name'];
@@ -498,7 +496,7 @@ class DefaultTableMappingTest extends UnitTestCase {
    *   consisting of the entity type ID, field name and a table prefix, followed
    *   by the expected data table name and the revision table name.
    */
-  public static function providerTestGetDedicatedTableName(): array {
+  public static function providerTestGetDedicatedTableName() {
     $data = [];
 
     $data['short entity type; short field name; no prefix'] = [

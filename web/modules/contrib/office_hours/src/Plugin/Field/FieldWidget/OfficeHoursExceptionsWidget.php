@@ -28,7 +28,7 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     // In D8, we have a (deliberate) anomaly in the widget.
     // We prepare 1 widget for the whole week,
     // but the field has unlimited cardinality.
@@ -61,7 +61,7 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
 
     $count_days = $field_state["$field_name-exceptions_count"];
     // Keep aligned in ExceptionsWidget and OfficeHoursTable element.
-    // Add empty days if we clicked "AddMore: Add exception".
+    // Add empty days upon clicking "AddMore: Add exception".
     // We cannot do this in valueCallback, in case a date value is changed.
     for ($i = $filtered_items->countExceptionDays(); $i < max(0, $count_days); $i++) {
       $filtered_items->appendItem(['day' => OfficeHoursDateHelper::EXCEPTION_DAY_MIN]);
@@ -89,7 +89,7 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
       // Controls the HTML5 'open' attribute. Defaults to FALSE.
       // Make sure the 'details' element keeps open after 'Add exception' button.
       '#open' => !$field_state['collapsed_exceptions'],
-      '#title' => \Drupal::translation()->formatPlural($count_days, '1 exception', '@count exceptions'),
+      '#title' => \Drupal::translation()->formatPlural($count_days, '@count exception', '@count exceptions'),
       // Add the time slot table as a sub-element.
       'value' => $element,
     ];
@@ -100,9 +100,9 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    *
-   * Change core behaviour, added after formElement().
+   * Change core behavior, added after formElement().
    */
-  public static function afterBuild(array $element, FormStateInterface $form_state) {
+  public static function afterBuild(array $element, FormStateInterface $form_state): array {
     $element = parent::afterBuild($element, $form_state);
 
     // Remove the 'drag-n-drop reordering' element.
@@ -119,14 +119,7 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function extractFormValues(FieldItemListInterface $items, array $form, FormStateInterface $form_state) {
-    parent::extractFormValues($items, $form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function addMoreSubmit(array $form, FormStateInterface $form_state) {
+  public static function addMoreSubmit(array $form, FormStateInterface $form_state): void {
     $button = $form_state->getTriggeringElement();
 
     // Go one level up in the form, to the widgets container.
@@ -153,7 +146,7 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
    * - determine the $delta differently;
    * - use 'value' subelement to set prefix/suffix.
    */
-  public static function addMoreAjax(array $form, FormStateInterface $form_state) {
+  public static function addMoreAjax(array $form, FormStateInterface $form_state): AjaxResponse {
     // return parent::addMoreAjax($form, $form_state);
     $button = $form_state->getTriggeringElement();
 
@@ -188,13 +181,6 @@ class OfficeHoursExceptionsWidget extends OfficeHoursWidgetBase {
     // Add command to set the focus on first focusable element within the div.
     $response->addCommand(new FocusFirstCommand("[$focus_attribute]"));
     return $response;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
-    return parent::massageFormValues($values, $form, $form_state);
   }
 
 }

@@ -109,7 +109,7 @@ class OfficeHoursDatetime extends Datetime {
    * @return bool
    *   TRUE if the data structure is empty, FALSE otherwise.
    */
-  public static function isEmpty($element) {
+  public static function isEmpty($element): bool {
     // Note: in Week-widget, day is <> '', in List-widget, day can be ''.
     // And in Exception day, day can be ''.
     // Note: test every change with Week/List widget and Select/HTML5 element!

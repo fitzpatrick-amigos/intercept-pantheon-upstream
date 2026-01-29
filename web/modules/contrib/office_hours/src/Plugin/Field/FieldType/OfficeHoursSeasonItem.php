@@ -19,7 +19,7 @@ class OfficeHoursSeasonItem extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     // @todo Add random Season ID in past and in near future.
     $value = [];
     return $value;
@@ -29,7 +29,6 @@ class OfficeHoursSeasonItem extends OfficeHoursItem {
    * {@inheritdoc}
    */
   public function isInRange(int $from, int $to): bool {
-    $is_in_range = FALSE;
     if ($to < $from || $to < 0) {
       // @todo Error. Raise try/catch exception for $to < $from.
       // @todo Undefined result for <0. Raise try/catch exception.

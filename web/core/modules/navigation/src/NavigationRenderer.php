@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Handle rendering for different pieces of the navigation.
  *
- * @internal
+ * @internal The navigation module is experimental.
  */
 final class NavigationRenderer {
 
@@ -204,26 +204,13 @@ final class NavigationRenderer {
    * @see hook_page_top()
    */
   public function buildTopBar(array &$page_top): void {
-    $page_top['top_bar']['#cache']['contexts'][] = 'user.permissions';
-    if ($this->currentUser->hasPermission('access navigation')) {
-      $page_top['top_bar'] = [
-        '#cache' => [
-          'keys' => ['navigation', 'top_bar'],
-          'max-age' => CacheBackendInterface::CACHE_PERMANENT,
-        ],
-        '#lazy_builder' => ['navigation.renderer:doBuildTopBar', []],
-        '#create_placeholder' => TRUE,
-      ];
-    }
-  }
-
-  /**
-   * Lazy builder to generate the top bar render array.
-   */
-  #[TrustedCallback]
-  public function doBuildTopBar(): array {
-    return [
+    $page_top['top_bar'] = [
       '#type' => 'top_bar',
+      '#access' => $this->currentUser->hasPermission('access navigation'),
+      '#cache' => [
+        'keys' => ['top_bar'],
+        'contexts' => ['user.permissions'],
+      ],
     ];
   }
 

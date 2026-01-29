@@ -38,7 +38,7 @@ class OfficeHoursStatus extends TypedData implements OptionsProviderInterface {
   /**
    * Implements \Drupal\Core\TypedData\TypedDataInterface::getValue().
    */
-  public function getValue() {
+  public function getValue(): int {
     if (!isset($this->value)) {
       $items = $this->getParent()->getParent();
 
@@ -61,28 +61,28 @@ class OfficeHoursStatus extends TypedData implements OptionsProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPossibleValues(?AccountInterface $account = NULL, array $formatter_settings = []) {
+  public function getPossibleValues(?AccountInterface $account = NULL, array $formatter_settings = []): array {
     return array_keys($this->getPossibleOptions($account, $formatter_settings));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getPossibleOptions(?AccountInterface $account = NULL, array $formatter_settings = []) {
+  public function getPossibleOptions(?AccountInterface $account = NULL, array $formatter_settings = []): array {
     return $this->getSettableOptions($account, $formatter_settings);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSettableValues(?AccountInterface $account = NULL, array $formatter_settings = []) {
+  public function getSettableValues(?AccountInterface $account = NULL, array $formatter_settings = []): array {
     return array_keys($this->getSettableOptions($account, $formatter_settings));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSettableOptions(?AccountInterface $account = NULL, array $formatter_settings = []) {
+  public function getSettableOptions(?AccountInterface $account = NULL, array $formatter_settings = []): array {
     return $this->getOptions($account, $formatter_settings);
   }
 
@@ -97,7 +97,7 @@ class OfficeHoursStatus extends TypedData implements OptionsProviderInterface {
    * @return array
    *   An array of key-value pairs with status options for ItemList.
    */
-  public static function getOptions(?AccountInterface $account = NULL, array $formatter_settings = []) {
+  public static function getOptions(?AccountInterface $account = NULL, array $formatter_settings = []): array {
     // @todo Avoid passing $formatter_settings.
     $settings = $formatter_settings;
     return [

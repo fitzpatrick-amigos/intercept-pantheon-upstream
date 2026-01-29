@@ -6,13 +6,14 @@ namespace Drupal\Tests\Core\Common;
 
 use Drupal\Component\Utility\Tags;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\Group;
 
 // cspell:ignore sloopal troopal
+
 /**
  * Tests explosion and implosion of autocomplete tags.
+ *
+ * @group Common
  */
-#[Group('Common')]
 class TagsTest extends UnitTestCase {
 
   /**

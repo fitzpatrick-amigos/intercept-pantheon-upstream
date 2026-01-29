@@ -112,6 +112,8 @@ libraries-extend:
   addtocalendar/base:
     - intercept_base/action-button
     - intercept_base/addtocalendar
+  webform_image_select/webform_image_select.element:
+    - intercept_base/webform_image_select
   views_filters_summary/views_filters_summary:
     - intercept_base/current-filters
 

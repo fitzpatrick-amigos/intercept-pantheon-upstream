@@ -6,14 +6,12 @@ namespace Drupal\Tests\node\Functional;
 
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\node\Traits\NodeAccessTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests node access rebuild functions with multiple node access modules.
+ *
+ * @group node
  */
-#[Group('node')]
-#[RunTestsInSeparateProcesses]
 class NodeAccessRebuildNodeGrantsTest extends NodeTestBase {
 
   use NodeAccessTrait;
@@ -47,7 +45,7 @@ class NodeAccessRebuildNodeGrantsTest extends NodeTestBase {
       'administer site configuration',
       'access administration pages',
       'access site reports',
-      'rebuild node access permissions',
+      'administer nodes',
     ]);
     $this->drupalLogin($this->adminUser);
 
@@ -89,7 +87,6 @@ class NodeAccessRebuildNodeGrantsTest extends NodeTestBase {
     $this->clickLink('Rebuild permissions');
     $this->submitForm([], 'Rebuild permissions');
     $this->assertSession()->pageTextContains('The content access permissions have been rebuilt.');
-    \Drupal::service('node.view_all_nodes_memory_cache')->deleteAll();
 
     // Test if the rebuild by user that cannot bypass node access and does not
     // have access to the nodes has been successful.

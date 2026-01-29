@@ -17,14 +17,7 @@ class Season extends FieldBase {
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
-    return parent::defineOptions();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     parent::addOptionsFormWarning($form, $form_state, $this->options['label']);
     parent::buildOptionsForm($form, $form_state);
   }

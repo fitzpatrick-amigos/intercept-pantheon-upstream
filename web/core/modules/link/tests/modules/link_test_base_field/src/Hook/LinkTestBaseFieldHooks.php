@@ -9,7 +9,6 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Hook\Attribute\Hook;
-use Drupal\link\LinkTitleVisibility;
 
 /**
  * Hook implementations for link_test_base_field.
@@ -25,7 +24,7 @@ class LinkTestBaseFieldHooks {
     if ($entity_type->id() === 'entity_test') {
       $fields['links'] = BaseFieldDefinition::create('link')->setLabel('Links')->setRevisionable(TRUE)->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)->setDescription('Add links to the entity.')->setRequired(FALSE)->setSettings([
         'link_type' => LinkItemInterface::LINK_GENERIC,
-        'title' => LinkTitleVisibility::Required->value,
+        'title' => DRUPAL_REQUIRED,
       ])->setDisplayOptions('form', ['type' => 'link_default', 'weight' => 49]);
     }
     return $fields;

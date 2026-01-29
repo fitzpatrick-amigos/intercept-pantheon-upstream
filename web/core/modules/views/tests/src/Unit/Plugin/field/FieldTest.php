@@ -13,16 +13,12 @@ use Drupal\Tests\UnitTestCase;
 use Drupal\Tests\views\Unit\Plugin\HandlerTestTrait;
 use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\views\ResultRow;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Tests Drupal\views\Plugin\views\field\EntityField.
+ * @coversDefaultClass \Drupal\views\Plugin\views\field\EntityField
+ * @group views
  */
-#[CoversClass(EntityField::class)]
-#[Group('views')]
 class FieldTest extends UnitTestCase {
 
   use HandlerTestTrait;
@@ -127,9 +123,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests construct.
-   *
-   * @legacy-covers ::__construct
+   * @covers ::__construct
    */
   public function testConstruct(): void {
     $definition = [
@@ -144,9 +138,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests define options with no options.
-   *
-   * @legacy-covers ::defineOptions
+   * @covers ::defineOptions
    */
   public function testDefineOptionsWithNoOptions(): void {
     $definition = [
@@ -173,9 +165,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests define options with default formatter on field definition.
-   *
-   * @legacy-covers ::defineOptions
+   * @covers ::defineOptions
    */
   public function testDefineOptionsWithDefaultFormatterOnFieldDefinition(): void {
     $definition = [
@@ -203,9 +193,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests define options with default formatter on field type.
-   *
-   * @legacy-covers ::defineOptions
+   * @covers ::defineOptions
    */
   public function testDefineOptionsWithDefaultFormatterOnFieldType(): void {
     $definition = [
@@ -232,9 +220,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests calculate dependencies with base field.
-   *
-   * @legacy-covers ::calculateDependencies
+   * @covers ::calculateDependencies
    */
   public function testCalculateDependenciesWithBaseField(): void {
     $definition = [
@@ -256,9 +242,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests calculate dependencies with configured field.
-   *
-   * @legacy-covers ::calculateDependencies
+   * @covers ::calculateDependencies
    */
   public function testCalculateDependenciesWithConfiguredField(): void {
     $definition = [
@@ -284,9 +268,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests access.
-   *
-   * @legacy-covers ::access
+   * @covers ::access
    */
   public function testAccess(): void {
     $definition = [
@@ -338,8 +320,9 @@ class FieldTest extends UnitTestCase {
    *
    * @param string $order
    *   The sort order.
+   *
+   * @dataProvider providerSortOrders
    */
-  #[DataProvider('providerSortOrders')]
   public function testClickSortWithOutConfiguredColumn($order): void {
     $definition = [
       'entity_type' => 'test_entity',
@@ -355,14 +338,12 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests click sort with base field.
+   * @covers ::clickSort
+   * @dataProvider providerSortOrders
    *
    * @param string $order
    *   The sort order.
-   *
-   * @legacy-covers ::clickSort
    */
-  #[DataProvider('providerSortOrders')]
   public function testClickSortWithBaseField($order): void {
     $definition = [
       'entity_type' => 'test_entity',
@@ -416,14 +397,12 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests click sort with configured field.
+   * @covers ::clickSort
+   * @dataProvider providerSortOrders
    *
    * @param string $order
    *   The sort order.
-   *
-   * @legacy-covers ::clickSort
    */
-  #[DataProvider('providerSortOrders')]
   public function testClickSortWithConfiguredField($order): void {
     $definition = [
       'entity_type' => 'test_entity',
@@ -477,9 +456,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests query with group by for base field.
-   *
-   * @legacy-covers ::query
+   * @covers ::query
    */
   public function testQueryWithGroupByForBaseField(): void {
     $definition = [
@@ -541,9 +518,7 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests query with group by for config field.
-   *
-   * @legacy-covers ::query
+   * @covers ::query
    */
   public function testQueryWithGroupByForConfigField(): void {
     $definition = [
@@ -605,11 +580,10 @@ class FieldTest extends UnitTestCase {
   }
 
   /**
-   * Tests prepare items by delta.
+   * @covers ::prepareItemsByDelta
    *
-   * @legacy-covers ::prepareItemsByDelta
+   * @dataProvider providerTestPrepareItemsByDelta
    */
-  #[DataProvider('providerTestPrepareItemsByDelta')]
   public function testPrepareItemsByDelta(array $options, array $expected_values): void {
     $definition = [
       'entity_type' => 'test_entity',

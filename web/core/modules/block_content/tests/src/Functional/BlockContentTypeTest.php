@@ -8,14 +8,12 @@ use Drupal\block_content\Entity\BlockContentType;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
 use Drupal\Tests\system\Functional\Menu\AssertBreadcrumbTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Ensures that block type functions work correctly.
+ *
+ * @group block_content
  */
-#[Group('block_content')]
-#[RunTestsInSeparateProcesses]
 class BlockContentTypeTest extends BlockContentTestBase {
 
   use AssertBreadcrumbTrait;
@@ -60,26 +58,14 @@ class BlockContentTypeTest extends BlockContentTestBase {
   }
 
   /**
-   * Tests the block types on the block/add page.
+   * Tests the order of the block content types on the add page.
    */
-  public function testBlockContentAddPage(): void {
-    $this->createBlockContentType([
-      'id' => 'bundle_1',
-      'label' => 'Bundle 1',
-      'description' => 'Bundle 1 description',
-    ]);
-    $this->createBlockContentType([
-      'id' => 'bundle_2',
-      'label' => 'Aaa Bundle 2',
-      'description' => 'Bundle 2 description',
-    ]);
+  public function testBlockContentAddPageOrder(): void {
+    $this->createBlockContentType(['id' => 'bundle_1', 'label' => 'Bundle 1']);
+    $this->createBlockContentType(['id' => 'bundle_2', 'label' => 'Aaa Bundle 2']);
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('block/add');
-    // Ensure bundles are ordered by their label, not id.
     $this->assertSession()->pageTextMatches('/Aaa Bundle 2(.*)Bundle 1/');
-    // Block type descriptions should display.
-    $this->assertSession()->pageTextContains('Bundle 1 description');
-    $this->assertSession()->pageTextContains('Bundle 2 description');
   }
 
   /**
@@ -89,16 +75,11 @@ class BlockContentTypeTest extends BlockContentTestBase {
     // Log in a test user.
     $this->drupalLogin($this->adminUser);
 
-    // Test the Add block type action link.
-    $this->drupalGet(Url::fromRoute('entity.block_content_type.collection'));
-    $this->assertSession()->linkExists('Add block type');
-    $this->assertSession()->linkByHrefExists('admin/structure/block-content/add');
-
     // Test the page with no block-types.
     $this->drupalGet('block/add');
     $this->assertSession()->statusCodeEquals(200);
-    $this->assertSession()->pageTextContains('There is no block type yet');
-    $this->clickLink('Add a new block type');
+    $this->assertSession()->pageTextContains('You have not created any block types yet');
+    $this->clickLink('block type creation page');
 
     // Create a block type via the user interface.
     $edit = [
@@ -112,6 +93,9 @@ class BlockContentTypeTest extends BlockContentTestBase {
 
     $block_type = BlockContentType::load('foo');
     $this->assertInstanceOf(BlockContentType::class, $block_type);
+
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('block_content', 'foo');
+    $this->assertTrue(isset($field_definitions['body']), 'Body field created when using the UI to create block content types.');
 
     // Check that the block type was created in site default language.
     $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
@@ -253,10 +237,7 @@ class BlockContentTypeTest extends BlockContentTestBase {
         $blocks = $storage->loadByProperties(['info' => $edit['info[0][value]']]);
         if (!empty($blocks)) {
           $block = reset($blocks);
-          $this->assertSession()->addressEquals(Url::fromRoute('block.admin_add', [
-            'plugin_id' => 'block_content:' . $block->uuid(),
-            'theme' => $theme,
-          ]));
+          $this->assertSession()->addressEquals(Url::fromRoute('block.admin_add', ['plugin_id' => 'block_content:' . $block->uuid(), 'theme' => $theme]));
           $this->submitForm(['region' => 'content'], 'Save block');
           $this->assertSession()->addressEquals(Url::fromRoute('block.admin_display_theme', ['theme' => $theme], ['query' => ['block-placement' => $theme . '-' . Html::getClass($edit['info[0][value]'])]]));
         }

@@ -4,7 +4,6 @@ namespace Drupal\Core\Entity;
 
 use Drupal\Component\Utility\Reflection;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -70,8 +69,8 @@ class EntityResolverManager {
    */
   protected function getControllerClass(array $defaults) {
     $controller = NULL;
-    if (isset($defaults[RouteObjectInterface::CONTROLLER_NAME])) {
-      $controller = $defaults[RouteObjectInterface::CONTROLLER_NAME];
+    if (isset($defaults['_controller'])) {
+      $controller = $defaults['_controller'];
     }
 
     if (isset($defaults['_form'])) {

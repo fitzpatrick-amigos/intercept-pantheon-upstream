@@ -15,9 +15,6 @@ services:
     class: Drupal\default_content\Config\DefaultContentConfigSubscriber
     arguments: ['@default_content.importer']
     tags: [{ name: event_subscriber }]
-  logger.channel.default_content:
-    parent: logger.channel_base
-    arguments: ['default_content']
   default_content.content_entity_normalizer:
     class: Drupal\default_content\Normalizer\ContentEntityNormalizer
     arguments: ['@entity_type.manager', '@module_handler', '@entity.repository', '@language_manager']

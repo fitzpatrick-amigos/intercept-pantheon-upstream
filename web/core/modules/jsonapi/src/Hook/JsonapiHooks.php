@@ -7,7 +7,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\jsonapi\JsonApiFilter;
 use Drupal\jsonapi\Routing\Routes;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -108,7 +107,7 @@ class JsonapiHooks {
     // AccessResult::forbidden() from its implementation of this hook.
     if ($admin_permission = $entity_type->getAdminPermission()) {
       return [
-        JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, $admin_permission),
+        JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, $admin_permission),
       ];
     }
     return [];
@@ -123,8 +122,8 @@ class JsonapiHooks {
     // \Drupal\jsonapi\Access\TemporaryQueryGuard adds the condition for
     // (isReusable()), so this does not have to.
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access block library'),
-      JsonApiFilter::AMONG_PUBLISHED => AccessResult::allowed(),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access block library'),
+      JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowed(),
     ];
   }
 
@@ -137,8 +136,8 @@ class JsonapiHooks {
     // \Drupal\jsonapi\Access\TemporaryQueryGuard adds the condition for
     // (access to the commented entity), so this does not have to.
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'administer comments'),
-      JsonApiFilter::AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'access comments'),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'administer comments'),
+      JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'access comments'),
     ];
   }
 
@@ -149,7 +148,7 @@ class JsonapiHooks {
   public function jsonapiEntityTestFilterAccess(EntityTypeInterface $entity_type, AccountInterface $account): array {
     // @see \Drupal\entity_test\EntityTestAccessControlHandler::checkAccess()
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view test entity'),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view test entity'),
     ];
   }
 
@@ -162,7 +161,7 @@ class JsonapiHooks {
     // \Drupal\jsonapi\Access\TemporaryQueryGuard adds the condition for
     // (public OR owner), so this does not have to.
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access content'),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access content'),
     ];
   }
 
@@ -173,7 +172,7 @@ class JsonapiHooks {
   public function jsonapiMediaFilterAccess(EntityTypeInterface $entity_type, AccountInterface $account): array {
     // @see \Drupal\media\MediaAccessControlHandler::checkAccess()
     return [
-      JsonApiFilter::AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'view media'),
+      JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'view media'),
     ];
   }
 
@@ -185,30 +184,30 @@ class JsonapiHooks {
     // @see \Drupal\node\NodeAccessControlHandler::access()
     if ($account->hasPermission('bypass node access')) {
       return [
-        JsonApiFilter::AMONG_ALL => AccessResult::allowed()->cachePerPermissions(),
+        JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed()->cachePerPermissions(),
       ];
     }
     if (!$account->hasPermission('access content')) {
       $forbidden = AccessResult::forbidden("The 'access content' permission is required.")->cachePerPermissions();
       return [
-        JsonApiFilter::AMONG_ALL => $forbidden,
-        JsonApiFilter::AMONG_OWN => $forbidden,
-        JsonApiFilter::AMONG_PUBLISHED => $forbidden,
+        JSONAPI_FILTER_AMONG_ALL => $forbidden,
+        JSONAPI_FILTER_AMONG_OWN => $forbidden,
+        JSONAPI_FILTER_AMONG_PUBLISHED => $forbidden,
         // For legacy reasons, the Node entity type has a "status" key, so
         // forbid this subset as well, even though it has no semantic meaning.
-        JsonApiFilter::AMONG_ENABLED => $forbidden,
+        JSONAPI_FILTER_AMONG_ENABLED => $forbidden,
       ];
     }
     return [
-      // @see \Drupal\node\NodeAccessControlHandler::checkAccess()
-      JsonApiFilter::AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'view own unpublished content'),
-      // @see \Drupal\node\NodeGrantDatabaseStorage::access()
-      // Note that:
-      // - This is just for the default grant. Other node access conditions
-      //   are added via the 'node_access' query tag.
-      // - Permissions were checked earlier in this function, so we must
-      //   vary the cache by them.
-      JsonApiFilter::AMONG_PUBLISHED => AccessResult::allowed()->cachePerPermissions(),
+          // @see \Drupal\node\NodeAccessControlHandler::checkAccess()
+      JSONAPI_FILTER_AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'view own unpublished content'),
+          // @see \Drupal\node\NodeGrantDatabaseStorage::access()
+          // Note that:
+          // - This is just for the default grant. Other node access conditions
+          //   are added via the 'node_access' query tag.
+          // - Permissions were checked earlier in this function, so we must
+          //   vary the cache by them.
+      JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowed()->cachePerPermissions(),
     ];
   }
 
@@ -222,7 +221,7 @@ class JsonapiHooks {
     // "shortcut_set = $shortcut_set_storage->getDisplayedToUser($current_user)"
     // so this does not have to.
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'administer shortcuts')->orIf(AccessResult::allowedIfHasPermissions($account, [
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'administer shortcuts')->orIf(AccessResult::allowedIfHasPermissions($account, [
         'access shortcuts',
         'customize shortcut links',
       ])),
@@ -236,8 +235,8 @@ class JsonapiHooks {
   public function jsonapiTaxonomyTermFilterAccess(EntityTypeInterface $entity_type, AccountInterface $account): array {
     // @see \Drupal\taxonomy\TermAccessControlHandler::checkAccess()
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'administer taxonomy'),
-      JsonApiFilter::AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'access content'),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'administer taxonomy'),
+      JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'access content'),
     ];
   }
 
@@ -250,8 +249,8 @@ class JsonapiHooks {
     // \Drupal\jsonapi\Access\TemporaryQueryGuard adds the condition for
     // (!isAnonymous()), so this does not have to.
     return [
-      JsonApiFilter::AMONG_OWN => AccessResult::allowed(),
-      JsonApiFilter::AMONG_ENABLED => AccessResult::allowedIfHasPermission($account, 'access user profiles'),
+      JSONAPI_FILTER_AMONG_OWN => AccessResult::allowed(),
+      JSONAPI_FILTER_AMONG_ENABLED => AccessResult::allowedIfHasPermission($account, 'access user profiles'),
     ];
   }
 
@@ -262,8 +261,8 @@ class JsonapiHooks {
   public function jsonapiWorkspaceFilterAccess(EntityTypeInterface $entity_type, AccountInterface $account): array {
     // @see \Drupal\workspaces\WorkspaceAccessControlHandler::checkAccess()
     return [
-      JsonApiFilter::AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view any workspace'),
-      JsonApiFilter::AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'view own workspace'),
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view any workspace'),
+      JSONAPI_FILTER_AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'view own workspace'),
     ];
   }
 

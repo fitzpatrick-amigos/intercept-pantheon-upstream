@@ -35,7 +35,7 @@ class OfficeHoursStatusFilter extends ManyToOne {
    * The formatter settings are taken from the main office_hours field.
    * This field is required and its name is defined in 'real field'.
    */
-  public function getValueOptions() {
+  public function getValueOptions(): array {
     if (!isset($this->valueOptions)) {
       $field_name = $this->configuration['real field'];
       $formatter_settings = $this->view->field[$field_name]->options['settings'] ?? [];
@@ -169,7 +169,7 @@ class OfficeHoursStatusFilter extends ManyToOne {
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
+  public function getCacheMaxAge(): int {
     $max_age = parent::getCacheMaxAge();
     // $max_age = $this->getDefaultCacheMaxAge();
     // $max_age = Cache::mergeMaxAges($max_age, $this->view->getQuery()

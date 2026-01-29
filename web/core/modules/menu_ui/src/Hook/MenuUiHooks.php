@@ -359,11 +359,7 @@ class MenuUiHooks {
       if ($plugin->getBaseId() === 'system_menu_block') {
         $menu = Menu::load($plugin->getDerivativeId());
         if ($menu && $menu->access('edit')) {
-          $operations['menu-edit'] = [
-            'title' => $this->t('Edit menu'),
-            'url' => $menu->toUrl('edit-form'),
-            'weight' => 50,
-          ];
+          $operations['menu-edit'] = ['title' => $this->t('Edit menu'), 'url' => $menu->toUrl('edit-form'), 'weight' => 50];
         }
       }
     }

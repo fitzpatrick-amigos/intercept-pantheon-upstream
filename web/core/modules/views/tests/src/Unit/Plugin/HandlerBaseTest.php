@@ -6,14 +6,11 @@ namespace Drupal\Tests\views\Unit\Plugin;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\Plugin\views\HandlerBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\views\Plugin\views\HandlerBase.
+ * @coversDefaultClass \Drupal\views\Plugin\views\HandlerBase
+ * @group Views
  */
-#[CoversClass(HandlerBase::class)]
-#[Group('Views')]
 class HandlerBaseTest extends UnitTestCase {
 
   use HandlerTestTrait;
@@ -30,9 +27,7 @@ class HandlerBaseTest extends UnitTestCase {
   }
 
   /**
-   * Tests get entity type for field on base table.
-   *
-   * @legacy-covers ::getEntityType
+   * @covers ::getEntityType
    */
   public function testGetEntityTypeForFieldOnBaseTable(): void {
     $handler = new TestHandler([], 'test_handler', []);
@@ -54,9 +49,7 @@ class HandlerBaseTest extends UnitTestCase {
   }
 
   /**
-   * Tests get entity type for field with relationship.
-   *
-   * @legacy-covers ::getEntityType
+   * @covers ::getEntityType
    */
   public function testGetEntityTypeForFieldWithRelationship(): void {
     $handler = new TestHandler([], 'test_handler', []);

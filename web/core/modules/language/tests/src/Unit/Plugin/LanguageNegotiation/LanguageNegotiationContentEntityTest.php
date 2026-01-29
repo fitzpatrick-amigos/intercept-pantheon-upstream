@@ -12,8 +12,6 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\language\ConfigurableLanguageManagerInterface;
 use Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationContentEntity;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ServerBag;
@@ -22,10 +20,10 @@ use Symfony\Component\Routing\Route;
 /**
  * Tests the LanguageNegotiationContentEntity plugin class.
  *
+ * @group language
+ * @coversDefaultClass \Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationContentEntity
  * @see \Drupal\language\Plugin\LanguageNegotiation\LanguageNegotiationContentEntity
  */
-#[CoversClass(LanguageNegotiationContentEntity::class)]
-#[Group('language')]
 class LanguageNegotiationContentEntityTest extends LanguageNegotiationTestBase {
 
   /**
@@ -97,9 +95,7 @@ class LanguageNegotiationContentEntityTest extends LanguageNegotiationTestBase {
   }
 
   /**
-   * Tests get langcode.
-   *
-   * @legacy-covers ::getLangcode
+   * @covers ::getLangcode
    */
   public function testGetLangcode(): void {
     $languageNegotiationContentEntity = $this->createLanguageNegotiationPlugin();
@@ -133,9 +129,7 @@ class LanguageNegotiationContentEntityTest extends LanguageNegotiationTestBase {
   }
 
   /**
-   * Tests process outbound.
-   *
-   * @legacy-covers ::processOutbound
+   * @covers ::processOutbound
    */
   public function testProcessOutbound(): void {
 
@@ -213,9 +207,7 @@ class LanguageNegotiationContentEntityTest extends LanguageNegotiationTestBase {
   }
 
   /**
-   * Tests get language switch links.
-   *
-   * @legacy-covers ::getLanguageSwitchLinks
+   * @covers ::getLanguageSwitchLinks
    */
   public function testGetLanguageSwitchLinks(): void {
     $languageNegotiationContentEntity = $this->createLanguageNegotiationPlugin();

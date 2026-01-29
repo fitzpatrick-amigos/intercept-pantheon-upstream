@@ -17,25 +17,48 @@ use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\views\ViewExecutable;
 
 /**
+ * FormElement base plugin class is deprecated and renamed to FormElementBase.
+ *
+ * @see https://www.drupal.org/node/3436275
+ */
+if (class_exists('\Drupal\Core\Render\Element\FormElementBase')) {
+  class_alias(
+    '\Drupal\Core\Render\Element\FormElementBase',
+    '\Drupal\office_hours\Element\FormElementBase'
+  );
+}
+else {
+  class_alias(
+    '\Drupal\Core\Render\Element\FormElement',
+    '\Drupal\office_hours\Element\FormElementBase'
+  );
+}
+
+
+/**
+ * Hook preprocess_field must remain procedural (message in D11.1).
+ *
+ * In Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
+ *
  * @see https://www.drupal.org/project/office_hours/issues/3505428
  * @see https://drupalize.me/blog/drupal-111-adds-hooks-classes-history-how-and-tutorials-weve-updated
- * Note: Hook preprocess_field must remain procedural (message in D11.1).
- * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
  */
 
 /**
  * Implements hook_field_type_category_info_alter().
+ *
+ * Add field type icon.
  */
 #[LegacyHook]
-function office_hours_field_type_category_info_alter(&$definitions) {
-  return \Drupal::service(OfficeHoursFieldHooks::class)->field_type_category_info_alter($definitions);
+function office_hours_field_type_category_info_alter(&$definitions): void {
+  \Drupal::service(OfficeHoursFieldHooks::class)->fieldTypeCategoryInfoAlter($definitions);
 }
 
 /**
  * Implements hook_help() on 'help.page.office_hours'.
  */
 #[LegacyHook]
-function office_hours_help($route_name, RouteMatchInterface $route_match) {
+function office_hours_help($route_name, RouteMatchInterface $route_match): string {
   return \Drupal::service(OfficeHoursFieldHooks::class)->help($route_name, $route_match);
 }
 
@@ -45,8 +68,8 @@ function office_hours_help($route_name, RouteMatchInterface $route_match) {
  * Note: Hook preprocess_field must remain procedural (message in D11.1).
  * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
  */
-function office_hours_preprocess_field(&$variables, $hook) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->preprocess_field($variables, $hook);
+function office_hours_preprocess_field(&$variables, $hook): void {
+  \Drupal::service(OfficeHoursThemeHooks::class)->preprocessField($variables, $hook);
 }
 
 /**
@@ -55,8 +78,8 @@ function office_hours_preprocess_field(&$variables, $hook) {
  * Note: Hook preprocess_field must remain procedural (message in D11.1).
  * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
  */
-function office_hours_preprocess_office_hours(&$variables) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->preprocess_office_hours($variables);
+function office_hours_preprocess_office_hours(&$variables): void {
+  \Drupal::service(OfficeHoursThemeHooks::class)->preprocessOfficeHours($variables);
 }
 
 /**
@@ -65,8 +88,8 @@ function office_hours_preprocess_office_hours(&$variables) {
  * Note: Hook preprocess_field must remain procedural (message in D11.1).
  * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
  */
-function office_hours_preprocess_office_hours_status(&$variables) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->preprocess_office_hours_status($variables);
+function office_hours_preprocess_office_hours_status(&$variables): void {
+  \Drupal::service(OfficeHoursThemeHooks::class)->preprocessOfficeHoursStatus($variables);
 }
 
 /**
@@ -75,8 +98,8 @@ function office_hours_preprocess_office_hours_status(&$variables) {
  * Note: Hook preprocess_field must remain procedural (message in D11.1).
  * in Drupal\Core\Hook\HookCollectorPass::checkForProceduralOnlyHooks().
  */
-function office_hours_preprocess_office_hours_table(&$variables) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->preprocess_office_hours_table($variables);
+function office_hours_preprocess_office_hours_table(&$variables): void {
+  \Drupal::service(OfficeHoursThemeHooks::class)->preprocessOfficeHoursTable($variables);
 }
 
 /**
@@ -92,21 +115,21 @@ function office_hours_theme() {
  */
 #[LegacyHook]
 function office_hours_theme_suggestions_office_hours(array $variables) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->theme_suggestions_office_hours($variables);
+  return \Drupal::service(OfficeHoursThemeHooks::class)->themeSuggestionsOfficeHours($variables);
 }
 
 /**
  * Implements hook_theme_suggestions_HOOK().
  */
 function office_hours_theme_suggestions_office_hours_status(array $variables) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->theme_suggestions_office_hours_status($variables);
+  return \Drupal::service(OfficeHoursThemeHooks::class)->themeSuggestionsOfficeHoursStatus($variables);
 }
 
 /**
  * Implements hook_theme_suggestions_HOOK().
  */
 function office_hours_theme_suggestions_office_hours_table(array $variables) {
-  return \Drupal::service(OfficeHoursThemeHooks::class)->theme_suggestions_office_hours_table($variables);
+  return \Drupal::service(OfficeHoursThemeHooks::class)->themeSuggestionsOfficeHoursTable($variables);
 }
 
 /**
@@ -170,6 +193,10 @@ function office_hours_views_post_render(ViewExecutable $view, array &$output, Ca
  */
 function office_hours_office_hours_time_format_alter(string &$formatted_time) {
   // Only to test the alter hook in office_hours.api.php .
+  $date_time = new \DateTime();
+  // $date_time->setTimestamp($time);
+  $date_time->setTimezone(new \DateTimeZone('Asia/Manila'));
+  $time = $date_time->getTimestamp();
 }
 
 /**
@@ -177,4 +204,10 @@ function office_hours_office_hours_time_format_alter(string &$formatted_time) {
  */
 function office_hours_office_hours_current_time_alter(int &$time, $entity) {
   // Only to test the alter hook in office_hours.api.php .
+
+  $date_time = new \DateTime();
+  $date_time->setTimestamp($time);
+  $date_time->setTimezone(new \DateTimeZone('Asia/Manila'));
+  $time = $date_time->getTimestamp();
+  // After this set timezone, i am expecting that store status will be display as per Manila timezone irrespective on user timezone.
 }

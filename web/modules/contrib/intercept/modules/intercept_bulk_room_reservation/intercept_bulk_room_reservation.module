@@ -15,7 +15,6 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_theme().
@@ -302,16 +301,6 @@ function intercept_bulk_room_reservation_room_reservation_predelete(EntityInterf
         }
       }
     }
-  }
-}
-
-
-/**
- * Implements hook_entity_delete().
- */
-function intercept_bulk_room_reservation_entity_delete(EntityInterface $entity) {
-  if ($entity->getEntityTypeId() == 'bulk_room_reservation') {
-    return new RedirectResponse('/manage/bulk-room-reservations');
   }
 }
 

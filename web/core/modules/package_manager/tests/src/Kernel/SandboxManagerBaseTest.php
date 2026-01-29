@@ -11,8 +11,8 @@ use Drupal\package_manager\Event\CollectPathsToExcludeEvent;
 use Drupal\package_manager\Event\PreCreateEvent;
 use Drupal\package_manager\Event\SandboxEvent;
 use Drupal\package_manager\Exception\ApplyFailedException;
-use Drupal\package_manager\Exception\FailureMarkerExistsException;
 use Drupal\package_manager\Exception\SandboxException;
+use Drupal\package_manager\Exception\FailureMarkerExistsException;
 use Drupal\package_manager\FailureMarker;
 use Drupal\package_manager\PathLocator;
 use Drupal\package_manager\SandboxManagerBase;
@@ -23,20 +23,13 @@ use Drupal\package_manager_bypass\NoOpStager;
 use PhpTuf\ComposerStager\API\Core\BeginnerInterface;
 use PhpTuf\ComposerStager\API\Core\CommitterInterface;
 use PhpTuf\ComposerStager\API\Core\StagerInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Drupal\package_manager\SandboxManagerBase.
- *
+ * @coversDefaultClass \Drupal\package_manager\SandboxManagerBase
+ * @group package_manager
+ * @group #slow
  * @internal
  */
-#[CoversClass(SandboxManagerBase::class)]
-#[Group('package_manager')]
-#[Group('#slow')]
-#[RunTestsInSeparateProcesses]
 class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
 
   use StringTranslationTrait;
@@ -59,10 +52,8 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests metadata.
-   *
-   * @legacy-covers ::getMetadata
-   * @legacy-covers ::setMetadata
+   * @covers ::getMetadata
+   * @covers ::setMetadata
    */
   public function testMetadata(): void {
     $stage = $this->createStage();
@@ -99,9 +90,7 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests get sandbox directory.
-   *
-   * @legacy-covers ::getSandboxDirectory
+   * @covers ::getSandboxDirectory
    */
   public function testGetSandboxDirectory(): void {
     // In this test, we're working with paths that (probably) don't exist in
@@ -138,9 +127,7 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests uncreated get sandbox directory.
-   *
-   * @legacy-covers ::getSandboxDirectory
+   * @covers ::getSandboxDirectory
    */
   public function testUncreatedGetSandboxDirectory(): void {
     $this->expectException(\LogicException::class);
@@ -296,8 +283,9 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
    *   A message about why the stage was destroyed or null.
    * @param string $expected_exception_message
    *   The expected exception message string.
+   *
+   * @dataProvider providerStoreDestroyInfo
    */
-  #[DataProvider('providerStoreDestroyInfo')]
   public function testStoreDestroyInfo(bool $force, bool $changes_applied, ?TranslatableMarkup $message, string $expected_exception_message): void {
     $stage = $this->createStage();
     $stage_id = $stage->create();
@@ -363,8 +351,9 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
    *   The fully qualified name of the Composer Stager class that should throw
    *   an exception. It is expected to have a static ::setException() method,
    *   provided by \Drupal\package_manager_bypass\ComposerStagerExceptionTrait.
+   *
+   * @dataProvider providerFailureDuringComposerStagerOperations
    */
-  #[DataProvider('providerFailureDuringComposerStagerOperations')]
   public function testFailureDuringComposerStagerOperations(string $throwing_class): void {
     $exception_message = "$throwing_class is angry!";
     $throwing_class::setException(\Exception::class, $exception_message, 1024);
@@ -456,9 +445,7 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests stage directory exists.
-   *
-   * @legacy-covers ::sandboxDirectoryExists
+   * @covers ::sandboxDirectoryExists
    */
   public function testStageDirectoryExists(): void {
     // Ensure that stageDirectoryExists() returns an accurate result during
@@ -480,8 +467,8 @@ class SandboxManagerBaseTest extends PackageManagerKernelTestBase {
   /**
    * Tests that destroyed stage directories are actually deleted during cron.
    *
-   * @legacy-covers ::destroy
-   * @legacy-covers \Drupal\package_manager\Plugin\QueueWorker\Cleaner
+   * @covers ::destroy
+   * @covers \Drupal\package_manager\Plugin\QueueWorker\Cleaner
    */
   public function testStageDirectoryDeletedDuringCron(): void {
     $stage = $this->createStage();

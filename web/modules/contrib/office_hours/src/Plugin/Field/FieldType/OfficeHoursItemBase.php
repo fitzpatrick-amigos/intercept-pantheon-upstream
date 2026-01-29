@@ -6,6 +6,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\Url;
 use Drupal\office_hours\OfficeHoursDateHelper;
@@ -18,7 +19,7 @@ class OfficeHoursItemBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function schema(FieldStorageDefinitionInterface $field_definition) {
+  public static function schema(FieldStorageDefinitionInterface $field_definition): array {
     return [
       'columns' => [
         'day' => [
@@ -49,7 +50,7 @@ class OfficeHoursItemBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
+  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition): array {
     $labels = OfficeHoursItem::getPropertyLabels('data');
 
     $properties['day'] = DataDefinition::create('integer')
@@ -96,7 +97,7 @@ class OfficeHoursItemBase extends FieldItemBase {
    * @return array
    *   The keyed set of translated labels.
    */
-  public static function getPropertyLabels($parent, array $field_settings = []) {
+  public static function getPropertyLabels($parent, array $field_settings = []): array {
     /*
      * Hmm, from where to take the titles...
      * - office_hours.schema.yml does not contain semi-computed all_day,
@@ -112,7 +113,7 @@ class OfficeHoursItemBase extends FieldItemBase {
     // "for the strings From and To in Context 'A point in time'.
     // for locale module, path: '/admin/config/regional/translate'
     if (\Drupal::currentUser()->hasPermission('translate interface')) {
-      // OfficeHoursItem::addMessage();
+      // OfficeHoursItem::addTranslationMessage();
     }
 
     // Added for propertyDefinition.
@@ -149,7 +150,7 @@ class OfficeHoursItemBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultStorageSettings() {
+  public static function defaultStorageSettings(): array {
     $defaultStorageSettings = [
       'time_format' => 'G',
       'element_type' => 'office_hours_datetime',
@@ -200,7 +201,7 @@ class OfficeHoursItemBase extends FieldItemBase {
 
     // "In order to get proper UX, check User interface translation page
     // "for the strings From and To in Context 'A point in time'.
-    OfficeHoursItem::addMessage();
+    OfficeHoursItem::addTranslationMessage();
 
     // Get a formatted list of valid hours values.
     $hours = OfficeHoursDateHelper::hours('H', FALSE);
@@ -348,9 +349,15 @@ class OfficeHoursItemBase extends FieldItemBase {
   }
 
   /**
-   * Adds a message to the user, to hint to proper translation.
+   * Adds a new message to the user, to hint to proper translation.
+   *
+   * The messages will be displayed in the order they got added later.
+   *
+   * @param string|null $type
+   *   (optional) The message's type. Either self::TYPE_STATUS,
+   *   self::TYPE_WARNING, or self::TYPE_ERROR.
    */
-  public static function addMessage() {
+  public static function addTranslationMessage(?string $type = MessengerInterface::TYPE_STATUS): void {
     if (\Drupal::moduleHandler()->moduleExists('locale')) {
       \Drupal::messenger()->addMessage(t(
         "In order to get a proper user experience in the Office Hours widget,
@@ -363,14 +370,14 @@ class OfficeHoursItemBase extends FieldItemBase {
           '%from' => 'From',
           '%to' => 'To',
         ]
-      ));
+      ), $type, FALSE);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     $value = [
       'day' => mt_rand(0, 6),
       'starthours' => mt_rand(00, 23) * 100,
@@ -383,7 +390,7 @@ class OfficeHoursItemBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public function applyDefaultValue($notify = TRUE) {
+  public function applyDefaultValue($notify = TRUE): static {
     // Apply the default value of all properties.
     // parent::applyDefaultValue($notify);.
     $this->setValue([], $notify);
@@ -395,7 +402,7 @@ class OfficeHoursItemBase extends FieldItemBase {
    *
    * {@inheritdoc}
    */
-  public static function sort(OfficeHoursItem $a, OfficeHoursItem $b) {
+  public static function sort(OfficeHoursItem $a, OfficeHoursItem $b): int {
     // Sort the item on date (but leave hours untouched).
     // @see https://www.php.net/manual/en/array.sorting.php
     // "If any of these sort functions evaluates two members as equal
@@ -407,7 +414,7 @@ class OfficeHoursItemBase extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public function getConstraints() {
+  public function getConstraints(): array {
     $constraints = [];
 
     // @todo When adding parent::getConstraints(), only English is allowed...
@@ -444,7 +451,7 @@ class OfficeHoursItemBase extends FieldItemBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public static function validateStorageSettings(array $element, FormStateInterface &$form_state) {
+  public static function validateStorageSettings(array $element, FormStateInterface &$form_state): void {
     if (!empty($element['limit_end']['#value']) &&
       $element['limit_end']['#value'] < $element['limit_start']['#value']) {
       $form_state->setError($element['limit_start'], t('%start is later then %end.', [

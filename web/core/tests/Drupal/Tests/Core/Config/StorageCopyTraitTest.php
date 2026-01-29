@@ -11,26 +11,21 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
- * Tests Drupal\Core\Config\StorageCopyTrait.
+ * @coversDefaultClass \Drupal\Core\Config\StorageCopyTrait
+ * @group Config
  */
-#[CoversClass(StorageCopyTrait::class)]
-#[Group('Config')]
 class StorageCopyTraitTest extends UnitTestCase {
 
   use StorageCopyTrait;
 
   /**
-   * Tests replace storage contents.
+   * @covers ::replaceStorageContents
    *
-   * @legacy-covers ::replaceStorageContents
+   * @dataProvider providerTestReplaceStorageContents
    */
-  #[DataProvider('providerTestReplaceStorageContents')]
   public function testReplaceStorageContents($source_collections, $target_collections): void {
     $source = new MemoryStorage();
     $target = new MemoryStorage();
@@ -125,7 +120,7 @@ class StorageCopyTraitTest extends UnitTestCase {
   /**
    * Tests replaceStorageContents() with config with an invalid configuration.
    *
-   * @legacy-covers ::replaceStorageContents
+   * @covers ::replaceStorageContents
    */
   public function testWithInvalidConfiguration(): void {
     $source = new TestStorage();

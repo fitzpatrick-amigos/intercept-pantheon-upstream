@@ -264,15 +264,13 @@ class MigrationLookup extends ProcessPluginBase implements ContainerFactoryPlugi
         // Build a new message.
         $skip_row_exception_message = $e->getMessage();
         if (empty($skip_row_exception_message)) {
-          $new_message = sprintf("Migration lookup for value '%s' and destination '%s' attempted to create a stub using migration %s, which resulted in a row skip",
-            $value,
+          $new_message = sprintf("Migration lookup for destination '%s' attempted to create a stub using migration %s, which resulted in a row skip",
             $destination_property,
             $stub_migration,
           );
         }
         else {
-          $new_message = sprintf("Migration lookup for value '%s' and destination '%s' attempted to create a stub using migration %s, which resulted in a row skip, with message '%s'",
-            $value,
+          $new_message = sprintf("Migration lookup for destination '%s' attempted to create a stub using migration %s, which resulted in a row skip, with message '%s'",
             $destination_property,
             $stub_migration,
             $skip_row_exception_message,

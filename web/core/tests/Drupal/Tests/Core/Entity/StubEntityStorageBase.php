@@ -17,7 +17,7 @@ class StubEntityStorageBase extends EntityStorageBase {
   /**
    * {@inheritdoc}
    */
-  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): static {
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return new static();
   }
 

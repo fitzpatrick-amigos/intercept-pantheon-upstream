@@ -9,17 +9,13 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\GeneratedUrl;
 use Drupal\Core\Render\Element\RenderElementBase;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests Drupal\Core\Render\Element\RenderElementBase.
+ * @coversDefaultClass \Drupal\Core\Render\Element\RenderElementBase
+ * @group Render
  */
-#[CoversClass(RenderElementBase::class)]
-#[Group('Render')]
 class RenderElementTest extends UnitTestCase {
 
   /**
@@ -49,9 +45,7 @@ class RenderElementTest extends UnitTestCase {
   }
 
   /**
-   * Tests pre render ajax form.
-   *
-   * @legacy-covers ::preRenderAjaxForm
+   * @covers ::preRenderAjaxForm
    */
   public function testPreRenderAjaxForm(): void {
     $request = Request::create('/test');
@@ -60,14 +54,8 @@ class RenderElementTest extends UnitTestCase {
 
     $prophecy = $this->prophesize('Drupal\Core\Routing\UrlGeneratorInterface');
     $url = '/test?foo=bar&ajax_form=1';
-    $prophecy->generateFromRoute('<current>', [], [
-      'query' => [
-        'foo' => 'bar',
-        FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
-      ],
-    ], TRUE)
-      ->willReturn((new GeneratedUrl())->setCacheContexts(['route'])
-        ->setGeneratedUrl($url));
+    $prophecy->generateFromRoute('<current>', [], ['query' => ['foo' => 'bar', FormBuilderInterface::AJAX_FORM_REQUEST => TRUE]], TRUE)
+      ->willReturn((new GeneratedUrl())->setCacheContexts(['route'])->setGeneratedUrl($url));
 
     $url_generator = $prophecy->reveal();
     $this->container->set('url_generator', $url_generator);
@@ -88,9 +76,7 @@ class RenderElementTest extends UnitTestCase {
   }
 
   /**
-   * Tests pre render ajax form with query options.
-   *
-   * @legacy-covers ::preRenderAjaxForm
+   * @covers ::preRenderAjaxForm
    */
   public function testPreRenderAjaxFormWithQueryOptions(): void {
     $request = Request::create('/test');
@@ -99,16 +85,8 @@ class RenderElementTest extends UnitTestCase {
 
     $prophecy = $this->prophesize('Drupal\Core\Routing\UrlGeneratorInterface');
     $url = '/test?foo=bar&other=query&ajax_form=1';
-    $prophecy->generateFromRoute('<current>', [], [
-      'query' => [
-        'foo' => 'bar',
-        'other' => 'query',
-        FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
-      ],
-    ], TRUE)
-      ->willReturn(
-        (new GeneratedUrl())->setCacheContexts(['route'])->setGeneratedUrl($url)
-       );
+    $prophecy->generateFromRoute('<current>', [], ['query' => ['foo' => 'bar', 'other' => 'query', FormBuilderInterface::AJAX_FORM_REQUEST => TRUE]], TRUE)
+      ->willReturn((new GeneratedUrl())->setCacheContexts(['route'])->setGeneratedUrl($url));
 
     $url_generator = $prophecy->reveal();
     $this->container->set('url_generator', $url_generator);
@@ -134,11 +112,10 @@ class RenderElementTest extends UnitTestCase {
   }
 
   /**
-   * Tests set attributes.
+   * @covers ::setAttributes
    *
-   * @legacy-covers ::setAttributes
+   * @dataProvider providerTestSetAttributes
    */
-  #[DataProvider('providerTestSetAttributes')]
   public function testSetAttributes(array $element, array $class, array $expected): void {
     RenderElementBase::setAttributes($element, $class);
     $this->assertSame($expected, $element);

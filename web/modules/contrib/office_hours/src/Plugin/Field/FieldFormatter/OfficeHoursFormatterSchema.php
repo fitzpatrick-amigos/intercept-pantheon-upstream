@@ -43,7 +43,7 @@ class OfficeHoursFormatterSchema extends OfficeHoursFormatterBase {
    *     Monday through Sunday, all day
    *   </time>.
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       // The following settings are fixed in the Microdata settings.
       'day_format' => 'two_letter', // Mo, Tu, We, Th, Fr, Sa, Su.
@@ -65,7 +65,7 @@ class OfficeHoursFormatterSchema extends OfficeHoursFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = parent::viewElements($items, $langcode);
 
     // Hide the formatter if no data is filled for this entity,

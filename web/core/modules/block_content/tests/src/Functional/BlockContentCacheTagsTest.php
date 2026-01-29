@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace Drupal\Tests\block_content\Functional;
 
 use Drupal\block_content\Entity\BlockContent;
+use Drupal\block_content\Entity\BlockContentType;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Tests\block_content\Traits\BlockContentCreationTrait;
 use Drupal\Tests\system\Functional\Entity\EntityCacheTagsTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the Content Block entity's cache tags.
+ *
+ * @group block_content
  */
-#[Group('block_content')]
-#[RunTestsInSeparateProcesses]
 class BlockContentCacheTagsTest extends EntityCacheTagsTestBase {
-
-  use BlockContentCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -36,11 +32,13 @@ class BlockContentCacheTagsTest extends EntityCacheTagsTestBase {
    * {@inheritdoc}
    */
   protected function createEntity() {
-    $this->createBlockContentType([
+    $block_content_type = BlockContentType::create([
       'id' => 'basic',
       'label' => 'basic',
       'revision' => FALSE,
-    ], TRUE);
+    ]);
+    $block_content_type->save();
+    block_content_add_body_field($block_content_type->id());
 
     // Create a "Llama" content block.
     $block_content = BlockContent::create([

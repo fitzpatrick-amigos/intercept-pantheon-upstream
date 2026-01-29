@@ -18,27 +18,22 @@ use Drupal\Core\Render\HtmlResponse;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\TestTools\Random;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests Drupal\big_pipe\Render\BigPipeResponseAttachmentsProcessor.
+ * @coversDefaultClass \Drupal\big_pipe\Render\BigPipeResponseAttachmentsProcessor
+ * @group big_pipe
  */
-#[CoversClass(BigPipeResponseAttachmentsProcessor::class)]
-#[Group('big_pipe')]
 class BigPipeResponseAttachmentsProcessorTest extends UnitTestCase {
 
   /**
-   * Tests non html response.
+   * @covers ::processAttachments
    *
-   * @legacy-covers ::processAttachments
+   * @dataProvider nonHtmlResponseProvider
    */
-  #[DataProvider('nonHtmlResponseProvider')]
   public function testNonHtmlResponse($response_class): void {
     $big_pipe_response_attachments_processor = $this->createBigPipeResponseAttachmentsProcessor($this->prophesize(AttachmentsResponseProcessorInterface::class));
 
@@ -58,11 +53,10 @@ class BigPipeResponseAttachmentsProcessorTest extends UnitTestCase {
   }
 
   /**
-   * Tests html response.
+   * @covers ::processAttachments
    *
-   * @legacy-covers ::processAttachments
+   * @dataProvider attachmentsProvider
    */
-  #[DataProvider('attachmentsProvider')]
   public function testHtmlResponse(array $attachments): void {
     $big_pipe_response = new BigPipeResponse(new HtmlResponse('original'));
     $big_pipe_response->setAttachments($attachments);

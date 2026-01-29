@@ -6,14 +6,11 @@ namespace Drupal\Tests\Core\ProxyBuilder;
 
 use Drupal\Core\ProxyBuilder\ProxyBuilder;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\ProxyBuilder\ProxyBuilder.
+ * @coversDefaultClass \Drupal\Core\ProxyBuilder\ProxyBuilder
+ * @group proxy_builder
  */
-#[CoversClass(ProxyBuilder::class)]
-#[Group('proxy_builder')]
 class ProxyBuilderTest extends UnitTestCase {
 
   /**
@@ -33,11 +30,9 @@ class ProxyBuilderTest extends UnitTestCase {
   }
 
   /**
-   * Tests build complex method.
-   *
-   * @legacy-covers ::buildMethod
-   * @legacy-covers ::buildParameter
-   * @legacy-covers ::buildMethodBody
+   * @covers ::buildMethod
+   * @covers ::buildParameter
+   * @covers ::buildMethodBody
    */
   public function testBuildComplexMethod(): void {
     $class = 'Drupal\Tests\Core\ProxyBuilder\TestServiceComplexMethod';
@@ -74,7 +69,7 @@ EOS;
    * @return string
    *   The code of the entire proxy.
    */
-  protected function buildExpectedClass($class, $expected_methods_body, $interface_string = ''): string {
+  protected function buildExpectedClass($class, $expected_methods_body, $interface_string = '') {
     $reflection = new \ReflectionClass($class);
     $namespace = ProxyBuilder::buildProxyNamespace($class);
     $proxy_class = $reflection->getShortName();

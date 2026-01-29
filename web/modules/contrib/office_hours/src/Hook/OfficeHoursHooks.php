@@ -20,7 +20,7 @@ class OfficeHoursHooks {
    * Implements hook_tokens().
    */
   #[Hook('tokens')]
-  public function tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  public function tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
 
     $replacements = [];
 
@@ -46,10 +46,10 @@ class OfficeHoursHooks {
           return $replacements;
         }
         $list = [$list->get($parts[0])];
-        $property = $parts[1];
+        $property = $parts[1] ?? NULL;
       }
       else {
-        $property = $parts[0];
+        $property = $parts[0] ?? NULL;
       }
       foreach ($list as $item) {
         /** @var \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem $item */

@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Core\Routing;
 
+use Drupal\Tests\UnitTestCase;
 use Drupal\Core\Routing\LazyRouteCollection;
 use Drupal\Core\Routing\RouteProviderInterface;
-use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\Core\Routing\LazyRouteCollection.
+ * @coversDefaultClass \Drupal\Core\Routing\LazyRouteCollection
+ *
+ * @group Routing
  */
-#[CoversClass(LazyRouteCollection::class)]
-#[Group('Routing')]
 class LazyRouteCollectionTest extends UnitTestCase {
 
   /**
@@ -46,10 +44,8 @@ class LazyRouteCollectionTest extends UnitTestCase {
   }
 
   /**
-   * Tests get iterator.
-   *
-   * @legacy-covers ::getIterator
-   * @legacy-covers ::all
+   * @covers ::getIterator
+   * @covers ::all
    */
   public function testGetIterator(): void {
     $this->routeProvider->expects($this->exactly(2))
@@ -62,9 +58,7 @@ class LazyRouteCollectionTest extends UnitTestCase {
   }
 
   /**
-   * Tests count.
-   *
-   * @legacy-covers ::count
+   * @covers ::count
    */
   public function testCount(): void {
     $this->routeProvider
@@ -78,7 +72,7 @@ class LazyRouteCollectionTest extends UnitTestCase {
   /**
    * Search for a both an existing and a non-existing route.
    *
-   * @legacy-covers ::get
+   * @covers ::get
    */
   public function testGetName(): void {
     // Hit.

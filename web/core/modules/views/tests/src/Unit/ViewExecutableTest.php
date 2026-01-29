@@ -15,16 +15,12 @@ use Drupal\views\Plugin\views\cache\None as NoneCache;
 use Drupal\views\Plugin\views\pager\None as NonePager;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\views\ViewExecutable.
+ * @coversDefaultClass \Drupal\views\ViewExecutable
+ * @group views
  */
-#[CoversClass(ViewExecutable::class)]
-#[Group('views')]
 class ViewExecutableTest extends UnitTestCase {
 
   /**
@@ -120,7 +116,7 @@ class ViewExecutableTest extends UnitTestCase {
   /**
    * The display plugin manager.
    *
-   * @var \Drupal\views\Plugin\ViewsPluginManager
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
    */
   protected $displayPluginManager;
 
@@ -178,9 +174,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests get url with overridden url.
-   *
-   * @legacy-covers ::getUrl
+   * @covers ::getUrl
    */
   public function testGetUrlWithOverriddenUrl(): void {
     $url = Url::fromRoute('example');
@@ -190,9 +184,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests get url with path no placeholders.
-   *
-   * @legacy-covers ::getUrl
+   * @covers ::getUrl
    */
   public function testGetUrlWithPathNoPlaceholders(): void {
     $this->displayHandler->expects($this->any())
@@ -212,9 +204,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests get url without router display.
-   *
-   * @legacy-covers ::getUrl
+   * @covers ::getUrl
    */
   public function testGetUrlWithoutRouterDisplay(): void {
     $this->displayHandler = $this->createMock('Drupal\views\Plugin\views\display\DisplayPluginInterface');
@@ -228,9 +218,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests get url with placeholders and args.
-   *
-   * @legacy-covers ::getUrl
+   * @covers ::getUrl
    */
   public function testGetUrlWithPlaceholdersAndArgs(): void {
     $this->displayHandler->expects($this->any())
@@ -256,9 +244,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests get url with placeholders and without args.
-   *
-   * @legacy-covers ::getUrl
+   * @covers ::getUrl
    */
   public function testGetUrlWithPlaceholdersAndWithoutArgs(): void {
     $this->displayHandler->expects($this->any())
@@ -284,9 +270,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests get url with placeholders and without args and exception value.
-   *
-   * @legacy-covers ::getUrl
+   * @covers ::getUrl
    */
   public function testGetUrlWithPlaceholdersAndWithoutArgsAndExceptionValue(): void {
     $this->displayHandler->expects($this->any())
@@ -323,9 +307,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests build theme functions.
-   *
-   * @legacy-covers ::buildThemeFunctions
+   * @covers ::buildThemeFunctions
    */
   public function testBuildThemeFunctions(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -369,9 +351,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests generate handler id.
-   *
-   * @legacy-covers ::generateHandlerId
+   * @covers ::generateHandlerId
    */
   public function testGenerateHandlerId(): void {
     // Test the generateHandlerId() method.
@@ -381,16 +361,15 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests add handler.
+   * @covers ::addHandler
+   *
+   * @dataProvider addHandlerProvider
    *
    * @param string $option
    *   The option to set on the View.
    * @param string $handler_type
    *   The handler type to set.
-   *
-   * @legacy-covers ::addHandler
    */
-  #[DataProvider('addHandlerProvider')]
   public function testAddHandler($option, $handler_type): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
     /** @var \Drupal\views\Plugin\views\display\DisplayPluginBase|\PHPUnit\Framework\MockObject\MockObject $display */
@@ -424,16 +403,15 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests add handler with entity field.
+   * @covers ::addHandler
+   *
+   * @dataProvider addHandlerProvider
    *
    * @param string $option
    *   The option to set on the View.
    * @param string $handler_type
    *   The handler type to set.
-   *
-   * @legacy-covers ::addHandler
    */
-  #[DataProvider('addHandlerProvider')]
   public function testAddHandlerWithEntityField($option, $handler_type): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
     /** @var \Drupal\views\Plugin\views\display\DisplayPluginBase|\PHPUnit\Framework\MockObject\MockObject $display */
@@ -495,9 +473,9 @@ class ViewExecutableTest extends UnitTestCase {
    * @param bool $expected_to_be_attached
    *   Expected result.
    *
-   * @legacy-covers ::attachDisplays
+   * @covers ::attachDisplays
+   * @dataProvider providerAttachDisplays
    */
-  #[DataProvider('providerAttachDisplays')]
   public function testAttachDisplays($display_enabled, $access_granted, $expected_to_be_attached): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
     /** @var \Drupal\views\Plugin\views\display\DisplayPluginBase|\PHPUnit\Framework\MockObject\MockObject $display */
@@ -611,10 +589,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests set items per page before pre render.
-   *
-   * @legacy-covers ::setItemsPerPage
-   * @legacy-covers ::getItemsPerPage
+   * @covers ::setItemsPerPage
+   * @covers ::getItemsPerPage
    */
   public function testSetItemsPerPageBeforePreRender(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -626,10 +602,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests set items per page during pre render.
-   *
-   * @legacy-covers ::setItemsPerPage
-   * @legacy-covers ::getItemsPerPage
+   * @covers ::setItemsPerPage
+   * @covers ::getItemsPerPage
    */
   public function testSetItemsPerPageDuringPreRender(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -645,10 +619,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests set offset before pre render.
-   *
-   * @legacy-covers ::setOffset
-   * @legacy-covers ::getOffset
+   * @covers ::setOffset
+   * @covers ::getOffset
    */
   public function testSetOffsetBeforePreRender(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -660,10 +632,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests set offset during pre render.
-   *
-   * @legacy-covers ::setOffset
-   * @legacy-covers ::getOffset
+   * @covers ::setOffset
+   * @covers ::getOffset
    */
   public function testSetOffsetDuringPreRender(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -679,10 +649,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests set current page before pre render.
-   *
-   * @legacy-covers ::setCurrentPage
-   * @legacy-covers ::getCurrentPage
+   * @covers ::setCurrentPage
+   * @covers ::getCurrentPage
    */
   public function testSetCurrentPageBeforePreRender(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -694,10 +662,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests set current page during pre render.
-   *
-   * @legacy-covers ::setCurrentPage
-   * @legacy-covers ::getCurrentPage
+   * @covers ::setCurrentPage
+   * @covers ::getCurrentPage
    */
   public function testSetCurrentPageDuringPreRender(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -713,9 +679,7 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
-   * Tests cache is ignored during preview.
-   *
-   * @legacy-covers ::execute
+   * @covers ::execute
    */
   public function testCacheIsIgnoredDuringPreview(): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
@@ -748,9 +712,9 @@ class ViewExecutableTest extends UnitTestCase {
    * @param bool $expected_result
    *   The expected result when calling execute().
    *
-   * @legacy-covers ::execute
+   * @covers ::execute
+   * @dataProvider providerExecuteReturn
    */
-  #[DataProvider('providerExecuteReturn')]
   public function testExecuteReturn($display_enabled, $expected_result): void {
     /** @var \Drupal\views\ViewExecutable|\PHPUnit\Framework\MockObject\MockObject $view */
     /** @var \Drupal\views\Plugin\views\display\DisplayPluginBase|\PHPUnit\Framework\MockObject\MockObject $display */

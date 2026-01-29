@@ -6,60 +6,54 @@ namespace Drupal\Tests\Core\Extension;
 
 use Drupal\Core\Extension\ExtensionVersion;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Extension\ExtensionVersion.
+ * @coversDefaultClass \Drupal\Core\Extension\ExtensionVersion
+ *
+ * @group Extension
  */
-#[CoversClass(ExtensionVersion::class)]
-#[Group('Extension')]
 class ExtensionVersionTest extends UnitTestCase {
 
   /**
-   * Tests get major version.
+   * @covers ::getMajorVersion
+   *
+   * @dataProvider providerVersionInfos
    *
    * @param string $version
    *   The version string to test.
    * @param array $expected_version_info
    *   The expected version information.
-   *
-   * @legacy-covers ::getMajorVersion
    */
-  #[DataProvider('providerVersionInfos')]
   public function testGetMajorVersion(string $version, array $expected_version_info): void {
     $version = ExtensionVersion::createFromVersionString($version);
     $this->assertSame($expected_version_info['major'], $version->getMajorVersion());
   }
 
   /**
-   * Tests get minor version.
+   * @covers ::getMinorVersion
+   *
+   * @dataProvider providerVersionInfos
    *
    * @param string $version
    *   The version string to test.
    * @param array $expected_version_info
    *   The expected version information.
-   *
-   * @legacy-covers ::getMinorVersion
    */
-  #[DataProvider('providerVersionInfos')]
   public function testGetMinorVersion(string $version, array $expected_version_info): void {
     $version = ExtensionVersion::createFromVersionString($version);
     $this->assertSame($expected_version_info['minor'], $version->getMinorVersion());
   }
 
   /**
-   * Tests get version extra.
+   * @covers ::getVersionExtra
+   *
+   * @dataProvider providerVersionInfos
    *
    * @param string $version
    *   The version string to test.
    * @param array $expected_version_info
    *   The expected version information.
-   *
-   * @legacy-covers ::getVersionExtra
    */
-  #[DataProvider('providerVersionInfos')]
   public function testGetVersionExtra(string $version, array $expected_version_info): void {
     $version = ExtensionVersion::createFromVersionString($version);
     $this->assertSame($expected_version_info['extra'], $version->getVersionExtra());
@@ -250,14 +244,13 @@ class ExtensionVersionTest extends UnitTestCase {
   }
 
   /**
-   * Tests invalid version number.
+   * @covers ::createFromVersionString
+   *
+   * @dataProvider providerInvalidVersionNumber
    *
    * @param string $version
    *   The version string to test.
-   *
-   * @legacy-covers ::createFromVersionString
    */
-  #[DataProvider('providerInvalidVersionNumber')]
   public function testInvalidVersionNumber(string $version): void {
     $this->expectException(\UnexpectedValueException::class);
     $this->expectExceptionMessage("Unexpected version number in: $version");
@@ -294,14 +287,13 @@ class ExtensionVersionTest extends UnitTestCase {
   }
 
   /**
-   * Tests invalid version core prefix.
+   * @covers ::createFromVersionString
+   *
+   * @dataProvider providerInvalidVersionCorePrefix
    *
    * @param string $version
    *   The version string to test.
-   *
-   * @legacy-covers ::createFromVersionString
    */
-  #[DataProvider('providerInvalidVersionCorePrefix')]
   public function testInvalidVersionCorePrefix(string $version): void {
     $this->expectException(\UnexpectedValueException::class);
     $this->expectExceptionMessage("Unexpected version core prefix in $version. The only core prefix expected in \Drupal\Core\Extension\ExtensionVersion is: 8.x-");
@@ -324,14 +316,13 @@ class ExtensionVersionTest extends UnitTestCase {
   }
 
   /**
-   * Tests invalid branch core prefix.
+   * @covers ::createFromSupportBranch
+   *
+   * @dataProvider providerInvalidBranchCorePrefix
    *
    * @param string $branch
    *   The branch to test.
-   *
-   * @legacy-covers ::createFromSupportBranch
    */
-  #[DataProvider('providerInvalidBranchCorePrefix')]
   public function testInvalidBranchCorePrefix(string $branch): void {
     $this->expectException(\UnexpectedValueException::class);
     $this->expectExceptionMessage("Unexpected version core prefix in {$branch}0. The only core prefix expected in \Drupal\Core\Extension\ExtensionVersion is: 8.x-");
@@ -354,16 +345,15 @@ class ExtensionVersionTest extends UnitTestCase {
   }
 
   /**
-   * Tests create from support branch.
+   * @covers ::createFromSupportBranch
+   *
+   * @dataProvider providerCreateFromSupportBranch
    *
    * @param string $branch
    *   The branch to test.
    * @param string $expected_major
    *   The expected major version.
-   *
-   * @legacy-covers ::createFromSupportBranch
    */
-  #[DataProvider('providerCreateFromSupportBranch')]
   public function testCreateFromSupportBranch(string $branch, string $expected_major): void {
     $version = ExtensionVersion::createFromSupportBranch($branch);
     $this->assertInstanceOf(ExtensionVersion::class, $version);
@@ -409,14 +399,13 @@ class ExtensionVersionTest extends UnitTestCase {
   }
 
   /**
-   * Tests invalid branch.
+   * @covers ::createFromSupportBranch
+   *
+   * @dataProvider provideInvalidBranch
    *
    * @param string $branch
    *   The branch to test.
-   *
-   * @legacy-covers ::createFromSupportBranch
    */
-  #[DataProvider('provideInvalidBranch')]
   public function testInvalidBranch(string $branch): void {
     $this->expectException(\UnexpectedValueException::class);
     $this->expectExceptionMessage("Invalid support branch: $branch");

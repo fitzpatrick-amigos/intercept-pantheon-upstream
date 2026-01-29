@@ -8,41 +8,26 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Hook\Order\Order;
 
 /**
- * Provides hook implementations for testing the execution order of hooks.
+ * This class contains hook implementations.
  *
  * By default, these will be called in module order, which is predictable due
- * to the alphabetical module names.
- *
- * @see \Drupal\KernelTests\Core\Hook\HookOrderTest::testHookOrder()
- * @see \Drupal\KernelTests\Core\Hook\HookOrderTest::testBothParametersHookOrder()
+ * to the alphabetical module names. Some of the implementations are reordered
+ * using order attributes.
  */
 class CHooks {
 
-  /**
-   * Implements hook_test_hook().
-   *
-   * This implementation has no ordering modifications.
-   */
   #[Hook('test_hook')]
   public function testHook(): string {
     return __METHOD__;
   }
 
-  /**
-   * Implements hook_test_hook().
-   *
-   * This implementation is modified to be first.
-   */
   #[Hook('test_hook', order: Order::First)]
   public function testHookFirst(): string {
     return __METHOD__;
   }
 
   /**
-   * Implements hook_test_hook().
-   *
-   * This implementation is modified in class
-   * \Drupal\ddd_hook_order_test\Hook\DHooks to be first.
+   * This implementation is reordered from elsewhere.
    *
    * @see \Drupal\ddd_hook_order_test\Hook\DHooks
    */
@@ -52,10 +37,7 @@ class CHooks {
   }
 
   /**
-   * Implements hook_test_hook().
-   *
-   * This implementation is removed in class
-   * \Drupal\ddd_hook_order_test\Hook\DHooks.
+   * This implementation is removed from elsewhere.
    *
    * @see \Drupal\ddd_hook_order_test\Hook\DHooks
    */
@@ -64,13 +46,6 @@ class CHooks {
     return __METHOD__;
   }
 
-  /**
-   * Implements hook_test_hook().
-   *
-   * This implementation is modified in
-   * \Drupal\aaa_hook_order_test\Hook\AHooks::testBothParametersHook using the
-   * OrderAfter attribute.
-   */
   #[Hook('test_both_parameters_hook')]
   public function testBothParametersHook(): string {
     return __METHOD__;

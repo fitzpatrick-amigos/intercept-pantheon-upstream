@@ -29,4 +29,12 @@ class LayoutDiscoveryHooks {
     return NULL;
   }
 
+  /**
+   * Implements hook_theme().
+   */
+  #[Hook('theme')]
+  public function theme() : array {
+    return \Drupal::service('plugin.manager.core.layout')->getThemeImplementations();
+  }
+
 }

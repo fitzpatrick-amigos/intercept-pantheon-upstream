@@ -8,14 +8,12 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Queue\DatabaseQueue;
 use Drupal\Core\Queue\Memory;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Queues and unqueues a set of items to check the basic queue functionality.
+ *
+ * @group Queue
  */
-#[Group('Queue')]
-#[RunTestsInSeparateProcesses]
 class QueueTest extends KernelTestBase {
 
   /**
@@ -109,7 +107,7 @@ class QueueTest extends KernelTestBase {
   /**
    * Returns the number of equal items in two arrays.
    */
-  protected function queueScore($items, $new_items): int {
+  protected function queueScore($items, $new_items) {
     $score = 0;
     foreach ($items as $item) {
       foreach ($new_items as $new_item) {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\Tests\content_moderation\Unit;
 
 use Drupal\content_moderation\Entity\Handler\ModerationHandler;
-use Drupal\content_moderation\ModerationInformation;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -13,18 +12,15 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\content_moderation\ModerationInformation;
 use Drupal\Tests\UnitTestCase;
 use Drupal\workflows\WorkflowInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
- * Tests Drupal\content_moderation\ModerationInformation.
+ * @coversDefaultClass \Drupal\content_moderation\ModerationInformation
+ * @group content_moderation
  */
-#[CoversClass(ModerationInformation::class)]
-#[Group('content_moderation')]
 class ModerationInformationTest extends UnitTestCase {
 
   /**
@@ -73,9 +69,7 @@ class ModerationInformationTest extends UnitTestCase {
   }
 
   /**
-   * Tests is moderated entity type.
-   *
-   * @legacy-covers ::isModeratedEntityType
+   * @covers ::isModeratedEntityType
    */
   public function testIsModeratedEntityType(): void {
     $moderation_information = new ModerationInformation($this->getEntityTypeManager(), $this->setupModerationBundleInfo('test_bundle', 'workflow'));
@@ -91,11 +85,9 @@ class ModerationInformationTest extends UnitTestCase {
   }
 
   /**
-   * Tests is moderated entity.
-   *
-   * @legacy-covers ::isModeratedEntity
+   * @covers ::isModeratedEntity
+   * @dataProvider providerWorkflow
    */
-  #[DataProvider('providerWorkflow')]
   public function testIsModeratedEntity($workflow, $expected): void {
     $moderation_information = new ModerationInformation($this->getEntityTypeManager(), $this->setupModerationBundleInfo('test_bundle', $workflow));
 
@@ -113,11 +105,9 @@ class ModerationInformationTest extends UnitTestCase {
   }
 
   /**
-   * Tests get workflow for entity.
-   *
-   * @legacy-covers ::getWorkflowForEntity
+   * @covers ::getWorkflowForEntity
+   * @dataProvider providerWorkflow
    */
-  #[DataProvider('providerWorkflow')]
   public function testGetWorkflowForEntity($workflow): void {
     $entity_type_manager = $this->prophesize(EntityTypeManagerInterface::class);
     if ($workflow) {
@@ -138,11 +128,9 @@ class ModerationInformationTest extends UnitTestCase {
   }
 
   /**
-   * Tests should moderate entities.
-   *
-   * @legacy-covers ::shouldModerateEntitiesOfBundle
+   * @covers ::shouldModerateEntitiesOfBundle
+   * @dataProvider providerWorkflow
    */
-  #[DataProvider('providerWorkflow')]
   public function testShouldModerateEntities($workflow, $expected): void {
     $entity_type = new ContentEntityType([
       'id' => 'test_entity_type',

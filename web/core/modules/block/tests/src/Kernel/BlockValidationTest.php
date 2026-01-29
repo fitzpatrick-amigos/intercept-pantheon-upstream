@@ -7,19 +7,13 @@ namespace Drupal\Tests\block\Kernel;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\KernelTests\Core\Config\ConfigEntityValidationTestBase;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests validation of block entities.
+ *
+ * @group block
+ * @group #slow
  */
-#[Group('block')]
-#[Group('#slow')]
-#[Group('config')]
-#[Group('Validation')]
-#[RunTestsInSeparateProcesses]
 class BlockValidationTest extends ConfigEntityValidationTestBase {
 
   /**
@@ -137,7 +131,7 @@ class BlockValidationTest extends ConfigEntityValidationTestBase {
     parent::testRequiredPropertyValuesMissing([
       'region' => [
         'region' => [
-          'This value should not be blank.',
+          'This is not a valid region of the <em class="placeholder">stark</em> theme.',
           'This value should not be null.',
         ],
       ],
@@ -177,9 +171,8 @@ class BlockValidationTest extends ConfigEntityValidationTestBase {
   }
 
   /**
- * Tests weight cannot be null.
- */
-  #[IgnoreDeprecations]
+   * @group legacy
+   */
   public function testWeightCannotBeNull(): void {
     $this->entity->set('weight', NULL);
     $this->assertNull($this->entity->getWeight());
@@ -250,8 +243,9 @@ class BlockValidationTest extends ConfigEntityValidationTestBase {
 
   /**
    * Tests validating menu block `level` and `depth` settings.
+   *
+   * @dataProvider providerMenuBlockLevelAndDepth
    */
-  #[DataProvider('providerMenuBlockLevelAndDepth')]
   public function testMenuBlockLevelAndDepth(int $level, ?int $depth, array $expected_errors): void {
     $this->installConfig('system');
 
@@ -262,7 +256,7 @@ class BlockValidationTest extends ConfigEntityValidationTestBase {
       'settings' => [
         'id' => 'system_menu_block:account',
         'label' => 'Account Menu',
-        'label_display' => '0',
+        'label_display' => FALSE,
         'provider' => 'system',
         'level' => $level,
         'depth' => $depth,

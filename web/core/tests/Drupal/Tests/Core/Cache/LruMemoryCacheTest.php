@@ -7,23 +7,20 @@ namespace Drupal\Tests\Core\Cache;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\MemoryCache\LruMemoryCache;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Cache\MemoryCache\LruMemoryCache.
+ * @coversDefaultClass \Drupal\Core\Cache\MemoryCache\LruMemoryCache
+ * @group Cache
  */
-#[CoversClass(LruMemoryCache::class)]
-#[Group('Cache')]
 class LruMemoryCacheTest extends UnitTestCase {
 
   /**
    * Tests getting, setting and deleting items from the LRU memory cache.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
-   * @legacy-covers ::delete
-   * @legacy-covers ::getMultiple
+   * @covers ::get
+   * @covers ::set
+   * @covers ::delete
+   * @covers ::getMultiple
    */
   public function testGetSetDelete(): void {
     $lru_cache = $this->getLruMemoryCache(3);
@@ -125,7 +122,7 @@ class LruMemoryCacheTest extends UnitTestCase {
   /**
    * Tests setting items with numeric keys in the LRU memory cache.
    *
-   * @legacy-covers ::set
+   * @covers ::set
    */
   public function testSetNumericKeys(): void {
     $lru_cache = $this->getLruMemoryCache(3);
@@ -158,7 +155,7 @@ class LruMemoryCacheTest extends UnitTestCase {
   /**
    * Tests setting multiple items in the LRU memory cache.
    *
-   * @legacy-covers ::setMultiple
+   * @covers ::setMultiple
    */
   public function testSetMultiple(): void {
     $lru_cache = $this->getLruMemoryCache(3);
@@ -209,9 +206,9 @@ class LruMemoryCacheTest extends UnitTestCase {
   /**
    * Tests invalidation from the LRU memory cache.
    *
-   * @legacy-covers ::invalidate
-   * @legacy-covers ::invalidateMultiple
-   * @legacy-covers ::invalidateTags
+   * @covers ::invalidate
+   * @covers ::invalidateMultiple
+   * @covers ::invalidateTags
    */
   public function testInvalidate(): void {
     $lru_cache = $this->getLruMemoryCache(3);
@@ -283,9 +280,9 @@ class LruMemoryCacheTest extends UnitTestCase {
   /**
    * Tests invalidation with numeric keys from the LRU memory cache.
    *
-   * @legacy-covers ::invalidate
-   * @legacy-covers ::invalidateMultiple
-   * @legacy-covers ::invalidateTags
+   * @covers ::invalidate
+   * @covers ::invalidateMultiple
+   * @covers ::invalidateTags
    */
   public function testInvalidateNumeric(): void {
     $lru_cache = $this->getLruMemoryCache(3);

@@ -6,19 +6,15 @@ namespace Drupal\Tests\Core\ParamConverter;
 
 use Drupal\Core\ParamConverter\ParamConverterManager;
 use Drupal\Core\ParamConverter\ParamNotConvertedException;
-use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Tests Drupal\Core\ParamConverter\ParamConverterManager.
+ * @coversDefaultClass \Drupal\Core\ParamConverter\ParamConverterManager
+ * @group ParamConverter
  */
-#[CoversClass(ParamConverterManager::class)]
-#[Group('ParamConverter')]
 class ParamConverterManagerTest extends UnitTestCase {
 
   /**
@@ -38,9 +34,10 @@ class ParamConverterManagerTest extends UnitTestCase {
   /**
    * Tests \Drupal\Core\ParamConverter\ParamConverterManager::getConverter().
    *
-   * @legacy-covers ::getConverter
+   * @dataProvider providerTestGetConverter
+   *
+   * @covers ::getConverter
    */
-  #[DataProvider('providerTestGetConverter')]
   public function testGetConverter($name, $class): void {
     $converter = $this->getMockBuilder('Drupal\Core\ParamConverter\ParamConverterInterface')
       ->setMockClassName($class)
@@ -56,7 +53,7 @@ class ParamConverterManagerTest extends UnitTestCase {
   /**
    * Tests \Drupal\Core\ParamConverter\ParamConverterManager::getConverter().
    *
-   * @legacy-covers ::getConverter
+   * @covers ::getConverter
    */
   public function testGetConverterException(): void {
     $this->expectException(\InvalidArgumentException::class);
@@ -72,7 +69,7 @@ class ParamConverterManagerTest extends UnitTestCase {
    *
    * @see ParamConverterManagerTest::testAddConverter()
    */
-  public function providerTestAddConverter(): array {
+  public function providerTestAddConverter() {
     $converters[0]['unsorted'] = [
       ['name' => 'strawberry'],
       ['name' => 'raspberry'],
@@ -115,7 +112,7 @@ class ParamConverterManagerTest extends UnitTestCase {
    *
    * @see ParamConverterManagerTest::testGetConverter()
    */
-  public static function providerTestGetConverter(): array {
+  public static function providerTestGetConverter() {
     return [
       ['ape', 'ApeConverterClass'],
       ['cat', 'CatConverterClass'],
@@ -128,11 +125,10 @@ class ParamConverterManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests set route parameter converters.
+   * @covers ::setRouteParameterConverters
    *
-   * @legacy-covers ::setRouteParameterConverters
+   * @dataProvider providerTestSetRouteParameterConverters
    */
-  #[DataProvider('providerTestSetRouteParameterConverters')]
   public function testSetRouteParameterConverters($path, $parameters = NULL, $expected = NULL): void {
     $converter = $this->createMock('Drupal\Core\ParamConverter\ParamConverterInterface');
     $converter->expects($this->any())
@@ -163,7 +159,7 @@ class ParamConverterManagerTest extends UnitTestCase {
   /**
    * Provides data for testSetRouteParameterConverters().
    */
-  public static function providerTestSetRouteParameterConverters(): array {
+  public static function providerTestSetRouteParameterConverters() {
     return [
       ['/test'],
       ['/test/{id}', ['id' => []], 'applied'],
@@ -172,9 +168,7 @@ class ParamConverterManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests convert.
-   *
-   * @legacy-covers ::convert
+   * @covers ::convert
    */
   public function testConvert(): void {
     $route = new Route('/test/{id}/{literal}/{null}');
@@ -201,7 +195,7 @@ class ParamConverterManagerTest extends UnitTestCase {
     $converter = $this->createMock('Drupal\Core\ParamConverter\ParamConverterInterface');
     $converter->expects($this->any())
       ->method('convert')
-      ->with(1, $this->isArray(), 'id', $this->isArray())
+      ->with(1, $this->isType('array'), 'id', $this->isType('array'))
       ->willReturn('something_better!');
     $this->manager->addConverter($converter, 'test_convert');
 
@@ -211,9 +205,7 @@ class ParamConverterManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests convert no converting.
-   *
-   * @legacy-covers ::convert
+   * @covers ::convert
    */
   public function testConvertNoConverting(): void {
     $route = new Route('/test');
@@ -229,9 +221,7 @@ class ParamConverterManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests convert missing param.
-   *
-   * @legacy-covers ::convert
+   * @covers ::convert
    */
   public function testConvertMissingParam(): void {
     $route = new Route('/test/{id}');
@@ -251,7 +241,7 @@ class ParamConverterManagerTest extends UnitTestCase {
     $converter = $this->createMock('Drupal\Core\ParamConverter\ParamConverterInterface');
     $converter->expects($this->any())
       ->method('convert')
-      ->with(1, $this->isArray(), 'id', $this->isArray())
+      ->with(1, $this->isType('array'), 'id', $this->isType('array'))
       ->willReturn(NULL);
     $this->manager->addConverter($converter, 'test_convert');
 

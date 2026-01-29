@@ -83,7 +83,7 @@ class DrupalSelenium2Driver extends Selenium2Driver {
   /**
    * {@inheritdoc}
    */
-  public function click($xpath): void {
+  public function click($xpath) {
     /** @var \Exception $not_clickable_exception */
     $not_clickable_exception = NULL;
     $result = $this->waitFor(10, function () use (&$not_clickable_exception, $xpath) {
@@ -108,7 +108,7 @@ class DrupalSelenium2Driver extends Selenium2Driver {
   /**
    * {@inheritdoc}
    */
-  public function setValue($xpath, $value): void {
+  public function setValue($xpath, $value) {
     /** @var \Exception $not_clickable_exception */
     $not_clickable_exception = NULL;
     $result = $this->waitFor(10, function () use (&$not_clickable_exception, $xpath, $value) {
@@ -191,7 +191,7 @@ JS);
   /**
    * {@inheritdoc}
    */
-  public function dragTo($sourceXpath, $destinationXpath): void {
+  public function dragTo($sourceXpath, $destinationXpath) {
     // Ensure both the source and destination exist at this point.
     $this->getWebDriverSession()->element('xpath', $sourceXpath);
     $this->getWebDriverSession()->element('xpath', $destinationXpath);

@@ -6,14 +6,12 @@ namespace Drupal\Tests\system\Functional\System;
 
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Tests\BrowserTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests output on administrative pages and compact mode functionality.
+ *
+ * @group system
  */
-#[Group('system')]
-#[RunTestsInSeparateProcesses]
 class AdminTest extends BrowserTestBase {
 
   /**

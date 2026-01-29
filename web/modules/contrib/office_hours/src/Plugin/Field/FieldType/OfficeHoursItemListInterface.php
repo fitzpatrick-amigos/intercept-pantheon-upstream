@@ -34,7 +34,7 @@ interface OfficeHoursItemListInterface extends FieldItemListInterface {
    * Since twig filters are static methods, a trait is not really an option.
    * Some installations are also subclassing this class.
    */
-  public function getRows(array $settings, array $field_settings, array $third_party_settings, int $time = 0, ?PluginSettingsBase $plugin = NULL);
+  public function getRows(array $settings, array $field_settings, array $third_party_settings, int $time = 0, ?PluginSettingsBase $plugin = NULL): array;
 
   /**
    * Create an array of seasons. (Do not collect regular or exception days.)
@@ -53,15 +53,15 @@ interface OfficeHoursItemListInterface extends FieldItemListInterface {
    * @return \Drupal\office_hours\OfficeHoursSeason[]
    *   A keyed array of seasons. Key = Season ID.
    */
-  public function getSeasons($add_weekdays_as_season = FALSE, $add_new_season = FALSE, $sort = '', $from = 0, $to = 0);
+  public function getSeasons($add_weekdays_as_season = FALSE, $add_new_season = FALSE, $sort = '', $from = 0, $to = 0): array;
 
   /**
    * Filters out Exception days.
    *
-   * @return $this
+   * @return OfficeHoursItemListInterface
    *   A filtered clone of the ItemList.
    */
-  public function getExceptionItems();
+  public function getExceptionItems(): OfficeHoursItemListInterface;
 
   /**
    * Filters out Season days by Season ID.
@@ -69,10 +69,10 @@ interface OfficeHoursItemListInterface extends FieldItemListInterface {
    * @param int $season_id
    *   The requested season ID.
    *
-   * @return $this
+   * @return OfficeHoursItemListInterface
    *   A filtered clone of the ItemList.
    */
-  public function getSeasonItems(int $season_id);
+  public function getSeasonItems(int $season_id): OfficeHoursItemListInterface;
 
   /**
    * Determines if the Entity has Exception days.
@@ -80,7 +80,7 @@ interface OfficeHoursItemListInterface extends FieldItemListInterface {
    * @return int
    *   Counter for Exception days.
    */
-  public function countExceptionDays();
+  public function countExceptionDays(): int;
 
   /**
    * Returns if an entity currently open, currently closed or never open.
@@ -109,7 +109,7 @@ interface OfficeHoursItemListInterface extends FieldItemListInterface {
    * @return \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem|null
    *   The current slot data, if any.
    */
-  public function getCurrentSlot(int $time = 0);
+  public function getCurrentSlot(int $time = 0): ?OfficeHoursItem;
 
   /**
    * Returns the slots of the current/next open day.
@@ -119,10 +119,10 @@ interface OfficeHoursItemListInterface extends FieldItemListInterface {
    * @param int $time
    *   A UNIX timestamp. If 0, set to 'REQUEST_TIME', alter-hook for Timezone.
    *
-   * @return \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem[]|null
+   * @return \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem[]
    *   A list of time slots.
    */
-  public function getNextDay(int $time = 0);
+  public function getNextDay(int $time = 0): array;
 
   /**
    * Determines if the Entity is Open or Closed at the given time.

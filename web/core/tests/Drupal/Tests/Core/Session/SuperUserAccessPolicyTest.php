@@ -12,17 +12,13 @@ use Drupal\Core\Session\CalculatedPermissionsItem;
 use Drupal\Core\Session\RefinableCalculatedPermissions;
 use Drupal\Core\Session\SuperUserAccessPolicy;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Tests Drupal\Core\Session\SuperUserAccessPolicy.
+ * @coversDefaultClass \Drupal\Core\Session\SuperUserAccessPolicy
+ * @group Session
  */
-#[CoversClass(SuperUserAccessPolicy::class)]
-#[Group('Session')]
 class SuperUserAccessPolicyTest extends UnitTestCase {
 
   /**
@@ -48,9 +44,7 @@ class SuperUserAccessPolicyTest extends UnitTestCase {
   }
 
   /**
-   * Tests applies.
-   *
-   * @legacy-covers ::applies
+   * @covers ::applies
    */
   public function testApplies(): void {
     $this->assertTrue($this->accessPolicy->applies(AccessPolicyInterface::SCOPE_DRUPAL));
@@ -66,9 +60,9 @@ class SuperUserAccessPolicyTest extends UnitTestCase {
    * @param bool $expect_admin_rights
    *   Whether to expect admin rights to be granted.
    *
-   * @legacy-covers ::calculatePermissions
+   * @covers ::calculatePermissions
+   * @dataProvider calculatePermissionsProvider
    */
-  #[DataProvider('calculatePermissionsProvider')]
   public function testCalculatePermissions(int $uid, bool $expect_admin_rights): void {
     $account = $this->prophesize(AccountInterface::class);
     $account->id()->willReturn($uid);
@@ -104,9 +98,9 @@ class SuperUserAccessPolicyTest extends UnitTestCase {
    * @param int $uid
    *   The UID for the account the policy checks.
    *
-   * @legacy-covers ::alterPermissions
+   * @covers ::alterPermissions
+   * @dataProvider alterPermissionsProvider
    */
-  #[DataProvider('alterPermissionsProvider')]
   public function testAlterPermissions(int $uid): void {
     $account = $this->prophesize(AccountInterface::class);
     $account->id()->willReturn($uid);
@@ -137,7 +131,7 @@ class SuperUserAccessPolicyTest extends UnitTestCase {
   /**
    * Tests the getPersistentCacheContexts method.
    *
-   * @legacy-covers ::getPersistentCacheContexts
+   * @covers ::getPersistentCacheContexts
    */
   public function testGetPersistentCacheContexts(): void {
     $this->assertSame(['user.is_super_user'], $this->accessPolicy->getPersistentCacheContexts(AccessPolicyInterface::SCOPE_DRUPAL));

@@ -8,23 +8,17 @@ use Drupal\ckeditor5\HTMLRestrictions;
 use Drupal\filter\FilterFormatInterface;
 use Drupal\filter\Plugin\FilterInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\ckeditor5\HTMLRestrictions.
+ * @coversDefaultClass \Drupal\ckeditor5\HTMLRestrictions
+ * @group ckeditor5
  */
-#[CoversClass(HTMLRestrictions::class)]
-#[Group('ckeditor5')]
 class HTMLRestrictionsTest extends UnitTestCase {
 
   /**
-   * Tests constructor.
-   *
-   * @legacy-covers ::__construct
+   * @covers ::__construct
+   * @dataProvider providerConstruct
    */
-  #[DataProvider('providerConstruct')]
   public function testConstructor(array $elements, ?string $expected_exception_message): void {
     if ($expected_exception_message !== NULL) {
       $this->expectException(\InvalidArgumentException::class);
@@ -164,12 +158,10 @@ class HTMLRestrictionsTest extends UnitTestCase {
   }
 
   /**
-   * Tests counting.
-   *
-   * @legacy-covers ::allowsNothing
-   * @legacy-covers ::getAllowedElements
+   * @covers ::allowsNothing
+   * @covers ::getAllowedElements
+   * @dataProvider providerCounting
    */
-  #[DataProvider('providerCounting')]
   public function testCounting(array $elements, bool $expected_is_empty, int $expected_concrete_only_count, int $expected_concrete_plus_wildcard_count): void {
     $r = new HTMLRestrictions($elements);
     $this->assertSame($expected_is_empty, $r->allowsNothing());
@@ -233,13 +225,11 @@ class HTMLRestrictionsTest extends UnitTestCase {
   }
 
   /**
-   * Tests convenience constructors.
-   *
-   * @legacy-covers ::fromString
-   * @legacy-covers ::fromTextFormat
-   * @legacy-covers ::fromFilterPluginInstance
+   * @covers ::fromString
+   * @covers ::fromTextFormat
+   * @covers ::fromFilterPluginInstance
+   * @dataProvider providerConvenienceConstructors
    */
-  #[DataProvider('providerConvenienceConstructors')]
   public function testConvenienceConstructors($input, array $expected, ?array $expected_raw = NULL): void {
     $expected_raw = $expected_raw ?? $expected;
 
@@ -647,13 +637,11 @@ class HTMLRestrictionsTest extends UnitTestCase {
   }
 
   /**
-   * Tests representations.
-   *
-   * @legacy-covers ::toCKEditor5ElementsArray
-   * @legacy-covers ::toFilterHtmlAllowedTagsString
-   * @legacy-covers ::toGeneralHtmlSupportConfig
+   * @covers ::toCKEditor5ElementsArray
+   * @covers ::toFilterHtmlAllowedTagsString
+   * @covers ::toGeneralHtmlSupportConfig
+   * @dataProvider providerRepresentations
    */
-  #[DataProvider('providerRepresentations')]
   public function testRepresentations(HTMLRestrictions $restrictions, array $expected_elements_array, string $expected_allowed_html_string, array $expected_ghs_config): void {
     $this->assertSame($expected_elements_array, $restrictions->toCKEditor5ElementsArray());
     $this->assertSame($expected_allowed_html_string, $restrictions->toFilterHtmlAllowedTagsString());
@@ -911,13 +899,11 @@ class HTMLRestrictionsTest extends UnitTestCase {
   }
 
   /**
-   * Tests operations.
-   *
-   * @legacy-covers ::diff
-   * @legacy-covers ::intersect
-   * @legacy-covers ::merge
+   * @covers ::diff
+   * @covers ::intersect
+   * @covers ::merge
+   * @dataProvider providerOperands
    */
-  #[DataProvider('providerOperands')]
   public function testOperations(HTMLRestrictions $a, HTMLRestrictions $b, $expected_diff, $expected_intersection, $expected_union): void {
     // This looks more complicated than it is: it applies the same processing to
     // all three of the expected operation results.
@@ -996,7 +982,7 @@ class HTMLRestrictionsTest extends UnitTestCase {
       'expected_union' => 'b',
     ];
 
-    // Basic cases: attributes.
+    // Basic cases: attributes..
     yield 'set + set with empty intersection' => [
       'a' => new HTMLRestrictions(['a' => ['href' => TRUE]]),
       'b' => new HTMLRestrictions(['b' => ['href' => TRUE]]),
@@ -1694,14 +1680,12 @@ class HTMLRestrictionsTest extends UnitTestCase {
   }
 
   /**
-   * Tests subsets.
-   *
-   * @legacy-covers ::getWildcardSubset
-   * @legacy-covers ::getConcreteSubset
-   * @legacy-covers ::getPlainTagsSubset
-   * @legacy-covers ::extractPlainTagsSubset
+   * @covers ::getWildcardSubset
+   * @covers ::getConcreteSubset
+   * @covers ::getPlainTagsSubset
+   * @covers ::extractPlainTagsSubset
+   * @dataProvider providerSubsets
    */
-  #[DataProvider('providerSubsets')]
   public function testSubsets(HTMLRestrictions $input, HTMLRestrictions $expected_wildcard_subset, HTMLRestrictions $expected_concrete_subset, HTMLRestrictions $expected_plain_tags_subset, HTMLRestrictions $expected_extracted_plain_tags_subset): void {
     $this->assertEquals($expected_wildcard_subset, $input->getWildcardSubset());
     $this->assertEquals($expected_concrete_subset, $input->getConcreteSubset());

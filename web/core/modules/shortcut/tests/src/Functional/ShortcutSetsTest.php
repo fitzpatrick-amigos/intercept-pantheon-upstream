@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\shortcut\Functional;
 
 use Drupal\shortcut\Entity\ShortcutSet;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Create, view, edit, delete, and change shortcut sets.
+ *
+ * @group shortcut
  */
-#[Group('shortcut')]
-#[RunTestsInSeparateProcesses]
 class ShortcutSetsTest extends ShortcutTestBase {
 
   /**

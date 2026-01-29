@@ -10,16 +10,11 @@ use Drupal\Core\Render\Element\Select;
 use Drupal\Core\Render\Element\Weight;
 use Drupal\element_info_test\ElementInfoTestNumberBuilder;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Drupal\Core\Render\Element\Weight.
+ * @coversDefaultClass \Drupal\Core\Render\Element\Weight
+ * @group Render
  */
-#[CoversClass(Weight::class)]
-#[Group('Render')]
-#[RunTestsInSeparateProcesses]
 class WeightTest extends KernelTestBase {
 
   /**
@@ -38,7 +33,7 @@ class WeightTest extends KernelTestBase {
   /**
    * Tests existing #default_value value in #options list.
    *
-   * @legacy-covers ::processWeight
+   * @covers ::processWeight
    */
   public function testProcessWeight(): void {
     $element = [];
@@ -64,7 +59,7 @@ class WeightTest extends KernelTestBase {
    *
    * @throws \Exception
    *
-   * @legacy-covers ::processWeight
+   * @covers ::processWeight
    */
   public function testProcessWeightSelectMax(): void {
     $form_state = new FormState();
@@ -75,7 +70,7 @@ class WeightTest extends KernelTestBase {
         ->get('system.site')
         ->get('weight_select_max'),
       // Expected by the "doBuildForm()" method of "form_builder" service.
-      '#parents' => ['test'],
+      '#parents' => [],
     ];
 
     $assert = function ($type, array $element, array $expected) use ($form_state) {

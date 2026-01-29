@@ -12,17 +12,13 @@ use Drupal\Core\Cache\Context\ContextCacheKeys;
 use Drupal\Core\Cache\MemoryBackend;
 use Drupal\Core\Cache\VariationCache;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Depends;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests Drupal\Core\Cache\VariationCache.
+ * @coversDefaultClass \Drupal\Core\Cache\VariationCache
+ * @group Cache
  */
-#[CoversClass(VariationCache::class)]
-#[Group('Cache')]
 class VariationCacheTest extends UnitTestCase {
 
   /**
@@ -185,8 +181,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests a cache item that has no variations.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testNoVariations(): void {
     $data = 'You have a nice house!';
@@ -199,8 +195,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests a cache item that only ever varies by one context.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testSingleVariation(): void {
     $cacheability = $this->housingTypeCacheability;
@@ -222,8 +218,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests a cache item that has nested variations.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testNestedVariations(): void {
     // We are running this scenario in the best possible outcome: The redirects
@@ -272,10 +268,11 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests a cache item that has nested variations that trigger self-healing.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
+   *
+   * @depends testNestedVariations
    */
-  #[Depends('testNestedVariations')]
   public function testNestedVariationsSelfHealing(): void {
     // This is the worst possible scenario: A very specific item was stored
     // first, followed by a less specific one. This means an overly specific
@@ -330,8 +327,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests self-healing for a cache item that has split variations.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testSplitVariationsSelfHealing(): void {
     // This is an edge case. Something varies by AB where some values of B
@@ -402,8 +399,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests exception for a cache item that has incomplete variations.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testIncompleteVariationsException(): void {
     // This should never happen. When someone first stores something in the
@@ -428,8 +425,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests exception for a cache item that has an incomplete redirect.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testIncompleteRedirectException(): void {
     // @todo Remove in Drupal 12.0.0. For more information, see:
@@ -471,8 +468,8 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests exception for a cache item that has incompatible cache redirects.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
    */
   public function testIncompatibleRedirectsException(): void {
     // @todo Remove in Drupal 12.0.0. For more information, see:
@@ -513,10 +510,11 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests the same as above, but with more redirects.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
+   *
+   * @depends testIncompatibleRedirectsException
    */
-  #[Depends('testIncompatibleRedirectsException')]
   public function testIncompatibleChainedRedirectsException(): void {
     // @todo Remove in Drupal 12.0.0. For more information, see:
     //   https://www.drupal.org/project/drupal/issues/3468921
@@ -561,10 +559,11 @@ class VariationCacheTest extends UnitTestCase {
   /**
    * Tests the same as above, but even more complex.
    *
-   * @legacy-covers ::get
-   * @legacy-covers ::set
+   * @covers ::get
+   * @covers ::set
+   *
+   * @depends testIncompatibleChainedRedirectsException
    */
-  #[Depends('testIncompatibleChainedRedirectsException')]
   public function testIncompatibleChainedRedirectsComplexException(): void {
     // @todo Remove in Drupal 12.0.0. For more information, see:
     //   https://www.drupal.org/project/drupal/issues/3468921

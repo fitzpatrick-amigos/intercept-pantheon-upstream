@@ -8,26 +8,20 @@ use Drupal\field\Plugin\migrate\process\d6\FieldInstanceSettings;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
 // cspell:ignore imagefield
+
 /**
- * Tests Drupal\field\Plugin\migrate\process\d6\FieldInstanceSettings.
+ * @coversDefaultClass \Drupal\field\Plugin\migrate\process\d6\FieldInstanceSettings
+ * @group field
  */
-#[CoversClass(FieldInstanceSettings::class)]
-#[Group('field')]
-#[IgnoreDeprecations]
 class FieldInstanceSettingsTest extends UnitTestCase {
 
   /**
-   * Tests get settings.
+   * @covers \Drupal\Core\Field\BaseFieldDefinition::getSettings
    *
-   * @legacy-covers \Drupal\Core\Field\BaseFieldDefinition::getSettings
+   * @dataProvider getSettingsProvider
    */
-  #[DataProvider('getSettingsProvider')]
   public function testGetSettings($field_type, $instance_settings, $expected): void {
     $instance_settings = unserialize($instance_settings);
     $plugin = new FieldInstanceSettings([], 'd6_field_field_settings', []);

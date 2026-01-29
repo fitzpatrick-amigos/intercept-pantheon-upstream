@@ -8,16 +8,13 @@ use Drupal\rest\Plugin\views\display\RestExport;
 use Drupal\rest\Plugin\views\style\Serializer;
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\ViewExecutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Tests Drupal\rest\Plugin\views\style\Serializer.
+ * @coversDefaultClass \Drupal\rest\Plugin\views\style\Serializer
+ * @group rest
  */
-#[CoversClass(Serializer::class)]
-#[Group('rest')]
 class SerializerTest extends UnitTestCase {
 
   /**
@@ -60,7 +57,7 @@ class SerializerTest extends UnitTestCase {
   /**
    * Tests that the symfony serializer receives style plugin from the render() method.
    *
-   * @legacy-covers ::render
+   * @covers ::render
    */
   public function testSerializerReceivesOptions(): void {
     $mock_serializer = $this->prophesize(SerializerInterface::class);

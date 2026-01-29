@@ -8,14 +8,11 @@ use Drupal\Core\TypedData\TypedDataInterface;
 use Drupal\serialization\Normalizer\NullNormalizer;
 use Drupal\Tests\serialization\Traits\JsonSchemaTestTrait;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\serialization\Normalizer\NullNormalizer.
+ * @coversDefaultClass \Drupal\serialization\Normalizer\NullNormalizer
+ * @group serialization
  */
-#[CoversClass(NullNormalizer::class)]
-#[Group('serialization')]
 class NullNormalizerTest extends UnitTestCase {
 
   use JsonSchemaTestTrait;
@@ -44,10 +41,8 @@ class NullNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests supports normalization.
-   *
-   * @legacy-covers ::__construct
-   * @legacy-covers ::supportsNormalization
+   * @covers ::__construct
+   * @covers ::supportsNormalization
    */
   public function testSupportsNormalization(): void {
     $mock = $this->createMock('Drupal\Core\TypedData\TypedDataInterface');
@@ -57,9 +52,7 @@ class NullNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests normalize.
-   *
-   * @legacy-covers ::normalize
+   * @covers ::normalize
    */
   public function testNormalize(): void {
     $mock = $this->createMock('Drupal\Core\TypedData\TypedDataInterface');

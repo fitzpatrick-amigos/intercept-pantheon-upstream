@@ -9,16 +9,12 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Utility\CallableResolver;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Tests Drupal\Core\Utility\CallableResolver.
+ * @coversDefaultClass \Drupal\Core\Utility\CallableResolver
+ * @group Utility
  */
-#[CoversClass(CallableResolver::class)]
-#[Group('Utility')]
 class CallableResolverTest extends UnitTestCase {
 
   /**
@@ -43,9 +39,7 @@ class CallableResolverTest extends UnitTestCase {
   }
 
   /**
-   * Tests callback resolver.
-   *
-   * @legacy-covers ::getCallableFromDefinition
+   * @covers ::getCallableFromDefinition
    */
   public function testCallbackResolver(): void {
     $cases = [
@@ -54,7 +48,7 @@ class CallableResolverTest extends UnitTestCase {
           return __METHOD__ . '+' . $suffix;
         },
         PHP_VERSION_ID >= 80400 ?
-        '{closure:Drupal\Tests\Core\Utility\CallableResolverTest::testCallbackResolver():53}' :
+        '{closure:Drupal\Tests\Core\Utility\CallableResolverTest::testCallbackResolver():47}' :
         'Drupal\Tests\Core\Utility\{closure}',
       ],
       'First-class callable function' => [
@@ -66,9 +60,9 @@ class CallableResolverTest extends UnitTestCase {
         __CLASS__ . '::staticMethod',
       ],
       'Arrow function' => [
-        fn($suffix): string => __METHOD__ . '+' . $suffix,
+        fn($suffix) => __METHOD__ . '+' . $suffix,
         PHP_VERSION_ID >= 80400 ?
-        '{closure:Drupal\Tests\Core\Utility\CallableResolverTest::testCallbackResolver():69}' :
+        '{closure:Drupal\Tests\Core\Utility\CallableResolverTest::testCallbackResolver():63}' :
         'Drupal\Tests\Core\Utility\{closure}',
       ],
       'Static function' => [
@@ -116,11 +110,9 @@ class CallableResolverTest extends UnitTestCase {
   }
 
   /**
-   * Tests callback resolver exception handling.
-   *
-   * @legacy-covers ::getCallableFromDefinition
+   * @dataProvider callableResolverExceptionHandlingTestCases
+   * @covers ::getCallableFromDefinition
    */
-  #[DataProvider('callableResolverExceptionHandlingTestCases')]
   public function testCallbackResolverExceptionHandling($definition, $exception_class, $exception_message): void {
     $this->expectException($exception_class);
     $this->expectExceptionMessage($exception_message);
@@ -130,7 +122,7 @@ class CallableResolverTest extends UnitTestCase {
   /**
    * Test cases for ::testCallbackResolverExceptionHandling.
    */
-  public static function callableResolverExceptionHandlingTestCases(): array {
+  public static function callableResolverExceptionHandlingTestCases() {
     return [
       'String function' => [
         'not_a_callable',
@@ -184,7 +176,7 @@ class CallableResolverTest extends UnitTestCase {
    * @return string
    *   A test string.
    */
-  public static function staticMethod($suffix): string {
+  public static function staticMethod($suffix) {
     return __METHOD__ . '+' . $suffix;
   }
 
@@ -200,7 +192,7 @@ class CallableResolverTest extends UnitTestCase {
    * @throws \Exception
    *   Throws an exception when called statically.
    */
-  public function method($suffix): string {
+  public function method($suffix) {
     return __METHOD__ . '+' . $suffix;
   }
 
@@ -213,7 +205,7 @@ class CallableResolverTest extends UnitTestCase {
    * @return string
    *   A test string.
    */
-  public function __invoke($suffix): string {
+  public function __invoke($suffix) {
     return __METHOD__ . '+' . $suffix;
   }
 
@@ -235,11 +227,11 @@ class MockContainerInjection implements ContainerInjectionInterface {
     $this->injected = $result;
   }
 
-  public static function create(ContainerInterface $container): static {
+  public static function create(ContainerInterface $container) {
     return new static('foo');
   }
 
-  public function getResult($suffix): string {
+  public function getResult($suffix) {
     return __METHOD__ . '-' . $this->injected . '+' . $suffix;
   }
 
@@ -254,7 +246,7 @@ class NoInstantiationMockStaticCallable {
     throw new \Exception(sprintf('The class %s should not require instantiation for the static method to be called.', __CLASS__));
   }
 
-  public static function staticMethod($suffix): string {
+  public static function staticMethod($suffix) {
     return __METHOD__ . '+' . $suffix;
   }
 
@@ -274,7 +266,7 @@ class MethodCallable {
    * @return string
    *   A test string.
    */
-  public function __invoke($suffix): string {
+  public function __invoke($suffix) {
     return __METHOD__ . '+' . $suffix;
   }
 
@@ -290,7 +282,7 @@ class MethodCallable {
    * @throws \Exception
    *   Throws an exception when called statically.
    */
-  public function method($suffix): string {
+  public function method($suffix) {
     return __METHOD__ . '+' . $suffix;
   }
 

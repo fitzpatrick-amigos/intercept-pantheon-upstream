@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace Drupal\Tests\Component\Datetime;
 
 use Drupal\Component\Datetime\Time;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,11 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
  * Tests the Time class.
  *
  * Isolate the tests to prevent side effects from altering system time.
+ *
+ * @coversDefaultClass \Drupal\Component\Datetime\Time
+ * @group Datetime
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
-#[CoversClass(\Drupal\Component\Datetime\Time::class)]
-#[Group('Datetime')]
-#[PreserveGlobalState(FALSE)]
-#[RunTestsInSeparateProcesses]
 class TimeTest extends TestCase {
 
   /**
@@ -50,7 +47,7 @@ class TimeTest extends TestCase {
   /**
    * Tests the getRequestTime method.
    *
-   * @legacy-covers ::getRequestTime
+   * @covers ::getRequestTime
    */
   public function testGetRequestTime(): void {
     $expected = 12345678;
@@ -69,7 +66,7 @@ class TimeTest extends TestCase {
   /**
    * Tests the getRequestMicroTime method.
    *
-   * @legacy-covers ::getRequestMicroTime
+   * @covers ::getRequestMicroTime
    */
   public function testGetRequestMicroTime(): void {
     $expected = 1234567.89;
@@ -86,9 +83,7 @@ class TimeTest extends TestCase {
   }
 
   /**
-   * Tests get request time no request.
-   *
-   * @legacy-covers ::getRequestTime
+   * @covers ::getRequestTime
    */
   public function testGetRequestTimeNoRequest(): void {
     // With no request, and no global variable, we expect to get the int part
@@ -101,9 +96,7 @@ class TimeTest extends TestCase {
   }
 
   /**
-   * Tests get request micro time no request.
-   *
-   * @legacy-covers ::getRequestMicroTime
+   * @covers ::getRequestMicroTime
    */
   public function testGetRequestMicroTimeNoRequest(): void {
     $expected = 1234567.89;
@@ -116,7 +109,7 @@ class TimeTest extends TestCase {
   /**
    * Tests the getCurrentTime method.
    *
-   * @legacy-covers ::getCurrentTime
+   * @covers ::getCurrentTime
    */
   public function testGetCurrentTime(): void {
     $expected = 12345678;
@@ -126,7 +119,7 @@ class TimeTest extends TestCase {
   /**
    * Tests the getCurrentMicroTime method.
    *
-   * @legacy-covers ::getCurrentMicroTime
+   * @covers ::getCurrentMicroTime
    */
   public function testGetCurrentMicroTime(): void {
     $expected = 1234567.89;
@@ -143,7 +136,7 @@ namespace Drupal\Component\Datetime;
  * @return int
  *   The fixed integer timestamp used for testing purposes.
  */
-function time(): int {
+function time() {
   return 12345678;
 }
 
@@ -153,6 +146,6 @@ function time(): int {
  * @return float
  *   The fixed float timestamp used for testing purposes.
  */
-function microtime(bool $as_float = FALSE): float {
+function microtime(bool $as_float = FALSE) {
   return 1234567.89;
 }

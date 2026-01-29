@@ -13,21 +13,21 @@ use Drupal\navigation\Menu\NavigationMenuLinkTreeManipulators;
 use Drupal\system\Controller\SystemController;
 use Drupal\Tests\Core\Menu\MenuLinkMock;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 
 /**
  * Tests the navigation menu link tree manipulator.
+ *
+ * @group navigation
+ *
+ * @coversDefaultClass \Drupal\navigation\Menu\NavigationMenuLinkTreeManipulators
  */
-#[CoversClass(NavigationMenuLinkTreeManipulators::class)]
-#[Group('navigation')]
 class NavigationMenuLinkTreeManipulatorsTest extends UnitTestCase {
 
   /**
    * Tests the addSecondLevelOverviewLinks() tree manipulator.
    *
-   * @legacy-covers ::addSecondLevelOverviewLinks
+   * @covers ::addSecondLevelOverviewLinks
    */
   public function testAddSecondLevelOverviewLinks(): void {
     $routeProvider = $this->createMock(RouteProviderInterface::class);
@@ -122,141 +122,141 @@ class NavigationMenuLinkTreeManipulatorsTest extends UnitTestCase {
    */
   protected function mockTree(): array {
     $links = [
-      1 => MenuLinkMock::createMock([
+      1 => MenuLinkMock::create([
         'id' => 'test.example1',
         'route_name' => 'example1',
         'title' => 'foo',
         'parent' => '',
       ]),
-      2 => MenuLinkMock::createMock([
+      2 => MenuLinkMock::create([
         'id' => 'test.example2',
         'route_name' => 'example2',
         'title' => 'foo',
         'parent' => '',
       ]),
-      3 => MenuLinkMock::createMock([
+      3 => MenuLinkMock::create([
         'id' => 'test.example3',
         'route_name' => 'example3',
         'title' => 'baz',
         'parent' => 'test.example2',
       ]),
-      4 => MenuLinkMock::createMock([
+      4 => MenuLinkMock::create([
         'id' => 'test.example4',
         'route_name' => 'example4',
         'title' => 'qux',
         'parent' => 'test.example3',
       ]),
-      5 => MenuLinkMock::createMock([
+      5 => MenuLinkMock::create([
         'id' => 'test.example5',
         'route_name' => 'example5',
         'title' => 'title5',
         'parent' => '',
       ]),
-      6 => MenuLinkMock::createMock([
+      6 => MenuLinkMock::create([
         'id' => 'test.example6',
         'route_name' => '',
         'url' => 'https://www.drupal.org/',
         'title' => 'bar_bar',
         'parent' => 'test.example5',
       ]),
-      7 => MenuLinkMock::createMock([
+      7 => MenuLinkMock::create([
         'id' => 'test.example7',
         'route_name' => 'example7',
         'title' => 'title7',
         'parent' => 'test.example6',
       ]),
-      8 => MenuLinkMock::createMock([
+      8 => MenuLinkMock::create([
         'id' => 'test.example8',
         'route_name' => 'example8',
         'title' => 'title8',
         'parent' => '',
       ]),
-      9 => MenuLinkMock::createMock([
+      9 => MenuLinkMock::create([
         'id' => 'test.example9',
         'route_name' => 'child_list',
         'title' => 'title9',
         'parent' => 'test.example8',
       ]),
-      10 => MenuLinkMock::createMock([
+      10 => MenuLinkMock::create([
         'id' => 'test.example10',
         'route_name' => 'example9',
         'title' => 'title10',
         'parent' => 'test.example9',
       ]),
-      11 => MenuLinkMock::createMock([
+      11 => MenuLinkMock::create([
         'id' => 'test.example11',
         'route_name' => 'example11',
         'title' => 'title11',
         'parent' => '',
       ]),
-      12 => MenuLinkMock::createMock([
+      12 => MenuLinkMock::create([
         'id' => 'test.example12',
         'route_name' => 'example12',
         'title' => 'title12',
         'parent' => 'text.example11',
       ]),
-      13 => MenuLinkMock::createMock([
+      13 => MenuLinkMock::create([
         'id' => 'test.example13',
         'route_name' => 'example13',
         'title' => 'title13',
         'parent' => '',
       ]),
-      14 => MenuLinkMock::createMock([
+      14 => MenuLinkMock::create([
         'id' => 'test.example14',
         'route_name' => '<nolink>',
         'title' => 'title14',
         'parent' => 'text.example13',
       ]),
-      15 => MenuLinkMock::createMock([
+      15 => MenuLinkMock::create([
         'id' => 'test.example15',
         'route_name' => 'example15',
         'title' => 'title15',
         'parent' => 'text.example14',
       ]),
-      16 => MenuLinkMock::createMock([
+      16 => MenuLinkMock::create([
         'id' => 'test.example16',
         'route_name' => 'example16',
         'title' => 'title16',
         'parent' => '',
       ]),
-      17 => MenuLinkMock::createMock([
+      17 => MenuLinkMock::create([
         'id' => 'test.example17',
         'route_name' => '<button>',
         'title' => 'title17',
         'parent' => 'text.example16',
       ]),
-      18 => MenuLinkMock::createMock([
+      18 => MenuLinkMock::create([
         'id' => 'test.example18',
         'route_name' => 'example18',
         'title' => 'title18',
         'parent' => 'text.example17',
       ]),
-      19 => MenuLinkMock::createMock([
+      19 => MenuLinkMock::create([
         'id' => 'test.example19',
         'route_name' => 'example19',
         'title' => 'title19',
         'parent' => '',
       ]),
-      20 => MenuLinkMock::createMock([
+      20 => MenuLinkMock::create([
         'id' => 'test.example20',
         'route_name' => 'example20',
         'title' => 'title20',
         'parent' => 'test.example19',
       ]),
-      21 => MenuLinkMock::createMock([
+      21 => MenuLinkMock::create([
         'id' => 'test.example21',
         'route_name' => 'example21',
         'title' => 'title21',
         'parent' => 'test.example20',
         'enabled' => FALSE,
       ]),
-      22 => MenuLinkMock::createMock([
+      22 => MenuLinkMock::create([
         'id' => 'test.example22',
         'route_name' => 'no_access',
         'title' => 'title22',
         'parent' => 'test.example20',
       ]),
-      23 => MenuLinkMock::createMock([
+      23 => MenuLinkMock::create([
         'id' => 'test.example23',
         'route_name' => 'example20',
         'title' => 'title23',

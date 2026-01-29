@@ -4,6 +4,7 @@ namespace Drupal\office_hours\Plugin\Field\FieldType;
 
 use Drupal\office_hours\Element\OfficeHoursDatetime;
 use Drupal\office_hours\OfficeHoursDateHelper;
+use Drupal\office_hours\OfficeHoursSeason;
 
 /**
  * Plugin implementation of the 'office_hours' field type.
@@ -21,13 +22,20 @@ use Drupal\office_hours\OfficeHoursDateHelper;
 class OfficeHoursItem extends OfficeHoursItemBase {
 
   /**
+   * The parent typed data object, overridden from TypedData.
+   *
+   * @var \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface|null
+   */
+  protected $parent;
+
+  /**
    * Determines whether the item is a seasonal or regular Weekday.
    *
    * @return int
    *   0 if the Item is a regular Weekday,E.g., 1..9 -> 0.
    *   season_id if a seasonal weekday, E.g., 301..309 -> 300.
    */
-  public function getSeasonId() {
+  public function getSeasonId(): int {
     $day = $this->day;
     $season_id = OfficeHoursDateHelper::getSeasonId($day);
     return $season_id;
@@ -39,7 +47,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return bool
    *   TRUE if the item is Exception day, FALSE otherwise.
    */
-  public function isExceptionDay() {
+  public function isExceptionDay(): bool {
     return FALSE;
   }
 
@@ -49,7 +57,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return bool
    *   True if the day is the specially defined ExceptionsHeader.
    */
-  public function isExceptionHeader() {
+  public function isExceptionHeader(): bool {
     return OfficeHoursDateHelper::isExceptionHeader($this->day);
   }
 
@@ -59,7 +67,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return bool
    *   True if the day_number is a seasonal weekday (100 to 100....7).
    */
-  public function isSeasonDay() {
+  public function isSeasonDay(): bool {
     return OfficeHoursDateHelper::isSeasonDay($this->day);
   }
 
@@ -70,7 +78,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    *   0 if the Item is a regular Weekday,E.g., 1..9 -> 0.
    *   season_id if a seasonal weekday, E.g., 301..309 -> 100..100.
    */
-  public function isSeasonHeader() {
+  public function isSeasonHeader(): bool {
     return OfficeHoursDateHelper::isSeasonHeader($this->day);
   }
 
@@ -80,7 +88,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return bool
    *   TRUE if the item is Exception day, FALSE otherwise.
    */
-  public function isWeekDay() {
+  public function isWeekDay(): bool {
     return OfficeHoursDateHelper::isWeekDay($this->day);
   }
 
@@ -163,6 +171,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
     // Check for Weekday and for Exception day ('midnight').
     if ($item_weekday == $now_weekday - 1 || ($item_weekday == $now_weekday + 6)) {
       // We were open yesterday evening, check if we are still open.
+      $status = static::WAS_OPEN;
       if ($start >= $end && $end > $now) {
         $status = static::IS_OPEN;
       }
@@ -208,7 +217,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return bool
    *   TRUE if open at $time.
    */
-  public function isOpen(int $time) {
+  public function isOpen(int $time): bool {
     $status = $this->getStatus($time);
     return $status == static::IS_OPEN;
   }
@@ -216,7 +225,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
   /**
    * {@inheritdoc}
    */
-  public function isEmpty() {
+  public function isEmpty(): bool {
     return $this->isValueEmpty($this->getValue());
   }
 
@@ -242,7 +251,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return bool
    *   TRUE if the data structure is empty, FALSE otherwise.
    */
-  public static function isValueEmpty(array $value) {
+  public static function isValueEmpty(array $value): bool {
     // Note: in Week-widget, day is <> '', in List-widget, day can be '',
     // and in Exception day, day can be ''.
     // Note: test every change with Week/List widget and Select/HTML5 element!
@@ -289,7 +298,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
   /**
    * {@inheritdoc}
    */
-  public function setValue($value, $notify = TRUE) {
+  public function setValue($value, $notify = TRUE): void {
     $value = $this->format($value);
     parent::setValue($value, $notify);
   }
@@ -303,7 +312,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return array
    *   The normalized value of a time slot.
    */
-  public static function format($value) {
+  public static function format($value): array {
     $value ??= [];
     $day = $value['day'] ?? NULL;
     $day_delta = $value['day_delta'] ?? 0;
@@ -385,7 +394,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return string
    *   Returns formatted time.
    */
-  public function formatTimeSlot(array $settings) {
+  public function formatTimeSlot(array $settings): string {
     $format = OfficeHoursDateHelper::getTimeFormat($settings['time_format']);
     $separator = $settings['separator']['hours_hours'];
 
@@ -411,85 +420,50 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    *   The day/date formatting pattern.
    * @param array $value
    *   An Office hours value structure.
-   * @param int $day_delta
-   *   An optional day_delta.
+   * @param array $settings
+   *   The formatter settings (optional) for extra separators.
    *
-   * @return string|\Drupal\Core\StringTranslation\TranslatableMarkup|null
-   *   The formatted day label, e.g., 'tuesday'.
+   * @return string|\Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The formatted day label, e.g., 'Tuesday'.
    */
-  public static function formatLabel(string $pattern, array $value, $day_delta = 0) {
+  public static function formatLabel(string $pattern, array $value, array $settings = []): string {
     $label = '';
 
     $day = $value['day'];
-    switch (TRUE) {
-      case ($day_delta):
-        // Return fast for a following slot.
-        $label = t('and');
-        break;
+    $label = match (TRUE) {
+      // Return fast if weekday is not to be displayed.
+      $pattern === 'none'
+       => '',
 
-      case ($pattern == 'none'):
-        // Return fast if weekday is not to be displayed.
-        $label = '';
-        break;
+       OfficeHoursDateHelper::isExceptionDay($day, TRUE)
+      => OfficeHoursDateHelper::format($day, $pattern),
 
-      case ($day === '' || $day === NULL || $day < 0):
-        // A new Exception slot.
-        $label = '';
-        break;
+      // Convert date into weekday in formatter.
+      // The day number is a weekday number + optional Season ID.
+      // OfficeHoursDateHelper::isSeasonHeader($day),
+      // OfficeHoursDateHelper::isSeasonDay($day),
+      // OfficeHoursDateHelper::isWeekDay($day),
+      default
+      => OfficeHoursDateHelper::weekDaysByFormat($pattern, $day),
+    };
 
-      case OfficeHoursDateHelper::isSeasonHeader($day):
-      case OfficeHoursDateHelper::isSeasonDay($day):
-      case OfficeHoursDateHelper::isWeekDay($day):
-        // The day number is a weekday number + optional Season ID.
-        $label = OfficeHoursDateHelper::weekDaysByFormat($pattern, $day);
-        break;
-
-      case OfficeHoursDateHelper::isExceptionDay($day) && ($pattern == 'l'):
-        // Convert date into weekday in widget.
-        $label = OfficeHoursDateHelper::format($day, $pattern);
-        break;
-
-      case OfficeHoursDateHelper::isExceptionDay($day):
-        $label = OfficeHoursDateHelper::format($day, $pattern);
-        break;
-
-      default:
-        // This is an error. Use $item->label() instead,
-        // and make sure the class is OK.
-        // @todo Add Watchdog message when we land here.
-        $label = '';
-        break;
-
-    }
     return $label;
   }
 
   /**
-   * Formats the labels of a Render element.
+   * Formats the label of a (grouped) day.
    *
    * @param array $settings
    *   The formatter settings.
    *
-   * @return string|\Drupal\Core\StringTranslation\TranslatableMarkup|null
-   *   The translated formatted day label, or NULL if there is no label defined.
+   * @return string
+   *   The translated formatted day label, or empty if no label requested.
    */
-  public function label(array $settings) {
+  public function label(array $settings): string {
     $value = $this->getValue();
-    $day = $value['day'];
-    $day_delta = $value['day_delta'];
 
-    // Get the label.
     $pattern = $settings['day_format'];
-    $label = OfficeHoursItem::formatLabel($pattern, $value, $day_delta);
-
-    // Extend the label for Grouped days.
-    if (isset($value['endday'])) {
-      $day = $value['endday'];
-      $label_to = $this->formatLabel($pattern, ['day' => $day]);
-
-      $group_separator = $settings['separator']['grouped_days'];
-      $label .= "$group_separator$label_to";
-    }
+    $label = static::formatLabel($pattern, $value, $settings);
 
     // Add separator after day name. E.g., 'Monday' --> 'Monday: '.
     $days_suffix = $settings['separator']['day_hours'] ?? '';
@@ -501,7 +475,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
   /**
    * {@inheritdoc}
    */
-  public function getSeason() {
+  public function getSeason(): OfficeHoursSeason {
     $seasons = $this->parent->getSeasons(TRUE, FALSE);
     $season = $seasons[$this->getSeasonId()];
     return $season;
@@ -513,7 +487,7 @@ class OfficeHoursItem extends OfficeHoursItemBase {
    * @return int
    *   Returns the weekday number(0=Sun, 6=Sat).
    */
-  public function getWeekday() {
+  public function getWeekday(): int {
     return OfficeHoursDateHelper::getWeekday($this->day);
   }
 

@@ -3,6 +3,8 @@
 namespace Drupal\office_hours\Controller;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,13 +32,26 @@ class StatusUpdateController implements ContainerInjectionInterface {
   protected $renderer;
 
   /**
+   * Controller to handle the status update.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->renderer = $renderer;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $instance = new static();
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->renderer = $container->get('renderer');
-    return $instance;
+    return new self(
+      $container->get('entity_type.manager'),
+      $container->get('renderer'),
+    );
   }
 
   /**
@@ -60,7 +75,7 @@ class StatusUpdateController implements ContainerInjectionInterface {
    *   '/office_hours/status_update/{entity_type}/{entity_id}/{field_name}/{langcode}/{view_mode}',
    *   name: 'office_hours.status_update')]
    */
-  public function updateStatus(string $entity_type, string $entity_id, string $field_name, string $langcode, string $view_mode) {
+  public function updateStatus(string $entity_type, string $entity_id, string $field_name, string $langcode, string $view_mode): Response {
 
     try {
       $storage = $this->entityTypeManager->getStorage($entity_type);
@@ -134,7 +149,7 @@ class StatusUpdateController implements ContainerInjectionInterface {
    * @return array
    *   Updated render array.
    */
-  public static function attachStatusUpdate(OfficeHoursItemListInterface $items, $langcode, $view_mode, array $third_party_settings, array $elements) {
+  public static function attachStatusUpdate(OfficeHoursItemListInterface $items, $langcode, $view_mode, array $third_party_settings, array $elements): array {
     // Note: when changing this, also test the Views StatusFilter.
     if (!\Drupal::currentUser()->isAnonymous()) {
       // Field cache should work properly for non-anonymous users.

@@ -6,14 +6,14 @@ namespace Drupal\Tests\Core\File\MimeType;
 
 use Drupal\Core\File\MimeType\MimeTypeMap;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the MIME type mapper to extension.
+ *
+ * @coversDefaultClass \Drupal\Core\File\MimeType\MimeTypeMap
+ *
+ * @group File
  */
-#[CoversClass(MimeTypeMap::class)]
-#[Group('File')]
 class MimeTypeMapTest extends UnitTestCase {
 
   /**
@@ -30,9 +30,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests add mapping.
-   *
-   * @legacy-covers ::addMapping
+   * @covers ::addMapping
    */
   public function testAddMapping(): void {
     $this->map->addMapping('image/gif', 'gif');
@@ -49,9 +47,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests remove mapping.
-   *
-   * @legacy-covers ::removeMapping
+   * @covers ::removeMapping
    */
   public function testRemoveMapping(): void {
     $this->assertTrue($this->map->removeMapping('image/jpeg', 'jpg'));
@@ -60,9 +56,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests remove mime type.
-   *
-   * @legacy-covers ::removeMimeType
+   * @covers ::removeMimeType
    */
   public function testRemoveMimeType(): void {
     $this->assertTrue($this->map->removeMimeType('image/jpeg'));
@@ -71,9 +65,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests list mime types.
-   *
-   * @legacy-covers ::listMimeTypes
+   * @covers ::listMimeTypes
    */
   public function testListMimeTypes(): void {
     $mimeTypes = $this->map->listMimeTypes();
@@ -82,9 +74,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests has mime type.
-   *
-   * @legacy-covers ::hasMimeType
+   * @covers ::hasMimeType
    */
   public function testHasMimeType(): void {
     $this->assertTrue($this->map->hasMimeType('image/jpeg'));
@@ -92,18 +82,14 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests get mime type for extension.
-   *
-   * @legacy-covers ::getMimeTypeForExtension
+   * @covers ::getMimeTypeForExtension
    */
   public function testGetMimeTypeForExtension(): void {
     $this->assertSame('image/jpeg', $this->map->getMimeTypeForExtension('jpe'));
   }
 
   /**
-   * Tests get extensions for mime type.
-   *
-   * @legacy-covers ::getExtensionsForMimeType
+   * @covers ::getExtensionsForMimeType
    */
   public function testGetExtensionsForMimeType(): void {
     $this->assertEquals(['jpe', 'jpeg', 'jpg'],
@@ -111,9 +97,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests list extension.
-   *
-   * @legacy-covers ::listExtensions
+   * @covers ::listExtensions
    */
   public function testListExtension(): void {
     $extensions = $this->map->listExtensions();
@@ -122,9 +106,7 @@ class MimeTypeMapTest extends UnitTestCase {
   }
 
   /**
-   * Tests has extension.
-   *
-   * @legacy-covers ::hasExtension
+   * @covers ::hasExtension
    */
   public function testHasExtension(): void {
     $this->assertTrue($this->map->hasExtension('jpg'));

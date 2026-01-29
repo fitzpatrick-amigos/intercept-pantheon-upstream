@@ -11,14 +11,11 @@ use Drupal\package_manager\ProcessOutputCallback;
 use Drupal\Tests\UnitTestCase;
 use PhpTuf\ComposerStager\API\Core\BeginnerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Logging Beginner.
+ * @covers \Drupal\package_manager\LoggingBeginner
+ * @group package_manager
  */
-#[Group('package_manager')]
-#[CoversClass(LoggingBeginner::class)]
 class LoggingBeginnerTest extends UnitTestCase {
 
   /**

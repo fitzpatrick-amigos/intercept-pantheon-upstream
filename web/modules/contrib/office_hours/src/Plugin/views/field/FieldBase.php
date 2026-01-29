@@ -15,7 +15,7 @@ class FieldBase extends FieldPluginBase {
   /**
    * Reusable optionsForm, also used to display messages during view render.
    */
-  public function addOptionsFormWarning(&$form, FormStateInterface $form_state, $field_label) {
+  public function addOptionsFormWarning(&$form, FormStateInterface $form_state, $field_label): void {
     $field_name = $this->configuration['field_name'];
     $previous = $this->getPreviousFieldLabels();
 

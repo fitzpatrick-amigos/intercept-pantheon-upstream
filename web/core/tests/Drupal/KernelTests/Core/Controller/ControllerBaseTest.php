@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\KernelTests\Core\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\dblog\Logger\DbLog;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\system_test\Controller\BrokenSystemTestController;
 use Drupal\system_test\Controller\OptionalServiceSystemTestController;
 use Drupal\system_test\Controller\SystemTestController;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\DependencyInjection\Exception\AutowiringFailedException;
 
 /**
  * Tests \Drupal\Core\Controller\ControllerBase.
+ *
+ * @coversDefaultClass \Drupal\Core\Controller\ControllerBase
+ * @group Controller
  */
-#[CoversClass(ControllerBase::class)]
-#[Group('Controller')]
-#[RunTestsInSeparateProcesses]
 class ControllerBaseTest extends KernelTestBase {
 
   /**
@@ -29,9 +25,7 @@ class ControllerBaseTest extends KernelTestBase {
   protected static $modules = ['system_test', 'system'];
 
   /**
-   * Tests create.
-   *
-   * @legacy-covers ::create
+   * @covers ::create
    */
   public function testCreate(): void {
     /** @var \Drupal\system_test\Controller\SystemTestController $controller */
@@ -52,20 +46,16 @@ class ControllerBaseTest extends KernelTestBase {
   }
 
   /**
-   * Tests create exception.
-   *
-   * @legacy-covers ::create
+   * @covers ::create
    */
   public function testCreateException(): void {
     $this->expectException(AutowiringFailedException::class);
-    $this->expectExceptionMessage('Cannot autowire service "Drupal\Core\Lock\LockBackendInterface": argument "$lock" of method "Drupal\system_test\Controller\BrokenSystemTestController::__construct()", you should configure its value explicitly.');
+    $this->expectExceptionMessage('Cannot autowire service "Drupal\Core\Lock\LockBackendInterface": argument "$lock" of method "Drupal\system_test\Controller\BrokenSystemTestController::_construct()", you should configure its value explicitly.');
     $this->container->get('class_resolver')->getInstanceFromDefinition(BrokenSystemTestController::class);
   }
 
   /**
-   * Tests create optional.
-   *
-   * @legacy-covers ::create
+   * @covers ::create
    */
   public function testCreateOptional(): void {
     $service = $this->container->get('class_resolver')->getInstanceFromDefinition(OptionalServiceSystemTestController::class);

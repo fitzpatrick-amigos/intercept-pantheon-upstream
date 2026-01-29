@@ -47,11 +47,7 @@ class AvifImageEffect extends ConvertImageEffect {
     }
 
     if (!$image->convert('avif')) {
-      $this->logger->error('Image convert failed using the %toolkit toolkit on %path (%mimetype)', [
-        '%toolkit' => $image->getToolkitId(),
-        '%path' => $image->getSource(),
-        '%mimetype' => $image->getMimeType(),
-      ]);
+      $this->logger->error('Image convert failed using the %toolkit toolkit on %path (%mimetype)', ['%toolkit' => $image->getToolkitId(), '%path' => $image->getSource(), '%mimetype' => $image->getMimeType()]);
       return FALSE;
     }
 

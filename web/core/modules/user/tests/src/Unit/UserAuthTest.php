@@ -10,9 +10,6 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Tests\UnitTestCase;
 use Drupal\user\Authentication\Provider\Cookie;
 use Drupal\user\UserAuth;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -20,10 +17,9 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Tests Drupal\user\UserAuth.
+ * @coversDefaultClass \Drupal\user\UserAuth
+ * @group user
  */
-#[CoversClass(UserAuth::class)]
-#[Group('user')]
 class UserAuthTest extends UnitTestCase {
 
   /**
@@ -96,9 +92,10 @@ class UserAuthTest extends UnitTestCase {
   /**
    * Tests failing authentication with missing credential parameters.
    *
-   * @legacy-covers ::authenticate
+   * @covers ::authenticate
+   *
+   * @dataProvider providerTestAuthenticateWithMissingCredentials
    */
-  #[DataProvider('providerTestAuthenticateWithMissingCredentials')]
   public function testAuthenticateWithMissingCredentials($username, $password): void {
     $this->userStorage->expects($this->never())
       ->method('loadByProperties');
@@ -124,7 +121,7 @@ class UserAuthTest extends UnitTestCase {
   /**
    * Tests the authenticate method with no account returned.
    *
-   * @legacy-covers ::authenticate
+   * @covers ::authenticate
    */
   public function testAuthenticateWithNoAccountReturned(): void {
     $this->userStorage->expects($this->once())
@@ -138,7 +135,7 @@ class UserAuthTest extends UnitTestCase {
   /**
    * Tests the authenticate method with an incorrect password.
    *
-   * @legacy-covers ::authenticate
+   * @covers ::authenticate
    */
   public function testAuthenticateWithIncorrectPassword(): void {
     $this->userStorage->expects($this->once())
@@ -157,7 +154,7 @@ class UserAuthTest extends UnitTestCase {
   /**
    * Tests the authenticate method with a correct password.
    *
-   * @legacy-covers ::authenticate
+   * @covers ::authenticate
    */
   public function testAuthenticateWithCorrectPassword(): void {
     $this->testUser->expects($this->once())
@@ -184,7 +181,7 @@ class UserAuthTest extends UnitTestCase {
    * password that is literally "0" was not possible. This test ensures that
    * this regression can't happen again.
    *
-   * @legacy-covers ::authenticate
+   * @covers ::authenticate
    */
   public function testAuthenticateWithZeroPassword(): void {
     $this->testUser->expects($this->once())
@@ -207,7 +204,7 @@ class UserAuthTest extends UnitTestCase {
   /**
    * Tests the authenticate method with a correct password & new password hash.
    *
-   * @legacy-covers ::authenticate
+   * @covers ::authenticate
    */
   public function testAuthenticateWithCorrectPasswordAndNewPasswordHash(): void {
     $this->testUser->expects($this->once())

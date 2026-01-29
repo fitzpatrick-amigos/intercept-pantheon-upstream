@@ -6,21 +6,16 @@ namespace Drupal\Tests\views\Unit\Plugin\display;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\views\Plugin\views\display\Page;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Routing\Route;
 
 /**
- * Tests Drupal\views\Plugin\views\display\Page.
+ * @coversDefaultClass \Drupal\views\Plugin\views\display\Page
+ * @group views
  */
-#[CoversClass(Page::class)]
-#[Group('views')]
 class PageTest extends UnitTestCase {
 
   /**
-   * Tests build basic renderable.
-   *
-   * @legacy-covers ::buildBasicRenderable
+   * @covers ::buildBasicRenderable
    */
   public function testBuildBasicRenderable(): void {
     $route = new Route('/test-view');
@@ -36,9 +31,7 @@ class PageTest extends UnitTestCase {
   }
 
   /**
-   * Tests build basic renderable with missing route.
-   *
-   * @legacy-covers ::buildBasicRenderable
+   * @covers ::buildBasicRenderable
    */
   public function testBuildBasicRenderableWithMissingRoute(): void {
     $this->expectException(\BadFunctionCallException::class);

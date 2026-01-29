@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace Drupal\Tests\automated_cron\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Tests for automated_cron.
+ *
+ * @group automated_cron
  */
-#[Group('automated_cron')]
-#[RunTestsInSeparateProcesses]
 class AutomatedCronTest extends KernelTestBase {
 
   /**
@@ -25,7 +23,7 @@ class AutomatedCronTest extends KernelTestBase {
   /**
    * Tests that automated cron runs cron on an HTTP request.
    *
-   * @legacy-covers \Drupal\automated_cron\EventSubscriber\AutomatedCron::onTerminate
+   * @covers \Drupal\automated_cron\EventSubscriber\AutomatedCron::onTerminate
    */
   public function testRunsCronOnHttpRequest(): void {
     // Set automated_cron interval and times.

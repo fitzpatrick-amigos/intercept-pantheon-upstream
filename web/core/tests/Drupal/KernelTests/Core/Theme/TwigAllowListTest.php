@@ -12,14 +12,12 @@ use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the allowed list of entity properties.
+ *
+ * @group Theme
  */
-#[Group('Theme')]
-#[RunTestsInSeparateProcesses]
 class TwigAllowListTest extends KernelTestBase {
 
   /**
@@ -43,6 +41,7 @@ class TwigAllowListTest extends KernelTestBase {
     'node',
     'taxonomy',
     'user',
+    'system',
     'text',
     'field',
   ];

@@ -19,9 +19,6 @@ use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,10 +26,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 
 /**
- * Tests Drupal\Core\Menu\LocalActionManager.
+ * @coversDefaultClass \Drupal\Core\Menu\LocalActionManager
+ * @group Menu
  */
-#[CoversClass(LocalActionManager::class)]
-#[Group('Menu')]
 class LocalActionManagerTest extends UnitTestCase {
 
   /**
@@ -139,9 +135,7 @@ class LocalActionManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests get title.
-   *
-   * @legacy-covers ::getTitle
+   * @covers ::getTitle
    */
   public function testGetTitle(): void {
     $local_action = $this->createMock('Drupal\Core\Menu\LocalActionInterface');
@@ -158,11 +152,10 @@ class LocalActionManagerTest extends UnitTestCase {
   }
 
   /**
-   * Tests get actions for route.
+   * @covers ::getActionsForRoute
    *
-   * @legacy-covers ::getActionsForRoute
+   * @dataProvider getActionsForRouteProvider
    */
-  #[DataProvider('getActionsForRouteProvider')]
   public function testGetActionsForRoute($route_appears, array $plugin_definitions, array $expected_actions): void {
     $this->discovery->expects($this->any())
       ->method('getDefinitions')
@@ -209,7 +202,7 @@ class LocalActionManagerTest extends UnitTestCase {
     $this->assertEquals($expected_actions, $this->localActionManager->getActionsForRoute($route_appears));
   }
 
-  public static function getActionsForRouteProvider(): array {
+  public static function getActionsForRouteProvider() {
     $originalContainer = \Drupal::hasContainer() ? \Drupal::getContainer() : NULL;
 
     $cache_contexts_manager = (new Prophet())->prophesize(CacheContextsManager::class);

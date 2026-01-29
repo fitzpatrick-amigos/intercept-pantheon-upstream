@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\demo_umami\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\PerformanceTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests demo_umami profile performance.
+ *
+ * @group #slow
  */
-#[Group('#slow')]
-#[RunTestsInSeparateProcesses]
 class AssetAggregationAcrossPagesTest extends PerformanceTestBase {
 
   /**
@@ -32,7 +30,7 @@ class AssetAggregationAcrossPagesTest extends PerformanceTestBase {
       'ScriptCount' => 1,
       'ScriptBytes' => 11700,
       'StylesheetCount' => 6,
-      'StylesheetBytes' => 117400,
+      'StylesheetBytes' => 119600,
     ];
     $this->assertMetrics($expected, $performance_data);
   }
@@ -49,10 +47,10 @@ class AssetAggregationAcrossPagesTest extends PerformanceTestBase {
     }, 'umamiFrontAndRecipePagesAuthenticated');
 
     $expected = [
-      'ScriptCount' => 6,
-      'ScriptBytes' => 204618,
+      'ScriptCount' => 3,
+      'ScriptBytes' => 171060,
       'StylesheetCount' => 5,
-      'StylesheetBytes' => 81750,
+      'StylesheetBytes' => 85600,
     ];
     $this->assertMetrics($expected, $performance_data);
   }
@@ -70,10 +68,10 @@ class AssetAggregationAcrossPagesTest extends PerformanceTestBase {
       $this->doRequests();
     }, 'umamiFrontAndRecipePagesEditor');
     $expected = [
-      'ScriptCount' => 8,
-      'ScriptBytes' => 397256,
+      'ScriptCount' => 5,
+      'ScriptBytes' => 335637,
       'StylesheetCount' => 5,
-      'StylesheetBytes' => 204350,
+      'StylesheetBytes' => 205700,
     ];
     $this->assertMetrics($expected, $performance_data);
   }

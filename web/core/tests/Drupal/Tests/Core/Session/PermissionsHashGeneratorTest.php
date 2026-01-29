@@ -16,15 +16,12 @@ use Drupal\Core\Session\PermissionsHashGenerator;
 use Drupal\Core\Session\RefinableCalculatedPermissions;
 use Drupal\Core\Site\Settings;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 
 /**
- * Tests Drupal\Core\Session\PermissionsHashGenerator.
+ * @coversDefaultClass \Drupal\Core\Session\PermissionsHashGenerator
+ * @group Session
  */
-#[CoversClass(PermissionsHashGenerator::class)]
-#[Group('Session')]
 class PermissionsHashGeneratorTest extends UnitTestCase {
 
   /**
@@ -97,7 +94,7 @@ class PermissionsHashGeneratorTest extends UnitTestCase {
   /**
    * Tests the generate method for regular accounts.
    *
-   * @legacy-covers ::generate
+   * @covers ::generate
    */
   public function testGenerateRegular(): void {
     $permissions = new CalculatedPermissions(
@@ -118,7 +115,7 @@ class PermissionsHashGeneratorTest extends UnitTestCase {
   /**
    * Tests the generate method for admin users.
    *
-   * @legacy-covers ::generate
+   * @covers ::generate
    */
   public function testGenerateAdmin(): void {
     $permissions = new CalculatedPermissions((new RefinableCalculatedPermissions())->addItem(new CalculatedPermissionsItem([], TRUE)));
@@ -137,7 +134,7 @@ class PermissionsHashGeneratorTest extends UnitTestCase {
   /**
    * Tests the generate method with no access policies.
    *
-   * @legacy-covers ::generate
+   * @covers ::generate
    */
   public function testGenerateNoAccessPolicies(): void {
     $permissions = new CalculatedPermissions(new RefinableCalculatedPermissions());
@@ -156,7 +153,7 @@ class PermissionsHashGeneratorTest extends UnitTestCase {
   /**
    * Tests the generate method's caching.
    *
-   * @legacy-covers ::generate
+   * @covers ::generate
    */
   public function testGenerateCache(): void {
     $permissions = new CalculatedPermissions(new RefinableCalculatedPermissions());

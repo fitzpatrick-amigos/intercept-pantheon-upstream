@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\office_hours\Unit;
 
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -34,6 +35,10 @@ class OfficeHoursDatetimeUnitTest extends UnitTestCase {
       ->willReturn(new Language(['id' => 'en']));
 
     $container->set('language_manager', $languageManager);
+
+    $dateFormatter = $this->createMock(DateFormatterInterface::class);
+    $container->set('date.formatter', $dateFormatter);
+
     \Drupal::setContainer($container);
   }
 

@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Drupal\Tests\migrate_drupal\Unit;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\field_discovery_test\FieldDiscoveryTestClass;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
-use Drupal\migrate_drupal\FieldDiscovery;
+use Drupal\field_discovery_test\FieldDiscoveryTestClass;
 use Drupal\migrate_drupal\FieldDiscoveryInterface;
 use Drupal\migrate_drupal\Plugin\MigrateFieldPluginManagerInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the FieldDiscovery Class.
+ *
+ * @group migrate_drupal
+ * @coversDefaultClass \Drupal\migrate_drupal\FieldDiscovery
  */
-#[CoversClass(FieldDiscovery::class)]
-#[Group('migrate_drupal')]
 class FieldDiscoveryTest extends UnitTestCase {
 
   /**
@@ -62,9 +59,9 @@ class FieldDiscoveryTest extends UnitTestCase {
    * @param array $expected_fields
    *   The expected fields.
    *
-   * @legacy-covers ::getEntityFields
+   * @covers ::getEntityFields
+   * @dataProvider getEntityFieldsData
    */
-  #[DataProvider('getEntityFieldsData')]
   public function testGetEntityFields($entity_type_id, array $expected_fields): void {
     $test_data = [
       'getAllFields' => [
@@ -139,9 +136,9 @@ class FieldDiscoveryTest extends UnitTestCase {
    * @param array $expected_fields
    *   The expected fields.
    *
-   * @legacy-covers ::getBundleFields
+   * @covers ::getBundleFields
+   * @dataProvider getBundleFieldsData
    */
-  #[DataProvider('getBundleFieldsData')]
   public function testGetBundleFields($entity_type_id, $bundle, array $expected_fields): void {
     $test_data = [
       'getAllFields' => [
@@ -225,9 +222,9 @@ class FieldDiscoveryTest extends UnitTestCase {
    * @param string|bool $expected_result
    *   The expected return value of the method.
    *
-   * @legacy-covers ::getCoreVersion
+   * @covers ::getCoreVersion
+   * @dataProvider getCoreVersionData
    */
-  #[DataProvider('getCoreVersionData')]
   public function testGetCoreVersion(array $tags, $expected_result): void {
     $migration = $this->prophesize(MigrationInterface::class);
     $migration->getMigrationTags()->willReturn($tags);
@@ -315,9 +312,9 @@ class FieldDiscoveryTest extends UnitTestCase {
    * @param array|bool $expected_definition
    *   The expected migration definition, or false if an exception is expected.
    *
-   * @legacy-covers ::getFieldInstanceStubMigrationDefinition
+   * @covers ::getFieldInstanceStubMigrationDefinition
+   * @dataProvider getFieldInstanceStubMigrationDefinition
    */
-  #[DataProvider('getFieldInstanceStubMigrationDefinition')]
   public function testGetFieldInstanceStubMigrationDefinition($core, $expected_definition): void {
     $field_discovery = new FieldDiscoveryTestClass($this->fieldPluginManager->reveal(), $this->migrationPluginManager->reveal(), $this->logger->reveal());
     if (!$expected_definition) {

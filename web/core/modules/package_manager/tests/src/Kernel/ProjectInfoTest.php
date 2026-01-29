@@ -6,23 +6,16 @@ namespace Drupal\Tests\package_manager\Kernel;
 
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\package_manager\ProjectInfo;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Drupal\package_manager\ProjectInfo.
- *
+ * @coversDefaultClass \Drupal\package_manager\ProjectInfo
+ * @group auto_updates
  * @internal
  */
-#[CoversClass(ProjectInfo::class)]
-#[Group('auto_updates')]
-#[RunTestsInSeparateProcesses]
 class ProjectInfoTest extends PackageManagerKernelTestBase {
 
   /**
-   * Tests get installable releases.
+   * @covers ::getInstallableReleases
    *
    * @param string $fixture
    *   The fixture file name.
@@ -31,9 +24,8 @@ class ProjectInfoTest extends PackageManagerKernelTestBase {
    * @param string[] $expected_versions
    *   The expected versions.
    *
-   * @legacy-covers ::getInstallableReleases
+   * @dataProvider providerGetInstallableReleases
    */
-  #[DataProvider('providerGetInstallableReleases')]
   public function testGetInstallableReleases(string $fixture, string $installed_version, array $expected_versions): void {
     [$project] = explode('.', $fixture);
     $fixtures_directory = __DIR__ . '/../../fixtures/release-history/';
@@ -189,7 +181,7 @@ class ProjectInfoTest extends PackageManagerKernelTestBase {
   /**
    * Tests a project with a status other than "published".
    *
-   * @legacy-covers ::getInstallableReleases
+   * @covers ::getInstallableReleases
    */
   public function testNotPublishedProject(): void {
     $this->setReleaseMetadata(['drupal' => __DIR__ . '/../../fixtures/release-history/drupal.9.8.2_unknown_status.xml']);
@@ -248,9 +240,10 @@ class ProjectInfoTest extends PackageManagerKernelTestBase {
    *   Whether the installed version of the project is expected to be found
    *   safe.
    *
-   * @legacy-covers ::isInstalledVersionSafe
+   * @covers ::isInstalledVersionSafe
+   *
+   * @dataProvider providerInstalledVersionSafe
    */
-  #[DataProvider('providerInstalledVersionSafe')]
   public function testInstalledVersionSafe(string $installed_version, string $release_xml, bool $expected_to_be_safe): void {
     $this->setCoreVersion($installed_version);
     $this->setReleaseMetadata(['drupal' => $release_xml]);
@@ -292,16 +285,15 @@ class ProjectInfoTest extends PackageManagerKernelTestBase {
   }
 
   /**
-   * Tests get supported branches.
+   * @covers ::getSupportedBranches
    *
    * @param string $release_xml
    *   The path of the release metadata.
    * @param string[] $expected_supported_branches
    *   The expected supported branches.
    *
-   * @legacy-covers ::getSupportedBranches
+   * @dataProvider providerGetSupportedBranches
    */
-  #[DataProvider('providerGetSupportedBranches')]
   public function testGetSupportedBranches(string $release_xml, array $expected_supported_branches): void {
     $this->setReleaseMetadata(['drupal' => $release_xml]);
     $project_info = new ProjectInfo('drupal');

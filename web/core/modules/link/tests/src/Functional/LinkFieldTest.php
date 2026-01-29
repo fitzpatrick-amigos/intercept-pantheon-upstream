@@ -8,21 +8,18 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\link\LinkItemInterface;
-use Drupal\link\LinkTitleVisibility;
 use Drupal\node\NodeInterface;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\Traits\Core\PathAliasTestTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests link field widgets and formatters.
+ *
+ * @group link
+ * @group #slow
  */
-#[Group('link')]
-#[Group('#slow')]
-#[RunTestsInSeparateProcesses]
 class LinkFieldTest extends BrowserTestBase {
 
   use PathAliasTestTrait;
@@ -95,7 +92,7 @@ class LinkFieldTest extends BrowserTestBase {
       'field_storage' => $this->fieldStorage,
       'bundle' => 'entity_test',
       'settings' => [
-        'title' => LinkTitleVisibility::Disabled->value,
+        'title' => DRUPAL_DISABLED,
         'link_type' => LinkItemInterface::LINK_GENERIC,
       ],
     ]);
@@ -191,9 +188,9 @@ class LinkFieldTest extends BrowserTestBase {
     $validation_error_2 = 'Manually entered paths should start with one of the following characters: / ? #';
     $validation_error_3 = "The path '@link_path' is inaccessible.";
     $invalid_external_entries = [
-      // Invalid protocol.
+      // Invalid protocol
       'invalid://not-a-valid-protocol' => $validation_error_1,
-      // Missing host name.
+      // Missing host name
       'http://' => $validation_error_1,
     ];
     $invalid_internal_entries = [
@@ -291,7 +288,7 @@ class LinkFieldTest extends BrowserTestBase {
       'bundle' => 'entity_test',
       'label' => 'Read more about this entity',
       'settings' => [
-        'title' => LinkTitleVisibility::Optional->value,
+        'title' => DRUPAL_OPTIONAL,
         'link_type' => LinkItemInterface::LINK_GENERIC,
       ],
     ]);
@@ -315,9 +312,9 @@ class LinkFieldTest extends BrowserTestBase {
       ->save();
 
     // Verify that the link text field works according to the field setting.
-    foreach (LinkTitleVisibility::cases() as $title_setting) {
+    foreach ([DRUPAL_DISABLED, DRUPAL_REQUIRED, DRUPAL_OPTIONAL] as $title_setting) {
       // Update the link title field setting.
-      $this->field->setSetting('title', $title_setting->value);
+      $this->field->setSetting('title', $title_setting);
       $this->field->save();
 
       // Display creation form.
@@ -327,7 +324,7 @@ class LinkFieldTest extends BrowserTestBase {
       $this->assertSession()->fieldValueEquals("{$field_name}[0][uri]", '');
       $this->assertSession()->responseContains('placeholder="http://example.com"');
 
-      if ($title_setting === LinkTitleVisibility::Disabled) {
+      if ($title_setting === DRUPAL_DISABLED) {
         $this->assertSession()->fieldNotExists("{$field_name}[0][title]");
         $this->assertSession()->responseNotContains('placeholder="Enter the text for this link"');
       }
@@ -335,7 +332,7 @@ class LinkFieldTest extends BrowserTestBase {
         $this->assertSession()->responseContains('placeholder="Enter the text for this link"');
 
         $this->assertSession()->fieldValueEquals("{$field_name}[0][title]", '');
-        if ($title_setting === LinkTitleVisibility::Optional) {
+        if ($title_setting === DRUPAL_OPTIONAL) {
           // Verify that the URL is required, if the link text is non-empty.
           $edit = [
             "{$field_name}[0][title]" => 'Example',
@@ -343,7 +340,7 @@ class LinkFieldTest extends BrowserTestBase {
           $this->submitForm($edit, 'Save');
           $this->assertSession()->statusMessageContains('The URL field is required when the Link text field is specified.', 'error');
         }
-        if ($title_setting === LinkTitleVisibility::Required) {
+        if ($title_setting === DRUPAL_REQUIRED) {
           // Verify that the link text is required, if the URL is non-empty.
           $edit = [
             "{$field_name}[0][uri]" => 'http://www.example.com',
@@ -370,11 +367,7 @@ class LinkFieldTest extends BrowserTestBase {
       }
     }
 
-    // Set link title back to optional.
-    $this->field->setSetting('title', LinkTitleVisibility::Optional->value)->save();
-
     // Verify that a link without link text is rendered using the URL as text.
-    $this->drupalGet('entity_test/add');
     $value = 'http://www.example.com/';
     $edit = [
       "{$field_name}[0][uri]" => $value,
@@ -424,7 +417,7 @@ class LinkFieldTest extends BrowserTestBase {
       'label' => 'Read more about this entity',
       'bundle' => 'entity_test',
       'settings' => [
-        'title' => LinkTitleVisibility::Optional->value,
+        'title' => DRUPAL_OPTIONAL,
       ],
     ])->save();
 
@@ -508,7 +501,7 @@ class LinkFieldTest extends BrowserTestBase {
       'label' => 'Link',
       'bundle' => 'entity_test',
       'settings' => [
-        'title' => LinkTitleVisibility::Optional->value,
+        'title' => DRUPAL_OPTIONAL,
         'link_type' => LinkItemInterface::LINK_GENERIC,
       ],
     ])->save();

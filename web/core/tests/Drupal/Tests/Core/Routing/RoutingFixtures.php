@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Core\Routing;
 
-use Drupal\Core\Database\Connection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+
+use Drupal\Core\Database\Connection;
 
 /**
  * Utility methods to generate sample data, database configuration, etc.
@@ -19,7 +20,7 @@ class RoutingFixtures {
    * @param \Drupal\Core\Database\Connection $connection
    *   The connection to use to create the tables.
    */
-  public function createTables(Connection $connection): void {
+  public function createTables(Connection $connection) {
     $tables = $this->routingTableDefinition();
     $schema = $connection->schema();
 
@@ -35,7 +36,7 @@ class RoutingFixtures {
    * @param \Drupal\Core\Database\Connection $connection
    *   The connection to use to drop the tables.
    */
-  public function dropTables(Connection $connection): void {
+  public function dropTables(Connection $connection) {
     $tables = $this->routingTableDefinition();
     $schema = $connection->schema();
 
@@ -47,7 +48,7 @@ class RoutingFixtures {
   /**
    * Returns a static version of the routes.
    */
-  public function staticSampleRouteCollection(): array {
+  public function staticSampleRouteCollection() {
     $routes = [];
     $routes['route_a'] = [
       'path' => '/path/one',
@@ -84,7 +85,7 @@ class RoutingFixtures {
    * @return \Symfony\Component\Routing\RouteCollection
    *   An array of of predefined routes for testing.
    */
-  public function sampleRouteCollection(): RouteCollection {
+  public function sampleRouteCollection() {
     $collection = new RouteCollection();
 
     $route = new Route('path/one');
@@ -117,7 +118,7 @@ class RoutingFixtures {
    * @return \Symfony\Component\Routing\RouteCollection
    *   A RouteCollection with varied route structures.
    */
-  public function complexRouteCollection(): RouteCollection {
+  public function complexRouteCollection() {
     $collection = new RouteCollection();
 
     $route = new Route('/path/{thing}/one');
@@ -148,7 +149,7 @@ class RoutingFixtures {
    * @return \Symfony\Component\Routing\RouteCollection
    *   A RouteCollection containing routes with mixed casing and Unicode characters.
    */
-  public function mixedCaseRouteCollection(): RouteCollection {
+  public function mixedCaseRouteCollection() {
     $collection = new RouteCollection();
 
     $route = new Route('/path/one');
@@ -183,7 +184,7 @@ class RoutingFixtures {
    * @return \Symfony\Component\Routing\RouteCollection
    *   A RouteCollection containing duplicate paths with different route names.
    */
-  public function duplicatePathsRouteCollection(): RouteCollection {
+  public function duplicatePathsRouteCollection() {
     $collection = new RouteCollection();
 
     $route = new Route('/path/one');
@@ -222,7 +223,7 @@ class RoutingFixtures {
    * @return \Symfony\Component\Routing\RouteCollection
    *   A RouteCollection containing routes with Content-type restrictions for testing.
    */
-  public function contentRouteCollection(): RouteCollection {
+  public function contentRouteCollection() {
     $collection = new RouteCollection();
 
     $route = new Route('path/three');
@@ -264,7 +265,7 @@ class RoutingFixtures {
    * @return array
    *   Table definitions.
    */
-  public function routingTableDefinition(): array {
+  public function routingTableDefinition() {
 
     $tables['test_routes'] = [
       'description' => 'Maps paths to various callbacks (access, page and title)',

@@ -123,7 +123,7 @@ final class Importer implements LoggerAwareInterface {
           }
         }
 
-        $entity = $this->toEntity($decoded)->enforceIsNew()->setSyncing(TRUE);
+        $entity = $this->toEntity($decoded)->enforceIsNew();
 
         // Ensure that the entity is not owned by the anonymous user.
         if ($entity instanceof EntityOwnerInterface && empty($entity->getOwnerId())) {
@@ -215,11 +215,6 @@ final class Importer implements LoggerAwareInterface {
       throw new ImportException('The uuid metadata must be specified.');
     }
 
-    // Allow third-party code to modify the entity data before the entity is
-    // created.
-    $event = new PreEntityImportEvent($data);
-    $data = ['_meta' => $event->metadata] + $this->eventDispatcher->dispatch($event)->data;
-
     $is_root = FALSE;
     // @see ::loadEntityDependency()
     if ($this->dependencies === NULL && !empty($data['_meta']['depends'])) {
@@ -296,7 +291,7 @@ final class Importer implements LoggerAwareInterface {
         unset($item_value['target_uuid']);
       }
 
-      $serialized_property_names = self::getCustomSerializedPropertyNames($item);
+      $serialized_property_names = $this->getCustomSerializedPropertyNames($item);
       foreach ($item_value as $property_name => $value) {
         if (\in_array($property_name, $serialized_property_names)) {
           if (\is_string($value)) {
@@ -336,7 +331,7 @@ final class Importer implements LoggerAwareInterface {
    *
    * @see \Drupal\serialization\Normalizer\SerializedColumnNormalizerTrait::getCustomSerializedPropertyNames
    */
-  public static function getCustomSerializedPropertyNames(FieldItemInterface $field_item): array {
+  private function getCustomSerializedPropertyNames(FieldItemInterface $field_item): array {
     if ($field_item instanceof PluginInspectionInterface) {
       $definition = $field_item->getPluginDefinition();
       $serialized_fields = $field_item->getEntity()->getEntityType()->get('serialized_field_property_names');

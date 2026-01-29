@@ -7,16 +7,11 @@ namespace Drupal\Tests\node\Kernel;
 use Drupal\Core\Config\Action\ConfigActionManager;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\NodeType;
-use Drupal\node\NodePreviewMode;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Config Actions.
+ * @group node
  */
-#[Group('node')]
-#[RunTestsInSeparateProcesses]
 class ConfigActionsTest extends KernelTestBase {
 
   use ContentTypeCreationTrait;
@@ -49,7 +44,7 @@ class ConfigActionsTest extends KernelTestBase {
     $node_type = $this->createContentType();
 
     $this->assertTrue($node_type->shouldCreateNewRevision());
-    $this->assertSame(NodePreviewMode::Optional, $node_type->getPreviewMode(FALSE));
+    $this->assertSame(DRUPAL_OPTIONAL, $node_type->getPreviewMode());
     $this->assertTrue($node_type->displaySubmitted());
 
     $this->configActionManager->applyAction(
@@ -60,7 +55,7 @@ class ConfigActionsTest extends KernelTestBase {
     $this->configActionManager->applyAction(
       'entity_method:node.type:setPreviewMode',
       $node_type->getConfigDependencyName(),
-      NodePreviewMode::Required,
+      DRUPAL_REQUIRED,
     );
     $this->configActionManager->applyAction(
       'entity_method:node.type:setDisplaySubmitted',
@@ -70,7 +65,7 @@ class ConfigActionsTest extends KernelTestBase {
 
     $node_type = NodeType::load($node_type->id());
     $this->assertFalse($node_type->shouldCreateNewRevision());
-    $this->assertSame(NodePreviewMode::Required, $node_type->getPreviewMode(FALSE));
+    $this->assertSame(DRUPAL_REQUIRED, $node_type->getPreviewMode());
     $this->assertFalse($node_type->displaySubmitted());
   }
 

@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\Component\Graph;
 
 use Drupal\Component\Graph\Graph;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Drupal\Component\Graph\Graph.
+ * @coversDefaultClass \Drupal\Component\Graph\Graph
+ * @group Graph
  */
-#[CoversClass(Graph::class)]
-#[Group('Graph')]
 class GraphTest extends TestCase {
 
   /**

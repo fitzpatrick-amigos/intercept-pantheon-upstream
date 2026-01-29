@@ -14,14 +14,12 @@ use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\TestFileCreationTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests image theme functions.
+ *
+ * @group image
  */
-#[Group('image')]
-#[RunTestsInSeparateProcesses]
 class ImageThemeFunctionTest extends KernelTestBase {
 
   use TestFileCreationTrait {
@@ -59,7 +57,6 @@ class ImageThemeFunctionTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->installConfig('system');
     $this->installEntitySchema('entity_test');
     $this->installEntitySchema('file');
     $this->installSchema('file', ['file_usage']);

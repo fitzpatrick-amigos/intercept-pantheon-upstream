@@ -6,16 +6,14 @@ namespace Drupal\Tests\Component\Render;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\TestTools\Extension\DeprecationBridge\ExpectDeprecationTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the TranslatableMarkup class.
+ *
+ * @coversDefaultClass \Drupal\Component\Render\FormattableMarkup
+ * @group utility
  */
-#[CoversClass(FormattableMarkup::class)]
-#[Group('utility')]
 class FormattableMarkupTest extends TestCase {
 
   use ExpectDeprecationTrait;
@@ -35,8 +33,8 @@ class FormattableMarkupTest extends TestCase {
   protected $lastErrorNumber;
 
   /**
-   * @legacy-covers ::__toString
-   * @legacy-covers ::jsonSerialize
+   * @covers ::__toString
+   * @covers ::jsonSerialize
    */
   public function testToString(): void {
     $string = 'Can I have a @replacement';
@@ -48,7 +46,7 @@ class FormattableMarkupTest extends TestCase {
   }
 
   /**
-   * @legacy-covers ::count
+   * @covers ::count
    */
   public function testCount(): void {
     $string = 'Can I have a @replacement';
@@ -74,9 +72,9 @@ class FormattableMarkupTest extends TestCase {
   }
 
   /**
-   * @legacy-covers ::__toString
+   * @covers ::__toString
+   * @dataProvider providerTestUnexpectedPlaceholder
    */
-  #[DataProvider('providerTestUnexpectedPlaceholder')]
   public function testUnexpectedPlaceholder($string, $arguments, $error_number, $error_message): void {
     // We set a custom error handler because of
     // https://github.com/sebastianbergmann/phpunit/issues/487
@@ -98,20 +96,10 @@ class FormattableMarkupTest extends TestCase {
    * @return array
    *   An array of test cases.
    */
-  public static function providerTestUnexpectedPlaceholder(): array {
+  public static function providerTestUnexpectedPlaceholder() {
     return [
-      [
-        'Non alpha, non-allowed starting character: ~placeholder',
-        ['~placeholder' => 'replaced'],
-        E_USER_WARNING,
-        'Placeholders must begin with one of the following "@", ":" or "%", invalid placeholder (~placeholder) with string: "Non alpha, non-allowed starting character: ~placeholder"',
-      ],
-      [
-        'Alpha starting character: placeholder',
-        ['placeholder' => 'replaced'],
-        NULL,
-        '',
-      ],
+      ['Non alpha, non-allowed starting character: ~placeholder', ['~placeholder' => 'replaced'], E_USER_WARNING, 'Placeholders must begin with one of the following "@", ":" or "%", invalid placeholder (~placeholder) with string: "Non alpha, non-allowed starting character: ~placeholder"'],
+      ['Alpha starting character: placeholder', ['placeholder' => 'replaced'], NULL, ''],
       // Ensure that where the placeholder is located in the string is
       // irrelevant.
       ['placeholder', ['placeholder' => 'replaced'], NULL, ''],

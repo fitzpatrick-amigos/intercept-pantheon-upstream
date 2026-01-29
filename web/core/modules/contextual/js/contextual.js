@@ -156,9 +156,7 @@
       const uncachedIDs = [];
       const uncachedTokens = [];
       ids.forEach((contextualID) => {
-        const html = storage.getItem(
-          `Drupal.contextual.${contextualID.id}.${drupalSettings.contextual.theme}`,
-        );
+        const html = storage.getItem(`Drupal.contextual.${contextualID.id}`);
         if (html?.length) {
           // Initialize after the current execution cycle, to make the AJAX
           // request for retrieving the uncached contextual links as soon as
@@ -182,25 +180,15 @@
       // Perform an AJAX request to let the server render the contextual links
       // for each of the placeholders.
       if (uncachedIDs.length > 0) {
-        const data = new URLSearchParams();
-        uncachedIDs.forEach((id) => data.append('ids[]', id));
-        uncachedTokens.forEach((id) => data.append('tokens[]', id));
-
-        const controllerUrl = `contextual/render?theme=${drupalSettings.contextual.theme}`;
-        const req = new Request(Drupal.url(controllerUrl), {
-          method: 'POST',
-          body: data,
-        });
-
-        fetch(req)
-          .then((res) => res.json())
-          .then((json) =>
-            Object.entries(json).forEach(([contextualID, html]) => {
+        $.ajax({
+          url: Drupal.url('contextual/render'),
+          type: 'POST',
+          data: { 'ids[]': uncachedIDs, 'tokens[]': uncachedTokens },
+          dataType: 'json',
+          success(results) {
+            Object.entries(results).forEach(([contextualID, html]) => {
               // Store the metadata.
-              storage.setItem(
-                `Drupal.contextual.${contextualID}.${drupalSettings.contextual.theme}`,
-                html,
-              );
+              storage.setItem(`Drupal.contextual.${contextualID}`, html);
               // If the rendered contextual links are empty, then the current
               // user does not have permission to access the associated links:
               // don't render anything.
@@ -219,9 +207,9 @@
                   initContextual($placeholders.eq(i), html);
                 }
               }
-            }),
-          )
-          .catch((error) => console.warn(error));
+            });
+          },
+        });
       }
     },
   };
@@ -544,6 +532,6 @@
    * @listens event:drupalContextualLinkAdded
    */
   $(document).on('drupalContextualLinkAdded', (event, data) => {
-    Drupal.ajax?.bindAjaxLinks(data.$el[0]);
+    Drupal.ajax.bindAjaxLinks(data.$el[0]);
   });
 })(jQuery, Drupal, drupalSettings, window.JSON, window.sessionStorage);

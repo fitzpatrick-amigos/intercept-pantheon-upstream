@@ -2,7 +2,7 @@
 
 namespace Drupal\migrate\Plugin\Discovery;
 
-use Drupal\Component\Annotation\Doctrine\AnnotationRegistry;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Drupal\Component\Annotation\Doctrine\StaticReflectionParser as BaseStaticReflectionParser;
 use Drupal\Component\Annotation\Reflection\MockFileFinder;
 use Drupal\Component\ClassFinder\ClassFinder;
@@ -12,10 +12,9 @@ use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
  * Determines providers based on a class's and its parent's namespaces.
  *
  * @internal
- *   This provides backwards compatibility for migration source plugins
- *   using annotations and having more than one provider. This functionality
- *   will be deprecated with plugin discovery by annotations in
- *   https://www.drupal.org/project/drupal/issues/3522409.
+ *   This is a temporary solution to the fact that migration source plugins have
+ *   more than one provider. This functionality will be moved to core in
+ *   https://www.drupal.org/node/2786355.
  */
 class AnnotatedClassDiscoveryAutomatedProviders extends AnnotatedClassDiscovery {
 
@@ -66,7 +65,7 @@ class AnnotatedClassDiscoveryAutomatedProviders extends AnnotatedClassDiscovery 
                 if (isset($cached['id'])) {
                   // Explicitly unserialize this to create a new object
                   // instance.
-                  $definitions[$cached['id']] = unserialize($cached['content'], ['allowed_classes' => FALSE]);
+                  $definitions[$cached['id']] = unserialize($cached['content']);
                 }
                 continue;
               }

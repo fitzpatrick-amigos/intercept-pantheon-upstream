@@ -7,7 +7,6 @@ namespace Drupal\FunctionalJavascriptTests;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Tests\BrowserTestBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use PHPUnit\Framework\Attributes\PostCondition;
 
 /**
  * Runs a browser test using a driver that supports JavaScript.
@@ -125,8 +124,9 @@ abstract class WebDriverTestBase extends BrowserTestBase {
    * Triggers a test failure if a JavaScript error was encountered.
    *
    * @throws \PHPUnit\Framework\AssertionFailedError
+   *
+   * @postCondition
    */
-  #[PostCondition]
   protected function failOnJavaScriptErrors(): void {
     if ($this->failOnJavascriptConsoleErrors) {
       $errors = $this->getSession()->evaluateScript("JSON.parse(sessionStorage.getItem('js_testing_log_test.errors') || JSON.stringify([]))");

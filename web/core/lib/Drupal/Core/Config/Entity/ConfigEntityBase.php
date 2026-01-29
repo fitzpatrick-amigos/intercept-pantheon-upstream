@@ -12,9 +12,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
 use Drupal\Core\Entity\SynchronizableEntityTrait;
-use Drupal\Core\Plugin\RemovableDependentPluginInterface;
 use Drupal\Core\Plugin\PluginDependencyTrait;
-use Drupal\Core\Plugin\RemovableDependentPluginReturn;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
@@ -85,7 +83,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
    *
    * @var array
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   protected $third_party_settings = [];
 
   /**
@@ -97,7 +95,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
    *
    * @var array
    */
-  // phpcs:ignore Drupal.Classes.PropertyDeclaration, Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.Classes.PropertyDeclaration, Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   protected $_core = [];
 
   /**
@@ -481,21 +479,6 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
       $old_count = count($this->third_party_settings);
       $this->third_party_settings = array_diff_key($this->third_party_settings, array_flip($dependencies['module']));
       $changed = $old_count != count($this->third_party_settings);
-    }
-    if ($this instanceof EntityWithPluginCollectionInterface) {
-      // Allow associated plugins to recalculate their dependencies and update
-      // settings on dependency removal.
-      foreach ($this->getPluginCollections() as $plugin_collection) {
-        foreach ($plugin_collection as $id => $instance) {
-          if ($instance instanceof RemovableDependentPluginInterface) {
-            $changed = match ($instance->onCollectionDependencyRemoval($dependencies)) {
-              RemovableDependentPluginReturn::Remove => $plugin_collection->removeInstanceId($id) || TRUE,
-              RemovableDependentPluginReturn::Changed => TRUE,
-              RemovableDependentPluginReturn::Unchanged => $changed,
-            };
-          }
-        }
-      }
     }
     return $changed;
   }

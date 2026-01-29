@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\field\Kernel\Migrate\d6;
 
-use Drupal\Core\Database\Database;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Core\Database\Database;
 use Drupal\Tests\migrate\Kernel\MigrateDumpAlterInterface;
 use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests migration of field label and description translations.
+ *
+ * @group migrate_drupal_6
+ * @group #slow
  */
-#[Group('migrate_drupal_6')]
-#[Group('#slow')]
-#[RunTestsInSeparateProcesses]
 class MigrateFieldInstanceLabelDescriptionTest extends MigrateDrupal6TestBase implements MigrateDumpAlterInterface {
 
   /**
@@ -24,8 +22,11 @@ class MigrateFieldInstanceLabelDescriptionTest extends MigrateDrupal6TestBase im
    */
   protected static $modules = [
     'config_translation',
+    'locale',
     'language',
     'menu_ui',
+    'node',
+    'field',
   ];
 
   /**

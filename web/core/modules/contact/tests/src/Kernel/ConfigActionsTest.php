@@ -7,14 +7,10 @@ namespace Drupal\Tests\contact\Kernel;
 use Drupal\contact\Entity\ContactForm;
 use Drupal\Core\Config\Action\ConfigActionManager;
 use Drupal\KernelTests\KernelTestBase;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Config Actions.
+ * @group contact
  */
-#[Group('contact')]
-#[RunTestsInSeparateProcesses]
 class ConfigActionsTest extends KernelTestBase {
 
   /**

@@ -4,8 +4,8 @@ namespace Drupal\office_hours;
 
 // The following are not used, but left for testing below issue.
 // @see https://www.drupal.org/project/office_hours/issues/3399054
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
+// use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+// use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItem;
 
 /**
@@ -140,8 +140,11 @@ class OfficeHoursSeason {
    *   (optional) Whether to notify the parent object of the change. Defaults to
    *   TRUE. If a property is updated from a parent object, set it to FALSE to
    *   avoid being notified again.
+   *
+   * @return \Drupal\office_hours\OfficeHoursSeason
+   *   The Season itself, for chaining.
    */
-  public function setValue($values, $notify = TRUE) {
+  public function setValue($values, $notify = TRUE): static {
     $this->id = $values['id'] ?? $this->id;
     $this->name = $values['name'] ?? $this->name;
     $this->from = $values['from'] ?? $this->from;
@@ -159,6 +162,8 @@ class OfficeHoursSeason {
     if (!is_numeric($this->to)) {
       $this->to = strtotime($this->to);
     }
+
+    return $this;
   }
 
   /**
@@ -167,7 +172,7 @@ class OfficeHoursSeason {
    * @return bool
    *   TRUE if the season is empty (to be discarded).
    */
-  public function isEmpty() {
+  public function isEmpty(): bool {
     if ($this->id() == 0) {
       return TRUE;
     }
@@ -205,11 +210,12 @@ class OfficeHoursSeason {
     }
 
     $season = $this;
-    if ($season->id()) {
-      $minDate = $season->getFromDate();
-      $maxDate = strtotime("+1 day midnight", $season->getToDate());
+    if ($season_id = $season->id()) {
       // Season days. Weekdays are always in range.
-      $is_in_range = ($minDate <= $to && $maxDate >= $from);
+      $season_from = $season->getFromDate();
+      $season_to = $season->getToDate();
+      $season_to = strtotime("+1 day midnight", $season_to);
+      $is_in_range = $season_from <= $to && $season_to >= $from;
     }
 
     return $is_in_range;
@@ -221,7 +227,7 @@ class OfficeHoursSeason {
    * @return int
    *   The ID.
    */
-  public function id() {
+  public function id(): int {
     return $this->id;
   }
 
@@ -231,7 +237,7 @@ class OfficeHoursSeason {
    * @return string|\Drupal\Core\StringTranslation\TranslatableMarkup
    *   The name.
    */
-  public function label() {
+  public function label(): string {
     // @todo Translate?
     // But if so, avoidLogicException Ajax error, by adding:
     // use DependencySerializationTrait;
@@ -255,7 +261,7 @@ class OfficeHoursSeason {
    * @return string
    *   The Season name.
    */
-  public function getName() {
+  public function getName(): string {
     return $this->name;
   }
 
@@ -265,10 +271,10 @@ class OfficeHoursSeason {
    * @param string $pattern
    *   The string pattern for the date to be returned.
    *
-   * @return string|int
-   *   The formatted date.
+   * @return int|string
+   *   The unformatted timestamp or formatted date/day, e.g., 'tuesday'.
    */
-  public function getFromDate($pattern = '') {
+  public function getFromDate($pattern = ''): int|string {
     $day = $this->from;
     return $this->formatDate($pattern, $day);
   }
@@ -280,23 +286,23 @@ class OfficeHoursSeason {
    *   The string pattern for the date to be returned.
    *
    * @return string
-   *   The formatted date.
+   *   The unformatted timestamp or formatted date/day, e.g., 'tuesday'.
    */
-  public function getToDate($pattern = '') {
+  public function getToDate($pattern = ''): string {
     $day = $this->to;
     return $this->formatDate($pattern, $day);
   }
 
   /**
-   * Returns the translated label of a Weekday/Exception day, e.g., 'tuesday'.
+   * Returns the translated label of a Weekday/Exception day.
    *
    * @param string $pattern
    *   The day/date formatting pattern.
    * @param int $day
    *   A day number or UNIX timestamp.
    *
-   * @return string
-   *   The formatted day label, e.g., 'tuesday'.
+   * @return int|string
+   *   The unformatted timestamp or formatted date/day, e.g., 'tuesday'.
    */
   private function formatDate(string $pattern, int $day) : string {
     if (!OfficeHoursDateHelper::isValidDate($day)) {
@@ -313,7 +319,7 @@ class OfficeHoursSeason {
   /**
    * {@inheritdoc}
    */
-  public static function sort(OfficeHoursSeason $a, OfficeHoursSeason $b) {
+  public static function sort(OfficeHoursSeason $a, OfficeHoursSeason $b): int {
     // Sort the entities using the entity class's sort() method.
     $a_date = $a->getFromDate();
     $b_date = $b->getFromDate();

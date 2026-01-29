@@ -4,21 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\package_manager\Kernel\PathExcluder;
 
-use Drupal\package_manager\PathExcluder\TestSiteExcluder;
 use Drupal\package_manager\PathLocator;
 use Drupal\Tests\package_manager\Kernel\PackageManagerKernelTestBase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Site Excluder.
- *
+ * @covers \Drupal\package_manager\PathExcluder\TestSiteExcluder
+ * @group package_manager
  * @internal
  */
-#[Group('package_manager')]
-#[CoversClass(TestSiteExcluder::class)]
-#[RunTestsInSeparateProcesses]
 class TestSiteExcluderTest extends PackageManagerKernelTestBase {
 
   /**

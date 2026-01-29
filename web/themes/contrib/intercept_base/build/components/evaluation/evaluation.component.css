@@ -115,21 +115,22 @@
   align-items: inherit;
   justify-content: inherit;
 }
-.evaluation .evaluation__radio-icon {
+.evaluation .evaluation__widget-inputs .evaluation__radio-icon {
+  aspect-ratio: 1;
   background-color: #eef1f4;
   border-radius: 50%;
   height: 5rem;
   width: 5rem;
 }
-.evaluation .evaluation__radio-icon img,
-.evaluation .evaluation__radio-icon svg {
+.evaluation .evaluation__widget-inputs .evaluation__radio-icon img,
+.evaluation .evaluation__widget-inputs .evaluation__radio-icon svg {
   height: 54.5454545455%;
   width: 54.5454545455%;
 }
-.evaluation .evaluation__radio-icon[class*=checked] {
+.evaluation .evaluation__widget-inputs .evaluation__radio-icon.evaluation__radio-icon--checked[class*=checked] {
   background-color: #747481;
 }
-.evaluation .evaluation__radio-icon:not(:first-child) {
+.evaluation .evaluation__widget-inputs .evaluation__radio-icon:not(:first-child) {
   margin-right: 0.625rem;
 }
 .evaluation .form-submit {

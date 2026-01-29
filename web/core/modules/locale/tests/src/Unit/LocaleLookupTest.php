@@ -8,17 +8,13 @@ use Drupal\Component\Gettext\PoItem;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\locale\LocaleLookup;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Tests Drupal\locale\LocaleLookup.
+ * @coversDefaultClass \Drupal\locale\LocaleLookup
+ * @group locale
  */
-#[CoversClass(LocaleLookup::class)]
-#[Group('locale')]
 class LocaleLookupTest extends UnitTestCase {
 
   /**
@@ -100,7 +96,7 @@ class LocaleLookupTest extends UnitTestCase {
   /**
    * Tests locale lookups without fallback.
    *
-   * @legacy-covers ::resolveCacheMiss
+   * @covers ::resolveCacheMiss
    */
   public function testResolveCacheMissWithoutFallback(): void {
     $args = [
@@ -145,9 +141,10 @@ class LocaleLookupTest extends UnitTestCase {
    *
    * Note that context is irrelevant here. It is not used but it is required.
    *
-   * @legacy-covers ::resolveCacheMiss
+   * @covers ::resolveCacheMiss
+   *
+   * @dataProvider resolveCacheMissWithFallbackProvider
    */
-  #[DataProvider('resolveCacheMissWithFallbackProvider')]
   public function testResolveCacheMissWithFallback($langcode, $string, $context, $expected): void {
     // These are fake words!
     // cSpell:disable
@@ -229,7 +226,7 @@ class LocaleLookupTest extends UnitTestCase {
   /**
    * Tests locale lookups with persistent tracking.
    *
-   * @legacy-covers ::resolveCacheMiss
+   * @covers ::resolveCacheMiss
    */
   public function testResolveCacheMissWithPersist(): void {
     $args = [
@@ -270,7 +267,7 @@ class LocaleLookupTest extends UnitTestCase {
   /**
    * Tests locale lookups without a found translation.
    *
-   * @legacy-covers ::resolveCacheMiss
+   * @covers ::resolveCacheMiss
    */
   public function testResolveCacheMissNoTranslation(): void {
     $string = $this->createMock('Drupal\locale\StringInterface');
@@ -318,9 +315,9 @@ class LocaleLookupTest extends UnitTestCase {
    * @param bool $is_fix
    *   The flag about expected fix translation.
    *
-   * @legacy-covers ::resolveCacheMiss
+   * @covers ::resolveCacheMiss
+   * @dataProvider providerFixOldPluralTranslationProvider
    */
-  #[DataProvider('providerFixOldPluralTranslationProvider')]
   public function testFixOldPluralStyleTranslations($translations, $langcode, $string, $is_fix): void {
     $this->storage->expects($this->any())
       ->method('findTranslation')
@@ -375,11 +372,10 @@ class LocaleLookupTest extends UnitTestCase {
   }
 
   /**
-   * Tests get cid.
+   * @covers ::getCid
    *
-   * @legacy-covers ::getCid
+   * @dataProvider getCidProvider
    */
-  #[DataProvider('getCidProvider')]
   public function testGetCid(array $roles, $expected): void {
     $this->user = $this->createMock('Drupal\Core\Session\AccountInterface');
     $this->user->expects($this->any())

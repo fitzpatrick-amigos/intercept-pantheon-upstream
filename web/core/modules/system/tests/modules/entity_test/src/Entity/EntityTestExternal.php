@@ -22,7 +22,6 @@ use Drupal\Core\Url;
   links: [
     'canonical' => '/entity_test_external/{entity_test_external}',
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_external',
 )]
 class EntityTestExternal extends EntityTest {

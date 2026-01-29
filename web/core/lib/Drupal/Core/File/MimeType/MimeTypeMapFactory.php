@@ -17,7 +17,7 @@ class MimeTypeMapFactory {
   ) {}
 
   /**
-   * Creates an instance of the MIME type map and dispatches the load event.
+   * Creates an instance of the MIME type map.
    *
    * @return \Drupal\Core\File\MimeType\MimeTypeMapInterface
    *   The MIME type map.
@@ -28,12 +28,6 @@ class MimeTypeMapFactory {
     return $map;
   }
 
-  /**
-   * Creates an instance of the MIME type map.
-   *
-   * @return \Drupal\Core\File\MimeType\MimeTypeMapInterface
-   *   The MIME type map.
-   */
   protected function doCreateMap(): MimeTypeMapInterface {
     return new MimeTypeMap();
   }

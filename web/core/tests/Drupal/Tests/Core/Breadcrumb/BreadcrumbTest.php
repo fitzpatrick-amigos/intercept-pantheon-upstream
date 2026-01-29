@@ -8,20 +8,15 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Breadcrumb\Breadcrumb.
+ * @coversDefaultClass \Drupal\Core\Breadcrumb\Breadcrumb
+ * @group Breadcrumb
  */
-#[CoversClass(Breadcrumb::class)]
-#[Group('Breadcrumb')]
 class BreadcrumbTest extends UnitTestCase {
 
   /**
-   * Tests set links.
-   *
-   * @legacy-covers ::setLinks
+   * @covers ::setLinks
    */
   public function testSetLinks(): void {
     $breadcrumb = new Breadcrumb();

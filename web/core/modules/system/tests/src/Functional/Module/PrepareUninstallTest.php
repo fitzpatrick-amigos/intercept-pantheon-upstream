@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace Drupal\Tests\system\Functional\Module;
 
 use Drupal\node\Entity\NodeType;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\node\Traits\NodeAccessTrait;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\taxonomy\Traits\TaxonomyTestTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests that modules which provide entity types can be uninstalled.
+ *
+ * @group Module
  */
-#[Group('Module')]
-#[RunTestsInSeparateProcesses]
 class PrepareUninstallTest extends BrowserTestBase {
 
   use TaxonomyTestTrait;

@@ -6,23 +6,18 @@ namespace Drupal\Tests\update\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\update\ProjectCoreCompatibility;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\update\ProjectCoreCompatibility.
+ * @coversDefaultClass \Drupal\update\ProjectCoreCompatibility
+ *
+ * @group update
  */
-#[CoversClass(ProjectCoreCompatibility::class)]
-#[Group('update')]
 class ProjectCoreCompatibilityTest extends UnitTestCase {
 
   /**
-   * Tests set project core compatibility ranges.
-   *
-   * @legacy-covers ::setReleaseMessage
+   * @covers ::setReleaseMessage
+   * @dataProvider providerSetProjectCoreCompatibilityRanges
    */
-  #[DataProvider('providerSetProjectCoreCompatibilityRanges')]
   public function testSetProjectCoreCompatibilityRanges(array $project_data, $core_data, array $supported_branches, array $core_releases, array $expected_releases, array $expected_security_updates): void {
     $project_compatibility = new ProjectCoreCompatibility($core_data, $core_releases, $supported_branches);
     $project_compatibility->setStringTranslation($this->getStringTranslationStub());
@@ -163,7 +158,8 @@ class ProjectCoreCompatibilityTest extends UnitTestCase {
   }
 
   /**
-   * Tests is core compatible.
+   * @covers ::isCoreCompatible
+   * @dataProvider providerIsCoreCompatible
    *
    * @param string $constraint
    *   The core_version_constraint to test.
@@ -171,10 +167,7 @@ class ProjectCoreCompatibilityTest extends UnitTestCase {
    *   The installed version of core to compare against.
    * @param bool $expected
    *   The expected result.
-   *
-   * @legacy-covers ::isCoreCompatible
    */
-  #[DataProvider('providerIsCoreCompatible')]
   public function testIsCoreCompatible(string $constraint, string $installed_core, bool $expected): void {
     $core_data['existing_version'] = $installed_core;
     $project_compatibility = new ProjectCoreCompatibility($core_data, [], []);

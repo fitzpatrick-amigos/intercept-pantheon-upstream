@@ -21,7 +21,7 @@ class OfficeHoursExceptionsItem extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     // @todo Add random Exception day value in past and in near future.
     $value = [];
     return $value;
@@ -30,42 +30,40 @@ class OfficeHoursExceptionsItem extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public function formatTimeSlot(array $settings) {
-    if ($this->isExceptionHeader()) {
+  public function formatTimeSlot(array $settings): string {
+    $result = match (TRUE) {
       // Exceptions header does not have time slot.
-      return '';
-    }
-    return parent::formatTimeSlot($settings);
+      $this->isExceptionHeader() => '',
+
+      default => parent::formatTimeSlot($settings),
+    };
+    return $result;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function label(array $settings) {
+  public function label(array $settings): string {
     $day = $this->day;
 
-    switch (TRUE) {
-      case OfficeHoursDateHelper::isExceptionHeader($day):
-        $label = $settings['exceptions']['title']
-          ? $this->t(Html::escape($settings['exceptions']['title']))
-          : '';
-        break;
+    $label = match (TRUE) {
+      // Caption on Exceptions header; avoid translating empty string.
+      OfficeHoursDateHelper::isExceptionHeader($day)
+      && $settings['exceptions']['title'] == ''
+      => '',
+      OfficeHoursDateHelper::isExceptionHeader($day)
+      => $this->t(Html::escape($settings['exceptions']['title'])),
 
-      default:
-        // Exception date. Override pattern.
-        $settings['day_format'] = $settings['exceptions']['date_format']
-          ?? $settings['day_format'];
-        $label = parent::label($settings);
-        break;
-    }
-
+      // Normal label on Exceptions date.
+      default => parent::label($settings),
+    };
     return $label;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isExceptionDay() {
+  public function isExceptionDay(): bool {
     return TRUE;
   }
 
@@ -93,29 +91,24 @@ class OfficeHoursExceptionsItem extends OfficeHoursItem {
     if (OfficeHoursDateHelper::isExceptionDay($to)) {
       // $from, $to are calendar dates.
       // @todo Support not only ($from = today, $to = today).
-      if ($day < $yesterday) {
-        return FALSE;
-      }
-      elseif ($day == $yesterday) {
-        // If the slot is until after midnight, it could be in range.
-        return parent::isOpen($time);
-      }
-      elseif ($day <= $to) {
-        return TRUE;
-      }
     }
     else {
       // $from, $to is a range, e.g., 0..90 days.
       // Time slots from yesterday with endhours after midnight are included.
       // @todo Call parent::isInRange();
       // @todo Support $from <> 0.
-      $last_day = strtotime("$date +$to day");
-      if ($day == $yesterday) {
-        return parent::isOpen($time);
-      }
-      elseif ($day >= $yesterday && $day <= $last_day) {
-        return TRUE;
-      }
+      $to = strtotime("$date +$to day");
+    }
+
+    if ($day < $yesterday) {
+      return FALSE;
+    }
+    elseif ($day == $yesterday && $day <= $to) {
+      // We were open yesterday evening, check if we are still open.
+      return parent::isOpen($time);
+    }
+    elseif ($day > $yesterday && $day <= $to) {
+      return TRUE;
     }
 
     return FALSE;
@@ -124,7 +117,7 @@ class OfficeHoursExceptionsItem extends OfficeHoursItem {
   /**
    * {@inheritdoc}
    */
-  public function isOpen($time) {
+  public function isOpen($time): bool {
     $is_open = FALSE;
 
     $today = OfficeHoursDateHelper::today();

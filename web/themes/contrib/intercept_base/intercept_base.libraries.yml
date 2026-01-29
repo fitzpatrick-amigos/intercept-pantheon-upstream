@@ -82,6 +82,12 @@ userEvents:
     - core/jquery
     - core/drupal
 
+# A11y impqrovements for Webform Image Select element
+webform_image_select:
+  css:
+    theme:
+      build/libraries/webform-image-select/webform-image-select.theme.css: {}
+
 #
 # Component Library
 #
@@ -295,6 +301,7 @@ header-mobile:
     component:
       build/components/header-mobile/header-mobile.component.css: {}
   js:
+    build/components/header-mobile/header-mobile.js: {}
     https://cdn.jsdelivr.net/npm/jquery-once@2.2.3/jquery.once.min.js:
       external: true
       minified: true
@@ -384,7 +391,6 @@ main-menu:
     https://cdn.jsdelivr.net/npm/jquery-once@2.2.3/jquery.once.min.js:
       external: true
       minified: true
-    js/mobile-menu-fix.js: {}
   dependencies:
     - core/jquery
     - intercept_base/tabbed

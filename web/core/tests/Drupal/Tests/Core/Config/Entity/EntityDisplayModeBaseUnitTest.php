@@ -8,14 +8,11 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityDisplayModeBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Entity\EntityDisplayModeBase.
+ * @coversDefaultClass \Drupal\Core\Entity\EntityDisplayModeBase
+ * @group Config
  */
-#[CoversClass(EntityDisplayModeBase::class)]
-#[Group('Config')]
 class EntityDisplayModeBaseUnitTest extends UnitTestCase {
 
   /**
@@ -78,9 +75,7 @@ class EntityDisplayModeBaseUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests calculate dependencies.
-   *
-   * @legacy-covers ::calculateDependencies
+   * @covers ::calculateDependencies
    */
   public function testCalculateDependencies(): void {
     $target_entity_type_id = $this->randomMachineName(16);
@@ -104,9 +99,7 @@ class EntityDisplayModeBaseUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests set target type.
-   *
-   * @legacy-covers ::setTargetType
+   * @covers ::setTargetType
    */
   public function testSetTargetType(): void {
     // Generate mock.
@@ -133,9 +126,7 @@ class EntityDisplayModeBaseUnitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get target type.
-   *
-   * @legacy-covers ::getTargetType
+   * @covers ::getTargetType
    */
   public function testGetTargetType(): void {
     // Generate mock.

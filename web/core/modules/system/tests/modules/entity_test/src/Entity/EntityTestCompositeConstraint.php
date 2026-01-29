@@ -27,7 +27,6 @@ use Drupal\entity_test\EntityTestForm;
       'default' => EntityTestForm::class,
     ],
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_composite_constraint',
   constraints: [
     'EntityTestComposite' => [],

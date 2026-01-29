@@ -15,7 +15,6 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\Attributes\TestWith;
 
 /**
@@ -95,7 +94,7 @@ class ExecutableFinderTest extends UnitTestCase {
   /**
    * Tests that the executable finder falls back to looking in config for paths.
    */
-  #[IgnoreDeprecations]
+  #[Group('legacy')]
   public function testLegacyExecutablePaths(): void {
     $exception = $this->prophesize(LogicException::class);
 

@@ -7,17 +7,14 @@ namespace Drupal\Tests\package_manager\Kernel;
 use Drupal\fixture_manipulator\ActiveFixtureManipulator;
 use Drupal\package_manager\ComposerInspector;
 use Drupal\package_manager\PathLocator;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Process\Process;
 
 /**
  * Test that the 'fake-site' fixture is a valid starting point.
  *
+ * @group package_manager
  * @internal
  */
-#[Group('package_manager')]
-#[RunTestsInSeparateProcesses]
 class FakeSiteFixtureTest extends PackageManagerKernelTestBase {
 
   /**
@@ -67,7 +64,7 @@ class FakeSiteFixtureTest extends PackageManagerKernelTestBase {
   /**
    * Tests if `removePackage` can be called on all packages in the fixture.
    *
-   * @legacy-covers \Drupal\fixture_manipulator\FixtureManipulator::removePackage
+   * @covers \Drupal\fixture_manipulator\FixtureManipulator::removePackage
    */
   public function testCallToRemovePackage(): void {
     /** @var \Drupal\package_manager\ComposerInspector $inspector */

@@ -293,12 +293,7 @@ abstract class SourcePluginBase extends PluginBase implements MigrateSourceInter
     $result = TRUE;
     try {
       $result_hook = $this->getModuleHandler()->invokeAll('migrate_prepare_row', [$row, $this, $this->migration]);
-      $result_named_hook = $this->getModuleHandler()
-        ->invokeAll('migrate_' . $this->migration->id() . '_prepare_row', [
-          $row,
-          $this,
-          $this->migration,
-        ]);
+      $result_named_hook = $this->getModuleHandler()->invokeAll('migrate_' . $this->migration->id() . '_prepare_row', [$row, $this, $this->migration]);
       // We will skip if any hook returned FALSE.
       $skip = ($result_hook && in_array(FALSE, $result_hook)) || ($result_named_hook && in_array(FALSE, $result_named_hook));
       $save_to_map = TRUE;
@@ -570,7 +565,7 @@ abstract class SourcePluginBase extends PluginBase implements MigrateSourceInter
   /**
    * Save the new high water mark.
    *
-   * @param int|null $high_water
+   * @param int $high_water
    *   The high water timestamp.
    */
   protected function saveHighWater($high_water) {

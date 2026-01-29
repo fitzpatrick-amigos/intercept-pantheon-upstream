@@ -6,16 +6,14 @@ namespace Drupal\Tests\Core\Theme\Icon;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginWithFormsInterface;
-use Drupal\Core\Theme\Icon\IconPackExtractorForm;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\Core\Theme\Icon\IconPackExtractorForm;
 
 /**
- * Tests Drupal\Core\Theme\Icon\IconPackExtractorForm.
+ * @coversDefaultClass \Drupal\Core\Theme\Icon\IconPackExtractorForm
+ *
+ * @group icon
  */
-#[CoversClass(IconPackExtractorForm::class)]
-#[Group('icon')]
 class IconPackExtractorFormTest extends UnitTestCase {
 
   /**

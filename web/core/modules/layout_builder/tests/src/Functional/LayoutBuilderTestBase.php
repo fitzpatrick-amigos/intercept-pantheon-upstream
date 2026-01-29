@@ -56,7 +56,6 @@ abstract class LayoutBuilderTestBase extends BrowserTestBase {
           'value' => 'The first node body',
         ],
       ],
-      'promote' => TRUE,
     ]);
     $this->createNode([
       'type' => 'bundle_with_section_field',
@@ -66,7 +65,6 @@ abstract class LayoutBuilderTestBase extends BrowserTestBase {
           'value' => 'The second node body',
         ],
       ],
-      'promote' => TRUE,
     ]);
   }
 

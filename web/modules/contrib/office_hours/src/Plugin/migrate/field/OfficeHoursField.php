@@ -23,7 +23,7 @@ class OfficeHoursField extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFieldFormatterMap() {
+  public function getFieldFormatterMap(): array {
     return [
       'office_hours' => 'office_hours_table',
     ];
@@ -32,7 +32,7 @@ class OfficeHoursField extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getFieldWidgetMap() {
+  public function getFieldWidgetMap(): array {
     return [
       'office_hours' => 'office_hours_exceptions',
     ];
@@ -41,7 +41,7 @@ class OfficeHoursField extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function processFieldValues(MigrationInterface $migration, $field_name, $data) {
+  public function processFieldValues(MigrationInterface $migration, $field_name, $data): void {
     // Function pre D8.6 .
     // @see https://www.drupal.org/node/2944598
     $this->defineValueProcessPipeline($migration, $field_name, $data);
@@ -50,7 +50,7 @@ class OfficeHoursField extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function defineValueProcessPipeline(MigrationInterface $migration, $field_name, $data) {
+  public function defineValueProcessPipeline(MigrationInterface $migration, $field_name, $data): void {
     // Function post D8.6 .
     // @see https://www.drupal.org/node/2944598
     $process = [

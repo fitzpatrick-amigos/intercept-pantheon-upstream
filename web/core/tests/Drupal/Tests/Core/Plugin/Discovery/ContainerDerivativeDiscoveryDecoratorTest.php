@@ -6,20 +6,15 @@ namespace Drupal\Tests\Core\Plugin\Discovery;
 
 use Drupal\Core\Plugin\Discovery\ContainerDerivativeDiscoveryDecorator;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\Core\Plugin\Discovery\ContainerDerivativeDiscoveryDecorator.
+ * @coversDefaultClass \Drupal\Core\Plugin\Discovery\ContainerDerivativeDiscoveryDecorator
+ * @group Plugin
  */
-#[CoversClass(ContainerDerivativeDiscoveryDecorator::class)]
-#[Group('Plugin')]
 class ContainerDerivativeDiscoveryDecoratorTest extends UnitTestCase {
 
   /**
-   * Tests get definitions.
-   *
-   * @legacy-covers ::getDefinitions
+   * @covers ::getDefinitions
    */
   public function testGetDefinitions(): void {
     $example_service = $this->createMock('Symfony\Contracts\EventDispatcher\EventDispatcherInterface');

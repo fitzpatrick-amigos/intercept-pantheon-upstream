@@ -6,17 +6,13 @@ namespace Drupal\Tests\views\Unit;
 
 use Drupal\Core\Language\Language;
 use Drupal\Tests\UnitTestCase;
-use Drupal\views\Tests\ViewTestData;
 use Drupal\views\ViewsData;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\views\Tests\ViewTestData;
 
 /**
- * Tests Drupal\views\ViewsData.
+ * @coversDefaultClass \Drupal\views\ViewsData
+ * @group views
  */
-#[CoversClass(ViewsData::class)]
-#[Group('views')]
 class ViewsDataTest extends UnitTestCase {
 
   /**
@@ -413,7 +409,7 @@ class ViewsDataTest extends UnitTestCase {
    *
    * Warm cache:
    *   - all tables
-   *   - views_test_data.
+   *   - views_test_data
    */
   public function testCacheCallsWithSameTableMultipleTimesAndWarmCache(): void {
     $expected_views_data = $this->viewsDataWithProvider();
@@ -481,7 +477,7 @@ class ViewsDataTest extends UnitTestCase {
    *   - all tables
    *   - views_test_data
    * Not warm cache:
-   *   - $non_existing_table.
+   *   - $non_existing_table
    */
   public function testCacheCallsWithWarmCacheAndInvalidTable(): void {
     $expected_views_data = $this->viewsDataWithProvider();
@@ -521,7 +517,7 @@ class ViewsDataTest extends UnitTestCase {
    * Warm cache:
    *   - all tables
    *   - views_test_data
-   *   - $non_existing_table.
+   *   - $non_existing_table
    */
   public function testCacheCallsWithWarmCacheForInvalidTable(): void {
     $non_existing_table = $this->randomMachineName();
@@ -574,7 +570,7 @@ class ViewsDataTest extends UnitTestCase {
    * Tests the cache calls for all views data.
    *
    * Warm cache:
-   *   - all tables.
+   *   - all tables
    */
   public function testCacheCallsWithWarmCacheAndGetAllTables(): void {
     $expected_views_data = $this->viewsDataWithProvider();
@@ -600,7 +596,7 @@ class ViewsDataTest extends UnitTestCase {
   /**
    * Tests the cache calls for multiple tables without warm caches.
    *
-   * @legacy-covers ::get
+   * @covers ::get
    */
   public function testCacheCallsWithoutWarmCacheAndGetMultipleTables(): void {
     $expected_views_data = $this->viewsDataWithProvider();
@@ -643,9 +639,9 @@ class ViewsDataTest extends UnitTestCase {
   /**
    * Tests that getting data with an empty key throws an exception.
    *
-   * @legacy-covers ::get
+   * @covers ::get
+   * @dataProvider providerTestGetEmptyKey
    */
-  #[DataProvider('providerTestGetEmptyKey')]
   public function testGetEmptyKey($key): void {
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage('A valid cache entry key is required. Use getAll() to get all table data.');

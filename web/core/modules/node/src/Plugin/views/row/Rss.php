@@ -25,13 +25,13 @@ class Rss extends RssPluginBase {
    *
    * @var string
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public $base_table = 'node_field_data';
 
   /**
    * The base field for this row plugin.
    */
-  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName, Drupal.Commenting.VariableComment.Missing
   public string $base_field = 'nid';
 
   /**
@@ -51,7 +51,8 @@ class Rss extends RssPluginBase {
    */
   public function buildOptionsForm_summary_options() {
     $options = parent::buildOptionsForm_summary_options();
-    $options[$this::TITLE_VIEW_MODE] = $this->t('Title only');
+    $options['title'] = $this->t('Title only');
+    $options['default'] = $this->t('Use site default RSS settings');
     return $options;
   }
 
@@ -88,6 +89,9 @@ class Rss extends RssPluginBase {
     }
 
     $display_mode = $this->options['view_mode'];
+    if ($display_mode == 'default') {
+      $display_mode = \Drupal::config('system.rss')->get('items.view_mode');
+    }
 
     // Load the specified node:
     /** @var \Drupal\node\NodeInterface $node */
@@ -116,9 +120,11 @@ class Rss extends RssPluginBase {
     // The node gets built and modules add to or modify $node->rss_elements
     // and $node->rss_namespaces.
 
+    $build_mode = $display_mode;
+
     $build = \Drupal::entityTypeManager()
       ->getViewBuilder('node')
-      ->view($node, $display_mode);
+      ->view($node, $build_mode);
     // Add rss key to cache to differentiate this from other caches.
     $build['#cache']['keys'][] = 'view_rss';
 
@@ -129,7 +135,7 @@ class Rss extends RssPluginBase {
     }
 
     $item = new \stdClass();
-    if ($display_mode != $this::TITLE_VIEW_MODE) {
+    if ($display_mode != 'title') {
       // We render node contents.
       $item->description = $build;
     }

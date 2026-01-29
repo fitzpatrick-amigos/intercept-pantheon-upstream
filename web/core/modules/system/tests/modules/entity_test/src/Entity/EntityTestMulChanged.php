@@ -49,7 +49,6 @@ use Drupal\views\EntityViewsData;
     'edit-form' => '/entity_test_mul_changed/manage/{entity_test_mul_changed}/edit',
     'delete-form' => '/entity_test/delete/entity_test_mul_changed/{entity_test_mul_changed}',
   ],
-  admin_permission: 'administer entity_test content',
   base_table: 'entity_test_mul_changed',
   data_table: 'entity_test_mul_changed_property',
   translatable: TRUE,

@@ -3,6 +3,7 @@
 namespace Drupal\office_hours\Event;
 
 use Drupal\Component\EventDispatcher\Event;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\PluginSettingsBase;
 use Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface;
 
@@ -53,7 +54,7 @@ class OfficeHoursEvent extends Event {
    * @param \Drupal\Core\Field\PluginSettingsBase|null $plugin
    *   (@todo) The formatter or widget, in order to avoid multiple processing.
    */
-  public function __construct(OfficeHoursItemListInterface $items, array $office_hours, int $time, PluginSettingsBase|NULL $plugin) {
+  public function __construct(OfficeHoursItemListInterface $items, array $office_hours, int $time, ?PluginSettingsBase $plugin) {
     $this->items = $items;
     $this->officeHours = $office_hours;
     $this->timestamp = $time;
@@ -66,7 +67,7 @@ class OfficeHoursEvent extends Event {
    * @return \Drupal\Core\Entity\EntityInterface
    *   The entity at hand.
    */
-  public function getEntity() {
+  public function getEntity(): FieldableEntityInterface {
     return $this->items->getEntity();
   }
 
@@ -76,7 +77,7 @@ class OfficeHoursEvent extends Event {
    * @return \Drupal\office_hours\Plugin\Field\FieldType\OfficeHoursItemListInterface
    *   The ItemList with the office hours values in $items->getValues().
    */
-  public function getItems() {
+  public function getItems(): OfficeHoursItemListInterface {
     return $this->items;
   }
 
@@ -86,7 +87,7 @@ class OfficeHoursEvent extends Event {
    * @return \Drupal\Core\Field\PluginSettingsBase|null
    *   The plugin.
    */
-  public function getPlugin() {
+  public function getPlugin(): ?PluginSettingsBase {
     return $this->plugin;
   }
 
@@ -96,7 +97,7 @@ class OfficeHoursEvent extends Event {
    * @return int
    *   The UNIX timestamp.
    */
-  public function getTimestamp() {
+  public function getTimestamp(): int {
     return $this->timestamp;
   }
 

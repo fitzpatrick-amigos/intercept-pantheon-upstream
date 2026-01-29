@@ -271,7 +271,18 @@ class WebformOfficeHours extends WebformCompositeBase {
       $this->officeHoursElement = $element;
       $items = $this->getItemsUnserialized($element, $webform_submission, $options);
       $build = $this->viewElements($items);
-      $html = \Drupal::service('renderer')->renderPlain($build);
+
+      $html = '';
+      $render = \Drupal::service('renderer');
+      // @see https://www.drupal.org/node/3407994 for more details.
+      if (version_compare(\Drupal::VERSION, '10.3.0', '>=')) {
+        $html = $render->renderInIsolation($build);
+      }
+      else {
+        // @phpstan-ignore-next-line.
+        $html = $render->renderPlain($build);
+      }
+
       return trim(MailFormatHelper::htmlToText($html));
     }
     else {
@@ -383,7 +394,7 @@ class WebformOfficeHours extends WebformCompositeBase {
    * Convert Office Hours array to serialized string,
    * since Webform does not support sub-sub components.
    *
-   * @param array $office_hours
+   * @param array $values
    *   Office hours array.
    * @param array $element
    *   An element.

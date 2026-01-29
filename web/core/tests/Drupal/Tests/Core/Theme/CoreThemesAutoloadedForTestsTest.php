@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\Core\Theme;
 
-use Drupal\claro\ClaroPreRender;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\Group;
+use Drupal\claro\ClaroPreRender;
 
 /**
  * Confirms that core/themes is autoloaded for tests.
+ *
+ * @group Theme
  */
-#[Group('Theme')]
 class CoreThemesAutoloadedForTestsTest extends UnitTestCase {
 
   /**

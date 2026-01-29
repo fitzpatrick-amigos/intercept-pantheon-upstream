@@ -6,14 +6,12 @@ namespace Drupal\Tests\taxonomy\Functional;
 
 use Drupal\Core\Url;
 use Drupal\Tests\system\Functional\Menu\AssertBreadcrumbTrait;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests for proper breadcrumb translation.
+ *
+ * @group taxonomy
  */
-#[Group('taxonomy')]
-#[RunTestsInSeparateProcesses]
 class TermTranslationTest extends TaxonomyTestBase {
 
   use AssertBreadcrumbTrait;

@@ -190,3 +190,38 @@ function consumers_update_8110(): void {
   $manager->updateFieldStorageDefinition(\Drupal::service('entity_field.manager')
     ->getBaseFieldDefinitions('consumer')['client_id']);
 }
+
+/**
+ * Add field 'status'.
+ */
+function consumers_update_8111() {
+  $field_definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(new TranslatableMarkup('Status'))
+    ->setDescription(new TranslatableMarkup('The status of the consumer.'))
+    ->setSetting('on_label', 'Enabled')
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => FALSE,
+      ],
+      'weight' => 100,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('view', [
+      'type' => 'boolean',
+      'label' => 'above',
+      'weight' => 100,
+      'settings' => [
+        'format' => 'enabled-disabled',
+      ],
+    ])
+    ->setDisplayConfigurable('view', TRUE)
+    ->setRevisionable(TRUE)
+    ->setDefaultValue(TRUE)
+    // Explicitly initialize existing entities with TRUE,
+    // to ensure a consistent behavior.
+    ->setInitialValue(TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('status', 'consumer', 'consumers', $field_definition);
+}

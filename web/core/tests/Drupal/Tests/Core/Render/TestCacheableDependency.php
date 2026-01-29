@@ -35,21 +35,21 @@ class TestCacheableDependency implements CacheableDependencyInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheContexts(): array {
+  public function getCacheContexts() {
     return $this->contexts;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags(): array {
+  public function getCacheTags() {
     return $this->tags;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge(): int {
+  public function getCacheMaxAge() {
     return $this->maxAge;
   }
 

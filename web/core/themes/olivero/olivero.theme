@@ -5,7 +5,6 @@
  * Functions to support theming in the Olivero theme.
  */
 
-use Drupal\Core\Extension\ThemeSettingsProvider;
 use Drupal\olivero\OliveroPreRender;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,7 +13,42 @@ use Drupal\Core\Render\Element;
 use Drupal\user\UserInterface;
 
 /**
- * Implements hook_preprocess_HOOK() for page-title.
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ *
+ * Adds body classes if certain regions have content.
+ */
+function olivero_preprocess_html(&$variables): void {
+  if (theme_get_setting('mobile_menu_all_widths') === 1) {
+    $variables['attributes']['class'][] = 'is-always-mobile-nav';
+  }
+
+  // Convert custom hex to hsl so we can use the hue value
+  $brand_color_hex = theme_get_setting('base_primary_color') ?? '#1b9ae4';
+  [$h, $s, $l] = _olivero_hex_to_hsl($brand_color_hex);
+
+  $variables['html_attributes']->setAttribute('style', "--color--primary-hue:$h;--color--primary-saturation:$s%;--color--primary-lightness:$l");
+
+  // So fonts can be preloaded from base theme in the event Olivero is used as a
+  // subtheme.
+  $variables['olivero_path'] = \Drupal::request()->getBasePath() . '/' . \Drupal::service('extension.list.theme')->getPath('olivero');
+
+  $query_string = \Drupal::service('asset.query_string')->get();
+
+  // Create render array with noscript tag to output non-JavaScript
+  // stylesheet for primary menu.
+  $variables['noscript_styles'] = [
+    '#type' => 'html_tag',
+    '#noscript' => TRUE,
+    '#tag' => 'link',
+    '#attributes' => [
+      'rel' => 'stylesheet',
+      'href' => $variables['olivero_path'] . '/css/components/navigation/nav-primary-no-js.css?' . $query_string,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page title templates.
  */
 function olivero_preprocess_page_title(&$variables): void {
   // Since the title and the shortcut link are both block level elements,
@@ -43,13 +77,13 @@ function olivero_preprocess_page_title(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for maintenance-page.
+ * Implements hook_preprocess_HOOK() for maintenance-page.html.twig.
  */
 function olivero_preprocess_maintenance_page(&$variables): void {
   // By default, site_name is set to Drupal if no db connection is available
   // or during site installation. Setting site_name to an empty string makes
   // the site and update pages look cleaner.
-  // @see \Drupal\Core\Theme\ThemePreprocess::preprocessMaintenancePage()
+  // @see template_preprocess_maintenance_page
   if (!$variables['db_is_active']) {
     $variables['site_name'] = '';
   }
@@ -59,7 +93,7 @@ function olivero_preprocess_maintenance_page(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for node.
+ * Implements hook_preprocess_HOOK() for node.html.twig.
  */
 function olivero_preprocess_node(&$variables): void {
   // Remove the "Add new comment" link on teasers or when the comment form is
@@ -82,7 +116,7 @@ function olivero_preprocess_node(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for block.
+ * Implements hook_preprocess_HOOK() for block.html.twig.
  */
 function olivero_preprocess_block(&$variables): void {
   if (!empty($variables['elements']['#id'])) {
@@ -114,7 +148,7 @@ function olivero_preprocess_block(&$variables): void {
   }
 
   if ($variables['plugin_id'] === 'system_branding_block') {
-    $site_branding_color = \Drupal::service(ThemeSettingsProvider::class)->getSetting('site_branding_bg_color');
+    $site_branding_color = theme_get_setting('site_branding_bg_color');
     if ($site_branding_color && $site_branding_color !== 'default') {
       $variables['attributes']['class'][] = 'site-branding--bg-' . $site_branding_color;
     }
@@ -136,7 +170,7 @@ function olivero_theme_suggestions_menu_alter(&$suggestions, array $variables): 
 }
 
 /**
- * Implements hook_preprocess_HOOK() for menu.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_menu(&$variables): void {
   if (isset($variables['attributes']['region'])) {
@@ -205,7 +239,7 @@ function olivero_theme_suggestions_block_alter(&$suggestions, array $variables):
 }
 
 /**
- * Implements hook_preprocess_HOOK() for menu-local-tasks.
+ * Implements hook_preprocess_HOOK() for menu-local-tasks templates.
  */
 function olivero_preprocess_menu_local_tasks(&$variables): void {
   foreach (Element::children($variables['primary']) as $key) {
@@ -217,7 +251,7 @@ function olivero_preprocess_menu_local_tasks(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for form-element.
+ * Implements hook_preprocess_form_element().
  */
 function olivero_preprocess_form_element(&$variables): void {
   if (in_array($variables['element']['#type'] ?? FALSE, ['checkbox', 'radio'], TRUE)) {
@@ -234,14 +268,14 @@ function olivero_preprocess_form_element(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for form-element-label.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_form_element_label(&$variables): void {
   $variables['attributes']['class'][] = 'form-item__label';
 }
 
 /**
- * Implements hook_preprocess_HOOK() for input.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_input(&$variables): void {
   if (
@@ -291,7 +325,7 @@ function olivero_preprocess_input(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for textarea.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_textarea(&$variables): void {
   $variables['attributes']['class'][] = 'form-element';
@@ -300,7 +334,7 @@ function olivero_preprocess_textarea(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for select.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_select(&$variables): void {
   $variables['attributes']['class'][] = 'form-element';
@@ -310,28 +344,27 @@ function olivero_preprocess_select(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for checkboxes.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_checkboxes(&$variables): void {
   $variables['attributes']['class'][] = 'form-boolean-group';
 }
 
 /**
- * Implements hook_preprocess_HOOK() for radios.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_radios(&$variables): void {
   $variables['attributes']['class'][] = 'form-boolean-group';
 }
 
 /**
- * Implements hook_preprocess_HOOK() for field.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_field(&$variables): void {
   $rich_field_types = ['text_with_summary', 'text', 'text_long'];
 
   if (in_array($variables['field_type'], $rich_field_types, TRUE)) {
     $variables['attributes']['class'][] = 'text-content';
-    $variables['#attached']['library'][] = 'olivero/olivero.table';
   }
 
   if ($variables['field_type'] == 'image' && $variables['element']['#view_mode'] == 'full' && !$variables["element"]["#is_multiple"] && $variables['field_name'] !== 'user_picture') {
@@ -340,7 +373,7 @@ function olivero_preprocess_field(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for field-multiple-value-form.
+ * Implements hook_preprocess_HOOK().
  */
 function olivero_preprocess_field_multiple_value_form(&$variables): void {
   // Make disabled available for the template.
@@ -348,12 +381,13 @@ function olivero_preprocess_field_multiple_value_form(&$variables): void {
 
   if (!empty($variables['multiple'])) {
     // Add an additional CSS class for the field label table cell.
-    // This repeats the logic of
-    // \Drupal\Core\Field\FieldPreprocess::preprocessFieldMultipleValueForm()
+    // This repeats the logic of template_preprocess_field_multiple_value_form()
     // without using '#prefix' and '#suffix' for the wrapper element.
     //
     // If the field is multiple, we don't have to check the existence of the
     // table header cell.
+    //
+    // @see template_preprocess_field_multiple_value_form().
     $header_attributes = ['class' => ['form-item__label', 'form-item__label--multiple-value-form']];
     if (!empty($variables['element']['#required'])) {
       $header_attributes['class'][] = 'js-form-required';
@@ -394,7 +428,7 @@ function olivero_preprocess_field_multiple_value_form(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for menu-local-task.
+ * Implements hook_preprocess_HOOK() for menu-local-task templates.
  */
 function olivero_preprocess_menu_local_task(&$variables): void {
   $variables['link']['#options']['attributes']['class'][] = 'tabs__link';
@@ -413,7 +447,7 @@ function olivero_preprocess_menu_local_task(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for fieldset.
+ * Implements template_preprocess_HOOK() for fieldset.
  */
 function olivero_preprocess_fieldset(&$variables): void {
   $element = $variables['element'];
@@ -469,7 +503,7 @@ function olivero_preprocess_filter_caption(&$variables): void {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter() for node_preview_form_select.
+ * Implements hook_form_FORM_ID_alter().
  */
 function olivero_form_node_preview_form_select_alter(&$form, FormStateInterface $form_state, $form_id): void {
   $form['backlink']['#options']['attributes']['class'][] = 'button';
@@ -480,7 +514,7 @@ function olivero_form_node_preview_form_select_alter(&$form, FormStateInterface 
 }
 
 /**
- * Implements hook_preprocess_HOOK() for comment.
+ * Implements hook_preprocess_HOOK() for comment.html.twig.
  */
 function olivero_preprocess_comment(&$variables): void {
   // Getting the node creation time stamp from the comment object.
@@ -490,7 +524,7 @@ function olivero_preprocess_comment(&$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for field--comment.
+ * Implements hook_preprocess_HOOK() for field--comment.html.twig.
  */
 function olivero_preprocess_field__comment(&$variables): void {
   // Add a comment_count.
@@ -524,7 +558,7 @@ function olivero_element_info_alter(&$info): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for text-format-wrapper.
+ * Implements template_preprocess_text_format_wrapper().
  *
  * @todo Remove when https://www.drupal.org/node/3016343 is fixed.
  */
@@ -583,19 +617,10 @@ function olivero_preprocess_table(&$variables): void {
       }
     }
   }
-
-  $variables['#attached']['library'][] = 'olivero/olivero.table';
 }
 
 /**
- * Implements hook_preprocess_HOOK() for views-view-table.
- */
-function olivero_preprocess_views_view_table(&$variables): void {
-  $variables['#attached']['library'][] = 'olivero/olivero.table';
-}
-
-/**
- * Implements hook_form_FORM_ID_alter() for views_exposed_form.
+ * Implements hook_form_views_exposed_form_alter().
  */
 function olivero_form_views_exposed_form_alter(&$form): void {
   $form['#attributes']['class'][] = 'form--inline';

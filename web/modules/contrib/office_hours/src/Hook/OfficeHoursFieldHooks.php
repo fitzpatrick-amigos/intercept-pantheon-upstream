@@ -17,9 +17,11 @@ class OfficeHoursFieldHooks {
 
   /**
    * Implements hook_field_type_category_info_alter().
+   *
+   * Add field type icon.
    */
   #[Hook('field_type_category_info_alter')]
-  public function field_type_category_info_alter(&$definitions) {
+  public function fieldTypeCategoryInfoAlter(&$definitions): void {
     // The 'office_hours' field type has no separate category defined.
     // It belongs in the 'general' category, so the libraries are attached here.
     $definitions[FieldTypeCategoryManagerInterface::FALLBACK_CATEGORY]['libraries'][] = 'office_hours/office_hours.custom-icon';
@@ -29,7 +31,7 @@ class OfficeHoursFieldHooks {
    * Implements hook_help() on 'help.page.office_hours'.
    */
   #[Hook('help')]
-  public function help($route_name, RouteMatchInterface $route_match) {
+  public function help($route_name, RouteMatchInterface $route_match): string {
     switch ($route_name) {
       case 'help.page.office_hours':
         $output = '<h3>' . t('About') . '</h3>';

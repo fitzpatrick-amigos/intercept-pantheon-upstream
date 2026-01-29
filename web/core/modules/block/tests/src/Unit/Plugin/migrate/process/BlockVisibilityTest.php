@@ -9,17 +9,15 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\migrate\MigrateLookupInterface;
 use Drupal\migrate\MigrateSkipRowException;
 use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 
 // cspell:ignore rbaz
+
 /**
  * Tests the block_visibility process plugin.
+ *
+ * @coversDefaultClass \Drupal\block\Plugin\migrate\process\BlockVisibility
+ * @group block
  */
-#[CoversClass(BlockVisibility::class)]
-#[Group('block')]
-#[IgnoreDeprecations]
 class BlockVisibilityTest extends MigrateProcessTestCase {
 
   /**
@@ -40,9 +38,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   }
 
   /**
-   * Tests transform no data.
-   *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformNoData(): void {
     $transformed_value = $this->plugin->transform([0, '', []], $this->migrateExecutable, $this->row, 'destination_property');
@@ -50,9 +46,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   }
 
   /**
-   * Tests transform single page with front.
-   *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformSinglePageWithFront(): void {
     $visibility = $this->plugin->transform([0, '<front>', []], $this->migrateExecutable, $this->row, 'destination_property');
@@ -62,9 +56,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   }
 
   /**
-   * Tests transform multiple pages with front.
-   *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformMultiplePagesWithFront(): void {
     $visibility = $this->plugin->transform([1, "foo\n/bar\rbaz\r\n<front>", []], $this->migrateExecutable, $this->row, 'destination_property');
@@ -74,9 +66,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   }
 
   /**
-   * Tests transform php enabled.
-   *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformPhpEnabled(): void {
     $this->moduleHandler->moduleExists('php')->willReturn(TRUE);
@@ -87,9 +77,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   }
 
   /**
-   * Tests transform php disabled.
-   *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformPhpDisabled(): void {
     $this->moduleHandler->moduleExists('php')->willReturn(FALSE);
@@ -98,9 +86,7 @@ class BlockVisibilityTest extends MigrateProcessTestCase {
   }
 
   /**
-   * Tests transform exception.
-   *
-   * @legacy-covers ::transform
+   * @covers ::transform
    */
   public function testTransformException(): void {
     $this->moduleHandler->moduleExists('php')->willReturn(FALSE);

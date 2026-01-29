@@ -6,14 +6,12 @@ namespace Drupal\Tests\taxonomy\Functional;
 
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\views\Views;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the taxonomy RSS display.
+ *
+ * @group taxonomy
  */
-#[Group('taxonomy')]
-#[RunTestsInSeparateProcesses]
 class RssTest extends TaxonomyTestBase {
 
   /**
@@ -103,7 +101,6 @@ class RssTest extends TaxonomyTestBase {
     $node = $this->drupalCreateNode([
       'type' => 'article',
       $this->fieldName => $term1->id(),
-      'promote' => TRUE,
     ]);
 
     // Check that the term is displayed when the RSS feed is viewed.

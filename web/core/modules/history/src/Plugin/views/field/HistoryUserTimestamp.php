@@ -37,10 +37,7 @@ class HistoryUserTimestamp extends Node {
       $this->additional_fields['created'] = ['table' => 'node_field_data', 'field' => 'created'];
       $this->additional_fields['changed'] = ['table' => 'node_field_data', 'field' => 'changed'];
       if (\Drupal::moduleHandler()->moduleExists('comment') && !empty($this->options['comments'])) {
-        $this->additional_fields['last_comment'] = [
-          'table' => 'comment_entity_statistics',
-          'field' => 'last_comment_timestamp',
-        ];
+        $this->additional_fields['last_comment'] = ['table' => 'comment_entity_statistics', 'field' => 'last_comment_timestamp'];
       }
     }
   }

@@ -5,24 +5,19 @@ declare(strict_types=1);
 namespace Drupal\Tests\migrate\Unit;
 
 use Drupal\Component\Utility\Html;
-use Drupal\migrate\MigrateException;
-use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\Plugin\MigrateDestinationInterface;
-use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Drupal\migrate\Plugin\MigrateProcessInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\MigrateIdMapInterface;
+use Drupal\migrate\MigrateException;
 use Drupal\migrate\Row;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
- * Tests Drupal\migrate\MigrateExecutable.
+ * @coversDefaultClass \Drupal\migrate\MigrateExecutable
+ * @group migrate
  */
-#[CoversClass(MigrateExecutable::class)]
-#[Group('migrate')]
 class MigrateExecutableTest extends MigrateTestCase {
 
   /**
@@ -452,9 +447,10 @@ class MigrateExecutableTest extends MigrateTestCase {
    *   The expected result of the rollback action. Optional, defaults to
    *   MigrationInterface::RESULT_COMPLETED.
    *
-   * @legacy-covers ::rollback
+   * @dataProvider providerTestRollback
+   *
+   * @covers ::rollback
    */
-  #[DataProvider('providerTestRollback')]
   public function testRollback(array $id_map_records, bool $rollback_called = TRUE, array $source_id_keys = ['source'], array $destination_id_keys = ['destination'], int $expected_result = MigrationInterface::RESULT_COMPLETED): void {
     $id_map = $this
       ->getTestRollbackIdMap($id_map_records, $source_id_keys, $destination_id_keys)

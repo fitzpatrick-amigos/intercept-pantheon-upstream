@@ -13,17 +13,11 @@ use Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\NodeType;
 use Drupal\views\Entity\View;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\IgnoreDeprecations;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Drupal\Core\Recipe\RecipeRunner.
+ * @coversDefaultClass \Drupal\Core\Recipe\RecipeRunner
+ * @group Recipe
  */
-#[CoversClass(RecipeRunner::class)]
-#[Group('Recipe')]
-#[RunTestsInSeparateProcesses]
 class RecipeRunnerTest extends KernelTestBase {
 
   use RecipeTestTrait;
@@ -283,8 +277,9 @@ YAML;
 
   /**
    * Tests that renamed plugins are marked as deprecated.
+   *
+   * @group legacy
    */
-  #[IgnoreDeprecations]
   public function testRenamedConfigActions(): void {
     $recipe_data = <<<YAML
 name: Renamed config action

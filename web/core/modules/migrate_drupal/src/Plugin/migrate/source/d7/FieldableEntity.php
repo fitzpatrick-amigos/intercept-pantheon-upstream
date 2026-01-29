@@ -135,7 +135,7 @@ abstract class FieldableEntity extends DrupalSqlBase {
    * @param int $entity_id
    *   The entity ID.
    *
-   * @return string|false
+   * @return string|bool
    *   The entity source language or FALSE if no source language was found.
    */
   protected function getEntityTranslationSourceLanguage($entity_type, $entity_id) {

@@ -9,25 +9,21 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer;
 use Drupal\jsonapi\ResourceType\ResourceType;
-use Drupal\jsonapi\ResourceType\ResourceTypeRepository;
+use Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Drupal\jsonapi\ResourceType\ResourceTypeRepository;
 
 /**
- * Tests Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer.
+ * @coversDefaultClass \Drupal\jsonapi\Normalizer\JsonApiDocumentTopLevelNormalizer
+ * @group jsonapi
  *
  * @internal
  */
-#[CoversClass(JsonApiDocumentTopLevelNormalizer::class)]
-#[Group('jsonapi')]
 class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
 
   /**
@@ -90,11 +86,9 @@ class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
   }
 
   /**
-   * Tests denormalize.
-   *
-   * @legacy-covers ::denormalize
+   * @covers ::denormalize
+   * @dataProvider denormalizeProvider
    */
-  #[DataProvider('denormalizeProvider')]
   public function testDenormalize($input, $expected): void {
     $resource_type = new ResourceType('node', 'article', FieldableEntityInterface::class);
     $resource_type->setRelatableResourceTypes([]);
@@ -221,9 +215,9 @@ class JsonApiDocumentTopLevelNormalizerTest extends UnitTestCase {
    * @param bool $expect_exception
    *   Whether to expect an exception.
    *
-   * @legacy-covers ::denormalize
+   * @covers ::denormalize
+   * @dataProvider denormalizeUuidProvider
    */
-  #[DataProvider('denormalizeUuidProvider')]
   public function testDenormalizeUuid($id, $expect_exception): void {
     $data['data'] = (isset($id)) ?
       ['type' => 'node--article', 'id' => $id] :

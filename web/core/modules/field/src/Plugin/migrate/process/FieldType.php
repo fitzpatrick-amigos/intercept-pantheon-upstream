@@ -14,11 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Determines the field type for a field.
- *
- * @deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. There is no
- * replacement.
- *
- * @see https://www.drupal.org/node/3533566
  */
 #[MigrateProcess('field_type')]
 class FieldType extends StaticMap implements ContainerFactoryPluginInterface {
@@ -55,7 +50,6 @@ class FieldType extends StaticMap implements ContainerFactoryPluginInterface {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->fieldPluginManager = $field_plugin_manager;
     $this->migration = $migration;
-    @trigger_error(__CLASS__ . '() is deprecated in drupal:11.3.0 and is removed from drupal:12.0.0. There is no replacement. See https://www.drupal.org/node/3533566', E_USER_DEPRECATED);
   }
 
   /**
@@ -66,7 +60,6 @@ class FieldType extends StaticMap implements ContainerFactoryPluginInterface {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      // @phpstan-ignore getDeprecatedService.deprecated
       $container->get('plugin.manager.migrate.field'),
       $migration
     );

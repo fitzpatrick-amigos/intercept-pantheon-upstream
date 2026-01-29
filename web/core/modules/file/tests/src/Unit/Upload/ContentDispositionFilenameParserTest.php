@@ -6,23 +6,21 @@ namespace Drupal\Tests\file\Unit\Upload;
 
 use Drupal\file\Upload\ContentDispositionFilenameParser;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Tests the ContentDispositionFilenameParser class.
+ *
+ * @group file
+ * @coversDefaultClass \Drupal\file\Upload\ContentDispositionFilenameParser
  */
-#[CoversClass(ContentDispositionFilenameParser::class)]
-#[Group('file')]
 class ContentDispositionFilenameParserTest extends UnitTestCase {
 
   /**
    * Tests the parseFilename() method.
    *
-   * @legacy-covers ::parseFilename
+   * @covers ::parseFilename
    */
   public function testParseFilenameSuccess(): void {
     $request = $this->createRequest('filename="test.txt"');
@@ -31,11 +29,9 @@ class ContentDispositionFilenameParserTest extends UnitTestCase {
   }
 
   /**
-   * Tests parse filename invalid.
-   *
-   * @legacy-covers ::parseFilename
+   * @covers ::parseFilename
+   * @dataProvider invalidHeaderProvider
    */
-  #[DataProvider('invalidHeaderProvider')]
   public function testParseFilenameInvalid(string | bool $contentDisposition): void {
     $this->expectException(BadRequestHttpException::class);
     $this->expectExceptionMessage('No filename found in "Content-Disposition" header. A file name in the format "filename=FILENAME" must be provided.');
@@ -44,9 +40,7 @@ class ContentDispositionFilenameParserTest extends UnitTestCase {
   }
 
   /**
-   * Tests parse filename missing.
-   *
-   * @legacy-covers ::parseFilename
+   * @covers ::parseFilename
    */
   public function testParseFilenameMissing(): void {
     $this->expectException(BadRequestHttpException::class);
@@ -56,9 +50,7 @@ class ContentDispositionFilenameParserTest extends UnitTestCase {
   }
 
   /**
-   * Tests parse filename extended.
-   *
-   * @legacy-covers ::parseFilename
+   * @covers ::parseFilename
    */
   public function testParseFilenameExtended(): void {
     $this->expectException(BadRequestHttpException::class);

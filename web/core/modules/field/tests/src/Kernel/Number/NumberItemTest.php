@@ -10,17 +10,14 @@ use Drupal\Core\Field\Plugin\Field\FieldType\NumericItemBase;
 use Drupal\Core\Form\FormState;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Tests\field\Kernel\FieldKernelTestBase;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Tests the new entity API for the number field type.
+ *
+ * @group field
  */
-#[Group('field')]
-#[RunTestsInSeparateProcesses]
 class NumberItemTest extends FieldKernelTestBase {
 
   /**
@@ -145,8 +142,9 @@ class NumberItemTest extends FieldKernelTestBase {
    *   The expected constraint violation message.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
+   *
+   * @dataProvider dataNumberFieldSettingsProvider
    */
-  #[DataProvider('dataNumberFieldSettingsProvider')]
   public function testConstraints($type, $min, $max, $value, $expect_constraints, $expected_constraint_message = ''): void {
     $field = FieldConfig::loadByName('entity_test', 'entity_test', 'field_' . $type);
     $field->setSetting('min', $min);
@@ -205,8 +203,9 @@ class NumberItemTest extends FieldKernelTestBase {
    *   Expected validation result.
    * @param string $message
    *   (optional) Error message result.
+   *
+   * @dataProvider dataTestMinMaxValue
    */
-  #[DataProvider('dataTestMinMaxValue')]
   public function testFormFieldMinMaxValue(int|float|string $min, int|float|string $max, int|float|string $value, bool $hasError, string $message = ''): void {
     $element = [
       '#type' => 'number',

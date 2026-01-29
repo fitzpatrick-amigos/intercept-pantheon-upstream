@@ -7,14 +7,12 @@ namespace Drupal\FunctionalTests\Installer;
 use Drupal\Core\Routing\RoutingEvents;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Test\PerformanceTestRecorder;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests router rebuilding during installation.
+ *
+ * @group Installer
  */
-#[Group('Installer')]
-#[RunTestsInSeparateProcesses]
 class InstallerRouterTest extends InstallerTestBase {
 
   /**

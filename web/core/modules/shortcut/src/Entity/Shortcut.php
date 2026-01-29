@@ -10,7 +10,6 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\link\LinkItemInterface;
-use Drupal\link\LinkTitleVisibility;
 use Drupal\shortcut\Form\ShortcutDeleteForm;
 use Drupal\shortcut\ShortcutAccessControlHandler;
 use Drupal\shortcut\ShortcutForm;
@@ -42,7 +41,6 @@ use Drupal\shortcut\ShortcutInterface;
       'edit' => ShortcutForm::class,
       'delete' => ShortcutDeleteForm::class,
     ],
-    'link_target' => ['view' => ShortcutLinkTarget::class],
   ],
   links: [
     'canonical' => '/admin/config/user-interface/shortcut/link/{shortcut}',
@@ -156,7 +154,7 @@ class Shortcut extends ContentEntityBase implements ShortcutInterface {
       ->setRequired(TRUE)
       ->setSettings([
         'link_type' => LinkItemInterface::LINK_INTERNAL,
-        'title' => LinkTitleVisibility::Disabled->value,
+        'title' => DRUPAL_DISABLED,
       ])
       ->setDisplayOptions('form', [
         'type' => 'link_default',

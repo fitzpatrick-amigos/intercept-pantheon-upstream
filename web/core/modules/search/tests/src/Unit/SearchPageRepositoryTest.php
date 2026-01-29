@@ -9,14 +9,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\search\Entity\SearchPage;
 use Drupal\search\SearchPageRepository;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
 
 /**
- * Tests Drupal\search\SearchPageRepository.
+ * @coversDefaultClass \Drupal\search\SearchPageRepository
+ * @group search
  */
-#[CoversClass(SearchPageRepository::class)]
-#[Group('search')]
 class SearchPageRepositoryTest extends UnitTestCase {
 
   /**

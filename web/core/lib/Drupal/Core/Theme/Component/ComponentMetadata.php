@@ -103,11 +103,6 @@ class ComponentMetadata {
   public readonly array $variants;
 
   /**
-   * Internal component, hidden in ui.
-   */
-  public readonly bool $noUi;
-
-  /**
    * ComponentMetadata constructor.
    *
    * @param array $metadata_info
@@ -145,7 +140,6 @@ class ComponentMetadata {
     $this->schema = $this->parseSchemaInfo($metadata_info);
     $this->slots = $metadata_info['slots'] ?? [];
     $this->variants = $metadata_info['variants'] ?? [];
-    $this->noUi = $metadata_info['noUi'] ?? FALSE;
   }
 
   /**

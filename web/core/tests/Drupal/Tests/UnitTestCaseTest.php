@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests;
 
 use Drupal\TestTools\Extension\Dump\DebugDump;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 
 /**
  * Tests for the UnitTestCase class.
+ *
+ * @group Tests
  */
-#[Group('Tests')]
 class UnitTestCaseTest extends UnitTestCase {
 
   /**
@@ -34,8 +33,9 @@ class UnitTestCaseTest extends UnitTestCase {
 
   /**
    * Tests the dump() function in a test run in a separate process.
+   *
+   * @runInSeparateProcess
    */
-  #[RunInSeparateProcess]
   public function testVarDumpSeparateProcess(): void {
     // Dump some variables.
     $object = (object) [

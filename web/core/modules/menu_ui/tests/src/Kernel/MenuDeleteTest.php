@@ -8,28 +8,23 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\menu_ui\Hook\MenuUiHooks;
 use Drupal\node\Entity\NodeType;
 use Drupal\system\Entity\Menu;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the menu_delete hook.
+ *
+ * @group menu_ui
  */
-#[Group('menu_ui')]
-#[RunTestsInSeparateProcesses]
 class MenuDeleteTest extends KernelTestBase {
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['node', 'menu_ui', 'system', 'user'];
+  protected static $modules = ['node', 'menu_ui', 'system'];
 
   /**
-   * Tests menu delete.
-   *
-   * @legacy-covers \Drupal\menu_ui\Hook\MenuUiHooks::menuDelete
+   * @covers \Drupal\menu_ui\Hook\MenuUiHooks::menuDelete
+   * @dataProvider providerMenuDelete
    */
-  #[DataProvider('providerMenuDelete')]
   public function testMenuDelete($settings, $expected): void {
     $menu = Menu::create([
       'id' => 'mock',

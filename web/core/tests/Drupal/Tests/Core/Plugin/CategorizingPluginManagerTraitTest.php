@@ -11,16 +11,12 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Tests\UnitTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
- * Tests Drupal\Core\Plugin\CategorizingPluginManagerTrait.
+ * @coversDefaultClass \Drupal\Core\Plugin\CategorizingPluginManagerTrait
+ * @group Plugin
+ * @runTestsInSeparateProcesses
  */
-#[CoversClass(CategorizingPluginManagerTrait::class)]
-#[Group('Plugin')]
-#[RunTestsInSeparateProcesses]
 class CategorizingPluginManagerTraitTest extends UnitTestCase {
 
   /**
@@ -54,9 +50,7 @@ class CategorizingPluginManagerTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get categories.
-   *
-   * @legacy-covers ::getCategories
+   * @covers ::getCategories
    */
   public function testGetCategories(): void {
     $this->assertSame([
@@ -66,9 +60,7 @@ class CategorizingPluginManagerTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get sorted definitions.
-   *
-   * @legacy-covers ::getSortedDefinitions
+   * @covers ::getSortedDefinitions
    */
   public function testGetSortedDefinitions(): void {
     $sorted = $this->pluginManager->getSortedDefinitions();
@@ -76,9 +68,7 @@ class CategorizingPluginManagerTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests get grouped definitions.
-   *
-   * @legacy-covers ::getGroupedDefinitions
+   * @covers ::getGroupedDefinitions
    */
   public function testGetGroupedDefinitions(): void {
     $grouped = $this->pluginManager->getGroupedDefinitions();
@@ -88,9 +78,7 @@ class CategorizingPluginManagerTraitTest extends UnitTestCase {
   }
 
   /**
-   * Tests process definition category.
-   *
-   * @legacy-covers ::processDefinitionCategory
+   * @covers ::processDefinitionCategory
    */
   public function testProcessDefinitionCategory(): void {
     // Existing category.
@@ -146,7 +134,7 @@ class CategorizingPluginManager extends DefaultPluginManager implements Categori
    *
    * Provides some test definitions to the trait.
    */
-  public function getDefinitions(): array {
+  public function getDefinitions() {
     return [
       'cucumber' => [
         'label' => 'cucumber',
