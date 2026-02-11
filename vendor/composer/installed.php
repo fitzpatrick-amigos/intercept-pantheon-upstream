@@ -3,7 +3,7 @@
         'name' => 'atendesigngroup/intercept-pantheon-upstream',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'c0b9edad1b3ee7ae40b6c23490cacb2038006d9f',
+        'reference' => '171f6938bcdd80d93af8e79982375242b0ab8e41',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'atendesigngroup/intercept-pantheon-upstream' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'c0b9edad1b3ee7ae40b6c23490cacb2038006d9f',
+            'reference' => '171f6938bcdd80d93af8e79982375242b0ab8e41',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -992,8 +992,8 @@
             'dev_requirement' => false,
         ),
         'drupal/webform_submission_log' => array(
-            'pretty_version' => '6.2.9',
-            'version' => '6.2.9.0',
+            'pretty_version' => '6.3.0-beta7',
+            'version' => '6.3.0.0-beta7',
             'reference' => null,
             'type' => 'metapackage',
             'install_path' => null,
