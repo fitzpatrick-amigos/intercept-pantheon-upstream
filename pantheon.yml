@@ -1,0 +1,30 @@
+api_version: 1
+web_docroot: true
+php_version: 8.3
+database:
+  version: 10.6
+workflows:
+  sync_code:
+    after:
+    - type: webphp
+      description: Import configuration from .yml files
+      script: web/private/scripts/quicksilver/drush_import_config/drush_config_import.php
+    - type: webphp
+      description: Log to New Relic
+      script: web/private/scripts/quicksilver/new_relic_deploy/new_relic_deploy.php
+  deploy:
+    after:
+      - type: webphp
+        description: Import configuration from .yml files
+        script: web/private/scripts/quicksilver/drush_import_config/drush_config_import.php
+      - type: webphp
+        description: Log to New Relic
+        script: web/private/scripts/quicksilver/new_relic_deploy/new_relic_deploy.php
+  deploy_product:
+    after:
+      - type: webphp
+        description: 'Run composer prepare-for-pantheon'
+        script: web/private/scripts/deploy_product/prepare-for-pantheon.php
+      - type: webphp
+        description: 'Run composer install & drupal-scaffold'
+        script: web/private/scripts/deploy_product/composer-install.php
