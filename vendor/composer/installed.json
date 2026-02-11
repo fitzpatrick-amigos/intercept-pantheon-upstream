@@ -6300,20 +6300,20 @@
         },
         {
             "name": "drupal/webform_submission_log",
-            "version": "6.3.0-beta7",
-            "version_normalized": "6.3.0.0-beta7",
+            "version": "6.2.9",
+            "version_normalized": "6.2.9.0",
             "require": {
-                "drupal/core": "^10.3 || ^11.0",
+                "drupal/core": "^8 || ^9 || ^10 || ^11 || ^12",
                 "drupal/webform": "*"
             },
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "6.3.0-beta7",
-                    "datestamp": "1768489801",
+                    "version": "6.2.9",
+                    "datestamp": "1733851063",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
